@@ -1,4 +1,4 @@
-package com.example.ronald.randomnotification;
+package com.example.ronald.trainjezelf;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
