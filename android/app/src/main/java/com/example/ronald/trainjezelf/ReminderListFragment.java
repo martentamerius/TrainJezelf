@@ -109,9 +109,10 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     /**
      * Add new reminder to the list
      */
-    public void addReminder() {
+    public int addReminder() {
         listItems.add(new Reminder("Reminder", 5, Reminder.Period.DAILY));
         adapter.notifyDataSetChanged();
+        return listItems.size();
     }
 
     /**

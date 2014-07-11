@@ -88,7 +88,8 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            mReminderListFragment.addReminder();
+            int addedIndex = mReminderListFragment.addReminder();
+            onReminderSelected(addedIndex);
             return true;
         }
         return super.onOptionsItemSelected(item);
