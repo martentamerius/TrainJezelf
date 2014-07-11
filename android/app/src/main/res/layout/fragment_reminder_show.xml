@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.ronald.trainjezelf.ReminderShowFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/reminderShowImageView"
         android:background="@drawable/nature_spring"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:layout_gravity="center"/>
 
     <TextView

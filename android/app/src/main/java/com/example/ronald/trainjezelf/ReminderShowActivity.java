@@ -16,7 +16,15 @@ public class ReminderShowActivity extends FragmentActivity
 
     public static String ARGUMENT_REMINDER_KEY = "reminderIndex";
 
-    private DataStore dataStore;
+    /**
+     * The reminder index that we are showing
+     */
+    private int reminderIndex;
+
+    /**
+     * Reference to the display fragment
+     */
+    private ReminderShowFragment reminderShowFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +33,21 @@ public class ReminderShowActivity extends FragmentActivity
 
         // Get handle to embedded fragment
         FragmentManager manager = getSupportFragmentManager();
-        ReminderShowFragment reminderShowFragment = (ReminderShowFragment) manager.findFragmentById(R.id.reminderShowFragment);
+        reminderShowFragment = (ReminderShowFragment) manager.findFragmentById(R.id.reminderShowFragment);
 
         // Fill activity with data to be edited
         Intent intent = getIntent();
-        int reminderIndex = intent.getExtras().getInt(ARGUMENT_REMINDER_KEY);
+        reminderIndex = intent.getExtras().getInt(ARGUMENT_REMINDER_KEY);
+        refreshView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshView();
+    }
+
+    private void refreshView() {
         Reminder reminder = DataStore.getInstance(this).get(reminderIndex);
         reminderShowFragment.displayReminder(reminder);
     }
@@ -47,7 +65,15 @@ public class ReminderShowActivity extends FragmentActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit) {
+            final Intent i = new Intent(ReminderShowActivity.this, ReminderEditActivity.class);
+            i.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_KEY, reminderIndex);
+            startActivity(i);
+            return true;
+        }
+        if (id == R.id.action_delete) {
+            DataStore.getInstance(this).remove(reminderIndex);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

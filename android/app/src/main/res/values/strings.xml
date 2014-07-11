@@ -10,5 +10,8 @@
     <string name="title_activity_reminder_show">Herinnering</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_edit">Bewerken</string>
+    <string name="action_save">Opslaan</string>
+    <string name="action_cancel">Annuleren</string>
 
 </resources>

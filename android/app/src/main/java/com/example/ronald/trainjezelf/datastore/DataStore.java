@@ -99,6 +99,14 @@ public final class DataStore {
     }
 
     /**
+     * Remove item from data store
+     * @param index index
+     */
+    public void remove(int index) {
+        reminders.remove(index);
+    }
+
+    /**
      * Get item from data store
      * @param index
      * @return reminder

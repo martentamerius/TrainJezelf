@@ -19,8 +19,8 @@ public class Reminder {
             this.name = name;
         }
 
-       @Override
-       public String toString() {
+        @Override
+        public String toString() {
             return name;
         }
     };
@@ -52,7 +52,16 @@ public class Reminder {
         return message;
     }
 
+    public int getNumberOfNotifiesPerPeriod() {
+        return numberOfNotifiesPerPeriod;
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
     public String frequencyToString() {
         return String.format("%d keer per %s", numberOfNotifiesPerPeriod, period);
     }
+
 }
