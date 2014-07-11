@@ -1,41 +1,34 @@
 package com.example.ronald.trainjezelf;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.example.ronald.trainjezelf.datastore.DataStore;
-import com.example.ronald.trainjezelf.datastore.Reminder;
-import com.example.ronald.trainjezelf.datastore.ReminderAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Main activity: displays a ListView with all reminders that the user has created.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity implements ReminderListFragment.OnReminderSelectedListener {
     /**
-     * ListView containing the reminders
+     * Whether or not we are in dual-pane mode
      */
-    private ListView listView = null;
+    boolean mIsDualPane = false;
 
     /**
-     * Items for the list
+     * The fragment where the reminder list is displayed
      */
-    private List<Reminder> listItems = null;
+    ReminderListFragment mReminderListFragment;
 
     /**
-     * Adapter that handles filling of the listview
+     * The fragment where the reminder details (null if absent)
      */
-    private ReminderAdapter adapter = null;
+    ReminderDetailsFragment mReminderDetailsFragment;
 
     /**
      * Object for managing permanent storage of activity data
@@ -45,30 +38,40 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_layout);
 
-        // create list for holding the resources
-        if (dataStore == null) {
-            dataStore = new DataStore(this);
-        }
-        listItems = dataStore.loadReminders();
+        // find our fragments
+        FragmentManager manager = getSupportFragmentManager();
+        mReminderListFragment = (ReminderListFragment) manager.findFragmentById(R.id.headlines);
+        mReminderDetailsFragment = (ReminderDetailsFragment) manager.findFragmentById(R.id.article);
 
-        // create adapter
-        adapter = new ReminderAdapter(this, android.R.layout.simple_list_item_1, listItems);
-
-        // get reference to the listview resource
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(adapter);
+        // Determine whether we are in single-pane or dual-pane mode by testing the visibility
+        // of the reminder view.
+        View reminderView = findViewById(R.id.article);
+        mIsDualPane = reminderView != null && reminderView.getVisibility() == View.VISIBLE;
 
         // what to do when someone clicks in the list
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                final Reminder item = (Reminder) parent.getItemAtPosition(position);
-                listItems.remove(item);
-                adapter.notifyDataSetChanged();
+        mReminderListFragment.setOnHeadlineSelectedListener(this);
+
+        // Set up headlines fragment
+        mReminderListFragment.setSelectable(mIsDualPane);
+        restoreSelection(savedInstanceState);
+    }
+
+    /** Restore category/article selection from saved state. */
+    void restoreSelection(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (mIsDualPane) {
+                int reminderIndex = savedInstanceState.getInt("reminderIndex", 0);
+                mReminderListFragment.setSelection(reminderIndex);
+                onReminderSelected(reminderIndex);
             }
-        });
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        restoreSelection(savedInstanceState);
     }
 
     @Override
@@ -85,24 +88,22 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            addListViewItem();
+            mReminderListFragment.addReminder();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        dataStore.saveReminders(this.listItems);
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    /**
-     * Add new reminder to the list
-     */
-    private void addListViewItem() {
-        listItems.add(new Reminder("Reminder", 5, Reminder.Period.DAILY));
-        adapter.notifyDataSetChanged();
+    public void onReminderSelected(int index) {
+        if (mIsDualPane) {
+            // display it on the article fragment
+            mReminderDetailsFragment.displayReminder(mReminderListFragment.getReminder(index));
+        } else {
+            // use separate activity
+            final Intent i = new Intent(MainActivity.this, ReminderEditActivity.class);
+            i.putExtra("messageId", index);
+            startActivity(i);
+        }
     }
 }
