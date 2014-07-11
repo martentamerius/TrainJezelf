@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.ronald.trainjezelf.datastore.DataStore;
-
 
 /**
  * Main activity: displays a ListView with all reminders that the user has created.
@@ -18,22 +16,17 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     /**
      * Whether or not we are in dual-pane mode
      */
-    boolean mIsDualPane = false;
+    boolean isDualPane = false;
 
     /**
      * The fragment where the reminder list is displayed
      */
-    ReminderListFragment mReminderListFragment;
+    ReminderListFragment reminderListFragment;
 
     /**
-     * The fragment where the reminder details (null if absent)
+     * The fragment where the reminder details are displayed (null if absent)
      */
-    ReminderDetailsFragment mReminderDetailsFragment;
-
-    /**
-     * Object for managing permanent storage of activity data
-     */
-    private DataStore dataStore = null;
+    ReminderShowFragment reminderShowFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +35,28 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
 
         // find our fragments
         FragmentManager manager = getSupportFragmentManager();
-        mReminderListFragment = (ReminderListFragment) manager.findFragmentById(R.id.headlines);
-        mReminderDetailsFragment = (ReminderDetailsFragment) manager.findFragmentById(R.id.article);
+        reminderListFragment = (ReminderListFragment) manager.findFragmentById(R.id.headlines);
+        reminderShowFragment = (ReminderShowFragment) manager.findFragmentById(R.id.article);
 
         // Determine whether we are in single-pane or dual-pane mode by testing the visibility
         // of the reminder view.
         View reminderView = findViewById(R.id.article);
-        mIsDualPane = reminderView != null && reminderView.getVisibility() == View.VISIBLE;
+        isDualPane = reminderView != null && reminderView.getVisibility() == View.VISIBLE;
 
         // what to do when someone clicks in the list
-        mReminderListFragment.setOnHeadlineSelectedListener(this);
+        reminderListFragment.setOnHeadlineSelectedListener(this);
 
         // Set up headlines fragment
-        mReminderListFragment.setSelectable(mIsDualPane);
+        reminderListFragment.setSelectable(isDualPane);
         restoreSelection(savedInstanceState);
     }
 
     /** Restore category/article selection from saved state. */
     void restoreSelection(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            if (mIsDualPane) {
+            if (isDualPane) {
                 int reminderIndex = savedInstanceState.getInt("reminderIndex", 0);
-                mReminderListFragment.setSelection(reminderIndex);
+                reminderListFragment.setSelection(reminderIndex);
                 onReminderSelected(reminderIndex);
             }
         }
@@ -88,8 +81,8 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            int addedIndex = mReminderListFragment.addReminder();
-            onReminderSelected(addedIndex);
+            int numberOfReminders = reminderListFragment.addReminder();
+            onReminderSelected(numberOfReminders - 1);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -97,13 +90,13 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
 
     @Override
     public void onReminderSelected(int index) {
-        if (mIsDualPane) {
+        if (isDualPane) {
             // display it on the article fragment
-            mReminderDetailsFragment.displayReminder(mReminderListFragment.getReminder(index));
+            reminderShowFragment.displayReminder(reminderListFragment.getReminder(index));
         } else {
             // use separate activity
-            final Intent i = new Intent(MainActivity.this, ReminderEditActivity.class);
-            i.putExtra("messageId", index);
+            final Intent i = new Intent(MainActivity.this, ReminderShowActivity.class);
+            i.putExtra(ReminderShowActivity.ARGUMENT_REMINDER_KEY, index);
             startActivity(i);
         }
     }

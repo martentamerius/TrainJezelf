@@ -22,6 +22,10 @@
             android:name=".ReminderEditActivity"
             android:label="@string/title_activity_reminder_edit" >
         </activity>
+        <activity
+            android:name=".ReminderShowActivity"
+            android:label="@string/title_activity_reminder_show" >
+        </activity>
     </application>
 
 </manifest>

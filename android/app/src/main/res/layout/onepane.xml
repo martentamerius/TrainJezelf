@@ -20,9 +20,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/headlines"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--
     <fragment android:id="@+id/headlines"
               android:layout_height="fill_parent"
               android:name="com.example.ronald.trainjezelf.ReminderListFragment"
               android:layout_width="match_parent" />
+              -->
+
 </LinearLayout>
 <!-- END_INCLUDE(all) -->

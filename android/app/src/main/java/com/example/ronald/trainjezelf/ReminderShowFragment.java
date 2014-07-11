@@ -3,11 +3,14 @@ package com.example.ronald.trainjezelf;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.ronald.trainjezelf.datastore.Reminder;
 
 
 /**
@@ -32,6 +35,11 @@ public class ReminderShowFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     /**
+     * The reminder
+     */
+    private Reminder reminder;
+
+    /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
@@ -48,6 +56,7 @@ public class ReminderShowFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public ReminderShowFragment() {
         // Required empty public constructor
     }
@@ -107,4 +116,21 @@ public class ReminderShowFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+
+    /**
+     * Displays a particular reminder.
+     * @param reminder the reminder to display
+     */
+    public void displayReminder(Reminder reminder) {
+        this.reminder = reminder;
+        loadReminder();
+    }
+
+    /**
+     * Loads reminder data into the UI.
+     */
+    private void loadReminder() {
+        TextView messageText = (TextView) getView().findViewById(R.id.reminderShowText);
+        messageText.setText(reminder.getMessage());
+    }
 }

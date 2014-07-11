@@ -7,22 +7,26 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/reminderShowImageView"
+        android:background="@drawable/nature_spring"
         android:layout_gravity="center"/>
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/reminderShowText"
         android:layout_gravity="center|bottom"
         android:padding="32dp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque tortor purus, porta sit amet elit luctus, eleifend mattis lorem."
         android:typeface="serif"
         android:textStyle="italic"
         android:clickable="false"
-        android:gravity="bottom"/>
+        android:gravity="bottom"
+        android:textSize="16sp"
+        style="@style/ReminderShowText" />
+
 </FrameLayout>

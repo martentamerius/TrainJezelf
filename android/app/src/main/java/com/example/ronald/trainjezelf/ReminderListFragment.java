@@ -23,11 +23,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     private ListView listView = null;
 
     /**
-     * Items for the list
-     */
-    private List<Reminder> listItems = null;
-
-    /**
      * Adapter that handles filling of the listview
      */
     private ReminderAdapter adapter = null;
@@ -69,8 +64,8 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listItems = getDataStore().loadReminders();
-        adapter = new ReminderAdapter(getActivity(), android.R.layout.simple_list_item_1, listItems);
+        dataStore = DataStore.getInstance(getActivity());
+        adapter = new ReminderAdapter(getActivity(), android.R.layout.simple_list_item_1, dataStore.getReminders());
         setListAdapter(adapter);
     }
 
@@ -110,34 +105,26 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
      * Add new reminder to the list
      */
     public int addReminder() {
-        listItems.add(new Reminder("Reminder", 5, Reminder.Period.DAILY));
+        int newSize = dataStore.add(new Reminder("Reminder", 5, Reminder.Period.DAILY));
         adapter.notifyDataSetChanged();
-        return listItems.size();
+        return newSize;
     }
 
     /**
      * Remove reminder from the list
      */
     public void removeReminder(Reminder item) {
-        listItems.remove(item);
+        dataStore.remove(item);
         adapter.notifyDataSetChanged();
-    }
-
-    private DataStore getDataStore() {
-        if (dataStore == null) {
-            dataStore = new DataStore(getActivity());
-        }
-        return dataStore;
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        getDataStore().saveReminders(this.listItems);
-        // Always call the superclass so it can save the view hierarchy state
+        dataStore.saveState();
         super.onSaveInstanceState(savedInstanceState);
     }
 
     public Reminder getReminder(int index) {
-        return listItems.get(index);
+        return dataStore.get(index);
     }
 }
