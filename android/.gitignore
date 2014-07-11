@@ -5,3 +5,4 @@
 /build
 /app/src/main/res/**/Thumbs.db
 /app/build
+/.idea/libraries
