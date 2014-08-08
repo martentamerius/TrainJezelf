@@ -9,6 +9,7 @@ public class Reminder {
      * Period enum for defining the frequency of the reminder
      */
     public enum Period {
+        HOURLY ("uur"),
         DAILY ("dag"),
         WEEKLY ("week"),
         MONTHLY ("maand");

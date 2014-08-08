@@ -1,14 +1,18 @@
 package com.example.ronald.trainjezelf;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -16,7 +20,9 @@ import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,11 +34,20 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
-public class ReminderEditFragment extends Fragment {
+public class ReminderEditFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final int NROF_NUMBER_BUTTONS = 10;
+
+    enum Period {
+        HOUR,
+        DAY,
+        WEEK,
+        MONTH
+    }
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -43,9 +58,19 @@ public class ReminderEditFragment extends Fragment {
      */
     private Reminder reminder;
 
+    /**
+     * GUI controls
+     */
     private EditText messageEditText;
-    private EditText frequencyEditText;
-    private Spinner spinner;
+
+    private Map<Integer, Button> numberButtons;
+    private Map<Integer, Integer> numberIdToNumber;
+    private Map<Integer, Integer> numberToNumberId;
+    private int currentNumberButtonId = 0;
+    private Map<Integer, Button> periodButtons;
+    private Map<Integer, Integer> periodIdToIndex;
+    private Map<Integer, Integer> indexToPeriodId;
+    private int currentPeriodButtonId = 0;
 
     private OnFragmentInteractionListener mListener;
 
@@ -92,8 +117,43 @@ public class ReminderEditFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Get references to GUI elements
         messageEditText = (EditText) getView().findViewById(R.id.messageEditText);
-        frequencyEditText = (EditText) getView().findViewById(R.id.frequencyEditText);
-        spinner = (Spinner) getView().findViewById(R.id.spinner);
+
+        numberButtons = new HashMap<Integer, Button>(NROF_NUMBER_BUTTONS);
+        numberIdToNumber = new HashMap<Integer, Integer>(NROF_NUMBER_BUTTONS);
+        numberToNumberId = new HashMap<Integer, Integer>(NROF_NUMBER_BUTTONS);
+        for (int i = 0; i < NROF_NUMBER_BUTTONS; i++) {
+            int number = i + 1;
+            String buttonId = "button" + number;
+            int resourceId = getResources().getIdentifier(buttonId, "id", getActivity().getPackageName());
+            Button button = (Button) getView().findViewById(resourceId);
+            Log.d("ReminderEditFragment", buttonId + " lookup returned " + button);
+            button.setOnClickListener(this);
+            numberButtons.put(resourceId, button);
+            numberIdToNumber.put(resourceId, number);
+            numberToNumberId.put(number, resourceId);
+        }
+
+        periodButtons = new HashMap<Integer, Button>();
+        periodIdToIndex = new HashMap<Integer, Integer>();
+        indexToPeriodId = new HashMap<Integer, Integer>();
+        int index = 0;
+        for (Period period : Period.values()) {
+            String buttonId = "button" + capitalizeFirstLetter(period.toString().toLowerCase());
+            Log.d("ReminderEditFragment", buttonId);
+            int resourceId = getResources().getIdentifier(buttonId, "id", getActivity().getPackageName());
+            Button button = (Button) getView().findViewById(resourceId);
+            button.setOnClickListener(this);
+            periodButtons.put(resourceId, button);
+            periodIdToIndex.put(resourceId, index);
+            indexToPeriodId.put(index, resourceId);
+            index++;
+        }
+    }
+
+    public String capitalizeFirstLetter(String original){
+        if(original.length() == 0)
+            return original;
+        return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -140,8 +200,6 @@ public class ReminderEditFragment extends Fragment {
      * @param reminder the reminder to display
      */
     public void displayReminder(Reminder reminder) {
-        // Populate spinner
-        populateSpinner();
         this.reminder = reminder;
         populateView();
     }
@@ -151,18 +209,11 @@ public class ReminderEditFragment extends Fragment {
      */
     private void populateView() {
         messageEditText.setText(reminder.getMessage());
-        frequencyEditText.setText(Integer.toString(reminder.getNumberOfNotifiesPerPeriod()));
-        spinner.setSelection(reminder.getPeriod().ordinal());
-    }
 
-    private void populateSpinner() {
-        List<String> list = new ArrayList<String>();
-        for (Reminder.Period period: Reminder.Period.values()) {
-            list.add(period.toString());
-        }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
+        currentNumberButtonId = toggleButtonById(currentNumberButtonId,
+                numberToNumberId.get(reminder.getNumberOfNotifiesPerPeriod()));
+        currentPeriodButtonId = toggleButtonById(currentPeriodButtonId,
+                indexToPeriodId.get(reminder.getPeriod().ordinal()));
     }
 
     public void saveReminder() {
@@ -172,19 +223,40 @@ public class ReminderEditFragment extends Fragment {
     }
 
     private Reminder getFromView() {
-         String message = messageEditText.getText().toString();
-         int numberOfNotifiesPerPeriod;
-         try {
-             numberOfNotifiesPerPeriod = Integer.parseInt(frequencyEditText.getText().toString());
-         } catch (NumberFormatException e) {
-             numberOfNotifiesPerPeriod = 1;
-         }
-         Reminder.Period period = Reminder.Period.values()[spinner.getSelectedItemPosition()];
+         final String message = messageEditText.getText().toString();
+         final int numberOfNotifiesPerPeriod = numberIdToNumber.get(currentNumberButtonId);
+         final Reminder.Period period = Reminder.Period.values()[periodIdToIndex.get(currentPeriodButtonId)];
          return new Reminder(message, numberOfNotifiesPerPeriod, period);
      }
 
-
     public String getReminderText() {
         return messageEditText.getText().toString();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int viewId = view.getId();
+        if (numberButtons.containsKey(viewId)) {
+            currentNumberButtonId = toggleButtonById(currentNumberButtonId, viewId);
+        } else if (periodButtons.containsKey(viewId)) {
+            currentPeriodButtonId = toggleButtonById(currentPeriodButtonId, viewId);
+        }
+    }
+
+    private int toggleButtonById(int currentButtonId, int newButtonId) {
+        if (newButtonId == currentButtonId) {
+            return currentButtonId;
+        }
+        // select new button
+        Button button = (Button) getView().findViewById(newButtonId);
+        button.setBackgroundColor(getResources().getColor(android.R.color.holo_purple));
+        button.setTextColor(Color.WHITE);
+        // deselect current button
+        if (currentButtonId != 0) {
+            button = (Button) getView().findViewById(currentButtonId);
+            button.setBackgroundColor(Color.TRANSPARENT);
+            button.setTextColor(Color.BLACK);
+        }
+        return newButtonId;
     }
 }
