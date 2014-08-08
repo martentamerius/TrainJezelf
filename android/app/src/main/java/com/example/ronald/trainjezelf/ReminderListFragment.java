@@ -2,6 +2,9 @@ package com.example.ronald.trainjezelf;
 
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -11,19 +14,12 @@ import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
 import com.example.ronald.trainjezelf.datastore.ReminderAdapter;
 
-import java.util.List;
-
 /**
- * Created by Ronald on 8-7-2014.
+ * Reminder list fragment class.
  */
 public class ReminderListFragment extends ListFragment implements OnItemClickListener {
     /**
-     * ListView containing the reminders
-     */
-    private ListView listView = null;
-
-    /**
-     * Adapter that handles filling of the listview
+     * Adapter that handles filling of the list view
      */
     private ReminderAdapter adapter = null;
 
@@ -33,7 +29,7 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     OnReminderSelectedListener mReminderSelectedListener = null;
 
     /**
-     * The datastore
+     * The data store
      */
     DataStore dataStore = null;
 
@@ -41,10 +37,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
      * Listener that will be notified of list item selections
      */
     public interface OnReminderSelectedListener {
-        /**
-         * Called when a given list item is selected.
-         * @param index the index of the selected item.
-         */
         public void onReminderSelected(int index);
     }
 
@@ -55,11 +47,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         super();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        getListView().setOnItemClickListener(this);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,23 +57,34 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        getListView().setOnItemClickListener(this);
+        registerForContextMenu(getListView());
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        dataStore.saveState();
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     /**
      * Sets the listener that should be notified of list item selection events.
      * @param listener the listener to notify.
      */
-    public void setOnHeadlineSelectedListener(OnReminderSelectedListener listener) {
+    public void setOnReminderSelectedListener(OnReminderSelectedListener listener) {
         mReminderSelectedListener = listener;
     }
 
     /**
      * Handles a click on a list item.
-     *
-     * This causes the configured listener to be notified that an item was selected.
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,7 +109,7 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
      * Add new reminder to the list
      */
     public int addReminder() {
-        int newSize = dataStore.add(new Reminder("Reminder", 5, Reminder.Period.DAILY));
+        int newSize = dataStore.add(new Reminder("", 5, Reminder.Period.DAILY));
         adapter.notifyDataSetChanged();
         return newSize;
     }
@@ -119,18 +117,35 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     /**
      * Remove reminder from the list
      */
-    public void removeReminder(Reminder item) {
-        dataStore.remove(item);
+    private void removeReminder(int reminderId) {
+        dataStore.remove(reminderId);
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        dataStore.saveState();
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
+    /**
+     * Get reminder from the list
+     * @param index
+     * @return the reminder
+     */
     public Reminder getReminder(int index) {
         return dataStore.get(index);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater mi = getActivity().getMenuInflater();
+        mi.inflate(R.menu.listview_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+                removeReminder(info.position);
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }

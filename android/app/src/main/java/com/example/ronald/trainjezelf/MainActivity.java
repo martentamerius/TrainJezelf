@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.ronald.trainjezelf.datastore.DataStore;
+
 
 /**
  * Main activity: displays a ListView with all reminders that the user has created.
@@ -26,7 +28,7 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     /**
      * The fragment where the reminder details are displayed (null if absent)
      */
-    ReminderShowFragment reminderShowFragment;
+    ReminderEditFragment reminderEditFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         // find our fragments
         FragmentManager manager = getSupportFragmentManager();
         reminderListFragment = (ReminderListFragment) manager.findFragmentById(R.id.headlines);
-        reminderShowFragment = (ReminderShowFragment) manager.findFragmentById(R.id.article);
+        reminderEditFragment = (ReminderEditFragment) manager.findFragmentById(R.id.article);
 
         // Determine whether we are in single-pane or dual-pane mode by testing the visibility
         // of the reminder view.
@@ -44,7 +46,7 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         isDualPane = reminderView != null && reminderView.getVisibility() == View.VISIBLE;
 
         // what to do when someone clicks in the list
-        reminderListFragment.setOnHeadlineSelectedListener(this);
+        reminderListFragment.setOnReminderSelectedListener(this);
 
         // Set up headlines fragment
         reminderListFragment.setSelectable(isDualPane);
@@ -92,12 +94,23 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     public void onReminderSelected(int index) {
         if (isDualPane) {
             // display it on the article fragment
-            reminderShowFragment.displayReminder(reminderListFragment.getReminder(index));
+            reminderEditFragment.displayReminder(reminderListFragment.getReminder(index));
         } else {
             // use separate activity
-            final Intent i = new Intent(MainActivity.this, ReminderShowActivity.class);
-            i.putExtra(ReminderShowActivity.ARGUMENT_REMINDER_KEY, index);
+            final Intent i = new Intent(MainActivity.this, ReminderEditActivity.class);
+            i.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_KEY, index);
             startActivity(i);
         }
+    }
+
+    /**
+     * Save persistent app state.
+     * According to the documentation, the right place for this is the onPause() method.
+     * http://developer.android.com/training/basics/activity-lifecycle/pausing.html
+     */
+    @Override
+    public void onPause() {
+        super.onPause(); // Always call the superclass method first
+        DataStore.getInstance(this).saveState();
     }
 }

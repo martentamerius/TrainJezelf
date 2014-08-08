@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,9 +37,14 @@ public class ReminderShowActivity extends FragmentActivity
         reminderShowFragment = (ReminderShowFragment) manager.findFragmentById(R.id.reminderShowFragment);
 
         // Fill activity with data to be edited
-        Intent intent = getIntent();
-        reminderIndex = intent.getExtras().getInt(ARGUMENT_REMINDER_KEY);
-        refreshView();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            reminderIndex = extras.getInt(ARGUMENT_REMINDER_KEY);
+            Log.d("ReminderShowActivity", "received reminder index " + reminderIndex);
+            refreshView();
+        } else {
+            Log.d("ReminderShowActivity", "no extras received");
+        }
     }
 
     @Override
@@ -82,5 +88,11 @@ public class ReminderShowActivity extends FragmentActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         // TODO?
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        Log.d("ReminderShowActivity", "received new intent");
+        setIntent(intent);
     }
 }

@@ -3,26 +3,32 @@ package com.example.ronald.trainjezelf;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
+import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReminderShowFragment.OnFragmentInteractionListener} interface
+ * {@link ReminderEditFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReminderShowFragment#newInstance} factory method to
+ * Use the {@link ReminderEditFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class ReminderShowFragment extends Fragment {
+public class ReminderEditFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,12 +38,16 @@ public class ReminderShowFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
-
     /**
      * The reminder
      */
     private Reminder reminder;
+
+    private EditText messageEditText;
+    private EditText frequencyEditText;
+    private Spinner spinner;
+
+    private OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -45,11 +55,11 @@ public class ReminderShowFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ReminderShowFragment.
+     * @return A new instance of fragment ReminderEditFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReminderShowFragment newInstance(String param1, String param2) {
-        ReminderShowFragment fragment = new ReminderShowFragment();
+    public static ReminderEditFragment newInstance(String param1, String param2) {
+        ReminderEditFragment fragment = new ReminderEditFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,8 +67,8 @@ public class ReminderShowFragment extends Fragment {
         return fragment;
     }
 
-    public ReminderShowFragment() {
-        // Required empty public constructor
+    public ReminderEditFragment() {
+        // Required empty constructor
     }
 
     @Override
@@ -71,9 +81,19 @@ public class ReminderShowFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reminder_show, container, false);
+        return inflater.inflate(R.layout.fragment_reminder_edit, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Get references to GUI elements
+        messageEditText = (EditText) getView().findViewById(R.id.messageEditText);
+        frequencyEditText = (EditText) getView().findViewById(R.id.frequencyEditText);
+        spinner = (Spinner) getView().findViewById(R.id.spinner);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -115,21 +135,56 @@ public class ReminderShowFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-
     /**
      * Displays a particular reminder.
      * @param reminder the reminder to display
      */
     public void displayReminder(Reminder reminder) {
+        // Populate spinner
+        populateSpinner();
         this.reminder = reminder;
-        loadReminder();
+        populateView();
     }
 
     /**
      * Loads reminder data into the UI.
      */
-    private void loadReminder() {
-        TextView messageText = (TextView) getView().findViewById(R.id.reminderShowText);
-        messageText.setText(reminder.getMessage());
+    private void populateView() {
+        messageEditText.setText(reminder.getMessage());
+        frequencyEditText.setText(Integer.toString(reminder.getNumberOfNotifiesPerPeriod()));
+        spinner.setSelection(reminder.getPeriod().ordinal());
+    }
+
+    private void populateSpinner() {
+        List<String> list = new ArrayList<String>();
+        for (Reminder.Period period: Reminder.Period.values()) {
+            list.add(period.toString());
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+    }
+
+    public void saveReminder() {
+        DataStore dataStore = DataStore.getInstance(getActivity());
+        dataStore.remove(reminder);
+        dataStore.add(getFromView());
+    }
+
+    private Reminder getFromView() {
+         String message = messageEditText.getText().toString();
+         int numberOfNotifiesPerPeriod;
+         try {
+             numberOfNotifiesPerPeriod = Integer.parseInt(frequencyEditText.getText().toString());
+         } catch (NumberFormatException e) {
+             numberOfNotifiesPerPeriod = 1;
+         }
+         Reminder.Period period = Reminder.Period.values()[spinner.getSelectedItemPosition()];
+         return new Reminder(message, numberOfNotifiesPerPeriod, period);
+     }
+
+
+    public String getReminderText() {
+        return messageEditText.getText().toString();
     }
 }
