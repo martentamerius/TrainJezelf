@@ -9,20 +9,34 @@ public class Reminder {
      * Period enum for defining the frequency of the reminder
      */
     public enum Period {
-        HOURLY ("uur"),
-        DAILY ("dag"),
-        WEEKLY ("week"),
-        MONTHLY ("maand");
+        HOURLY ("uur", "buttonHour"),
+        DAILY ("dag","buttonDay"),
+        WEEKLY ("week", "buttonWeek"),
+        MONTHLY ("maand", "buttonMonth");
 
         private final String name;
+        private final String buttonId;
 
-        Period(String name) {
+        Period(String name, String buttonId) {
             this.name = name;
+            this.buttonId = buttonId;
         }
 
         @Override
         public String toString() {
             return name;
+        }
+
+        public String getButtonId() { return buttonId; }
+
+        public static Period get(String id) {
+            final String lowerCase = id.toLowerCase();
+            for (Period candidate : Period.values()) {
+                if (lowerCase.equals(candidate.toString())) {
+                    return candidate;
+                }
+            }
+            throw new IllegalArgumentException(id + " not found");
         }
     };
 
