@@ -17,12 +17,16 @@ import java.util.List;
  */
 public class ReminderAdapter extends ArrayAdapter<Reminder> {
     private final Context context;
-    private final List<Reminder> data;
+    private List<Reminder> data;
 
     public ReminderAdapter(Context context, int layoutResourceId, List<Reminder> data) {
         super(context, layoutResourceId, data);
         this.context = context;
         this.data = data;
+    }
+
+    public void setReminders(List<Reminder> reminders) {
+        this.data = reminders;
     }
 
     // Cache view items for list scrolling performance

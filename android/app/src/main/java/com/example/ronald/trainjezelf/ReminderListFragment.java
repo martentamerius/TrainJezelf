@@ -63,18 +63,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         registerForContextMenu(getListView());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        dataStore.saveState();
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
     /**
      * Sets the listener that should be notified of list item selection events.
      * @param listener the listener to notify.

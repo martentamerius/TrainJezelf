@@ -43,6 +43,12 @@ public class ReminderEditActivity extends FragmentActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        reminderEditFragment.saveReminder();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         refreshView();

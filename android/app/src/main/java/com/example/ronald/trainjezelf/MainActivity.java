@@ -9,8 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.ronald.trainjezelf.datastore.DataStore;
-
 
 /**
  * Main activity: displays a ListView with all reminders that the user has created.
@@ -102,16 +100,5 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
             i.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_KEY, index);
             startActivity(i);
         }
-    }
-
-    /**
-     * Save persistent app state.
-     * According to the documentation, the right place for this is the onPause() method.
-     * http://developer.android.com/training/basics/activity-lifecycle/pausing.html
-     */
-    @Override
-    public void onPause() {
-        super.onPause(); // Always call the superclass method first
-        DataStore.getInstance(this).saveState();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ronald.trainjezelf.datastore;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -33,19 +34,13 @@ public final class DataStore {
     private List<Reminder> reminders = null;
 
     /**
-     * Dirty flag: true means we have changes w.r.t. the contents on permanent storage
-     */
-    private boolean isDirty;
-
-    /**
      * Constructor
      *
      * @param activity any context within the app
      */
     private DataStore(Activity activity) {
         this.sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-        this.reminders = loadReminders();
-        this.isDirty = false;
+        loadReminders();
     }
 
     /**
@@ -58,16 +53,6 @@ public final class DataStore {
             instance = new DataStore(activity);
         }
         return instance;
-    }
-
-    /**
-     * Save reminders to disk (if needed)
-     */
-    public void saveState() {
-        if (isDirty) {
-            saveReminders(reminders);
-            isDirty = false;
-        }
     }
 
     /**
@@ -84,17 +69,22 @@ public final class DataStore {
      * @return new size of the reminder list
      */
     public int add(Reminder reminder) {
-        this.reminders.add(reminder);
-        isDirty = true;
+        reminders.add(reminder);
+        saveReminders();
         return reminders.size();
     }
 
     /**
-     * Remove item from data store
-     * @param item the item
+     * Remove oldReminder from data store
+     * @param oldReminder the oldReminder to replace
+     * @param newReminder the new reminder that replaces the old one
+     * @return the new Reminder
      */
-    public void remove(Reminder item) {
-        reminders.remove(item);
+    public Reminder replace(Reminder oldReminder, Reminder newReminder) {
+        int replaceIndex = reminders.indexOf(oldReminder);
+        reminders.set(replaceIndex, newReminder);
+        saveReminders();
+        return newReminder;
     }
 
     /**
@@ -103,6 +93,7 @@ public final class DataStore {
      */
     public void remove(int index) {
         reminders.remove(index);
+        saveReminders();
     }
 
     /**
@@ -116,24 +107,23 @@ public final class DataStore {
 
     /**
      * Save reminders to data store
-     * @param reminders the reminders
      */
-    private void saveReminders(List<Reminder> reminders) {
+    @SuppressLint("CommitPrefEdits")
+    private void saveReminders() {
         final Gson gson = new Gson();
         final String json = gson.toJson(reminders);
         final SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(REMINDERS_KEY, json);
-        editor.apply();
+        editor.commit();
     }
 
     /**
      * Get reminders from data store
-     * @return list of reminders
      */
-    private List<Reminder> loadReminders() {
+    private void loadReminders() {
         final Gson gson = new Gson();
         final Type listType = new TypeToken<List<Reminder>>() {}.getType();
         final String json = sharedPref.getString(REMINDERS_KEY, "[]");
-        return gson.fromJson(json, listType);
+        reminders = gson.fromJson(json, listType);
     }
 }

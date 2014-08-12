@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/messageEditText"
             android:layout_below="@+id/messageTextView"
-            android:inputType="textAutoCorrect" />
+            android:inputType="textMultiLine|textCapSentences" />
 
         <TextView
             android:layout_width="match_parent"

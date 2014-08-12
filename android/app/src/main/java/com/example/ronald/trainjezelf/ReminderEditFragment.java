@@ -47,8 +47,7 @@ public class ReminderEditFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_reminder_edit, container, false);
     }
@@ -109,6 +108,7 @@ public class ReminderEditFragment extends Fragment {
      */
     private void populateView() {
         messageEditText.setText(reminder.getMessage());
+        messageEditText.setSelection(reminder.getMessage().length());
         frequencyNumberGroup.check(getResources().getIdentifier("button" + reminder.getNumberOfNotifiesPerPeriod(),
                 "id", getActivity().getPackageName()));
         frequencyPeriodGroup.check(getResources().getIdentifier(reminder.getPeriod().getButtonId(), "id",
@@ -120,8 +120,7 @@ public class ReminderEditFragment extends Fragment {
      */
     public void saveReminder() {
         DataStore dataStore = DataStore.getInstance(getActivity());
-        dataStore.remove(reminder);
-        dataStore.add(getFromView());
+        reminder = dataStore.replace(reminder, getFromView());
     }
 
     private Reminder getFromView() {
