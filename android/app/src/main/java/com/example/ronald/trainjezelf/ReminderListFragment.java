@@ -1,7 +1,7 @@
 package com.example.ronald.trainjezelf;
 
-import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
