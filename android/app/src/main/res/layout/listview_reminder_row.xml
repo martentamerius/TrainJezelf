@@ -13,7 +13,6 @@
               android:layout_gravity="center_vertical"
               android:textStyle="bold"
               android:textSize="16sp" />
-              <!--android:textSize="?android:attr/textAppearanceListItem" />-->
 
     <View android:layout_width="0dp"
           android:layout_height="0dp"
@@ -33,6 +32,7 @@
                android:layout_marginTop="8dp"
                android:layout_marginRight="8dp"
                android:layout_marginBottom="8dp"
-               android:src="@drawable/ic_launcher" />
+               android:src="@drawable/ic_launcher"
+               android:contentDescription="@string/background_photo" />
 
 </LinearLayout>

@@ -5,9 +5,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 
-import com.example.ronald.trainjezelf.ReminderEditActivity;
-
 /**
+ * Schedules alarms (notifications) on behalf of the app.
  * Created by ronald on 8-8-14.
  */
 public class AlarmScheduler {

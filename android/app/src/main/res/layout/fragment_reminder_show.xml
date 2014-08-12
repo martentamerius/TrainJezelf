@@ -11,17 +11,17 @@
         android:background="@drawable/nature_spring"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:contentDescription="@string/background_photo"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/reminderShowText"
         android:layout_gravity="center|bottom"
         android:padding="32dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque tortor purus, porta sit amet elit luctus, eleifend mattis lorem."
+        android:text="@string/lorem_ipsum"
         android:typeface="serif"
         android:textStyle="italic"
         android:clickable="false"

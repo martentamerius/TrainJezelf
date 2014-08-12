@@ -11,6 +11,7 @@ import com.example.ronald.trainjezelf.R;
 import com.example.ronald.trainjezelf.ReminderShowActivity;
 
 /**
+ * Receives alarms from the app, even when the app is not running.
  * Created by ronald on 8-8-14.
  */
 public class AlarmReceiver extends BroadcastReceiver {

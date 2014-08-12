@@ -2,6 +2,7 @@ package com.example.ronald.trainjezelf;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -18,17 +19,17 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     /**
      * Whether or not we are in dual-pane mode
      */
-    boolean isDualPane = false;
+    private boolean isDualPane = false;
 
     /**
      * The fragment where the reminder list is displayed
      */
-    ReminderListFragment reminderListFragment;
+    private ReminderListFragment reminderListFragment;
 
     /**
      * The fragment where the reminder details are displayed (null if absent)
      */
-    ReminderEditFragment reminderEditFragment;
+    private ReminderEditFragment reminderEditFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         restoreSelection(savedInstanceState);
     }
 

@@ -38,7 +38,7 @@ public class Reminder {
             }
             throw new IllegalArgumentException(id + " not found");
         }
-    };
+    }
 
     /**
      * The reminder message
@@ -53,9 +53,9 @@ public class Reminder {
 
     /**
      * Constructor
-     * @param message
-     * @param numberOfNotifiesPerPeriod
-     * @param period
+     * @param message message next
+     * @param numberOfNotifiesPerPeriod number of notifies per period
+     * @param period period
      */
     public Reminder(String message, int numberOfNotifiesPerPeriod, Period period) {
         this.message = message;

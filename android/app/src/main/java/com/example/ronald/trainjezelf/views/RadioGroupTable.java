@@ -2,34 +2,31 @@ package com.example.ronald.trainjezelf.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
+ * Helper class for creating a table view of radio buttons.
  * Created by ronald on 9-8-14.
  */
 public class RadioGroupTable extends TableLayout implements View.OnClickListener {
 
-    private static final String TAG = "RadioGroupTable";
     private RadioButton activeRadioButton;
-    private Map<Integer, RadioButton> buttons = new HashMap<Integer, RadioButton>();
+    private SparseArray<RadioButton> buttons = new SparseArray<RadioButton>();
 
     /**
-     * @param context
+     * @param context the context
      */
     public RadioGroupTable(Context context) {
         super(context);
     }
 
     /**
-     * @param context
-     * @param attrs
+     * @param context the context
+     * @param attrs the attributes
      */
     public RadioGroupTable(Context context, AttributeSet attrs) {
         super(context, attrs);

@@ -1,10 +1,8 @@
 package com.example.ronald.trainjezelf.datastore;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
+ * App-wide persistent data storage.
  * Created by Ronald on 4-7-2014.
  */
 public final class DataStore {
@@ -43,7 +42,7 @@ public final class DataStore {
      *
      * @param activity any context within the app
      */
-    protected DataStore(Activity activity) {
+    private DataStore(Activity activity) {
         this.sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         this.reminders = loadReminders();
         this.isDirty = false;
@@ -51,7 +50,7 @@ public final class DataStore {
 
     /**
      * Get data store instance (singleton pattern)
-     * @param activity
+     * @param activity the activity
      * @return the data store
      */
     public static DataStore getInstance(Activity activity) {
@@ -81,7 +80,7 @@ public final class DataStore {
 
     /**
      * Add reminder to data store
-     * @param reminder
+     * @param reminder the reminder
      * @return new size of the reminder list
      */
     public int add(Reminder reminder) {
@@ -92,7 +91,7 @@ public final class DataStore {
 
     /**
      * Remove item from data store
-     * @param item
+     * @param item the item
      */
     public void remove(Reminder item) {
         reminders.remove(item);
@@ -100,7 +99,7 @@ public final class DataStore {
 
     /**
      * Remove item from data store
-     * @param index index
+     * @param index the index
      */
     public void remove(int index) {
         reminders.remove(index);
@@ -108,8 +107,8 @@ public final class DataStore {
 
     /**
      * Get item from data store
-     * @param index
-     * @return reminder
+     * @param index the index
+     * @return reminder the reminder
      */
     public Reminder get(int index) {
         return reminders.get(index);
@@ -117,14 +116,14 @@ public final class DataStore {
 
     /**
      * Save reminders to data store
-     * @param reminders
+     * @param reminders the reminders
      */
     private void saveReminders(List<Reminder> reminders) {
         final Gson gson = new Gson();
         final String json = gson.toJson(reminders);
         final SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(REMINDERS_KEY, json);
-        editor.commit();
+        editor.apply();
     }
 
     /**

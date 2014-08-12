@@ -26,12 +26,12 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     /**
      * The listener we are to notify when a list item is selected
      */
-    OnReminderSelectedListener mReminderSelectedListener = null;
+    private OnReminderSelectedListener mReminderSelectedListener = null;
 
     /**
      * The data store
      */
-    DataStore dataStore = null;
+    private DataStore dataStore = null;
 
     /**
      * Listener that will be notified of list item selections
@@ -124,7 +124,7 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
 
     /**
      * Get reminder from the list
-     * @param index
+     * @param index in the list
      * @return the reminder
      */
     public Reminder getReminder(int index) {
