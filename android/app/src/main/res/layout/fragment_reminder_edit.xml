@@ -1,241 +1,247 @@
-<RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Melding"
-        android:id="@+id/messageTextView"
-        style="?android:attr/listSeparatorTextViewStyle" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/messageEditText"
-        android:layout_below="@+id/messageTextView" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Frequentie"
-        android:id="@+id/frequencyTextView"
-        style="?android:attr/listSeparatorTextViewStyle"
-        android:layout_below="@+id/messageEditText" />
-
-    <com.example.ronald.trainjezelf.views.RadioGroupTable
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frequencyNumberPad"
-        android:layout_below="@id/frequencyTextView" >
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin" >
 
-        <TableRow>
-            <RadioButton
-                android:text="1"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button1"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="2"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button2"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="3"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button3"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="4"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button4"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="5"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button5"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-        </TableRow>
-
-        <TableRow>
-            <RadioButton
-                android:text="6"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button6"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="7"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button7"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="8"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button8"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="9"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button9"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:text="10"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/button10"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
-        </TableRow>
-
-    </com.example.ronald.trainjezelf.views.RadioGroupTable>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="keer per"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:layout_marginLeft="8dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/timesPerText"
-        android:gravity="center"
-        android:layout_below="@+id/frequencyNumberPad" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:id="@+id/frequencyPeriodRow"
-        android:layout_below="@+id/timesPerText" >
-
-        <RadioGroup
-            android:id="@+id/frequencyPeriodRadioGroup"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:text="Melding"
+            android:id="@+id/messageTextView"
+            style="?android:attr/listSeparatorTextViewStyle" />
 
-            <RadioButton
-                android:text="Uur"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/buttonHour"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageEditText"
+            android:layout_below="@+id/messageTextView" />
 
-            <RadioButton
-                android:text="Dag"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/buttonDay"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Frequentie"
+            android:id="@+id/frequencyTextView"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_below="@+id/messageEditText" />
 
-            <RadioButton
-                android:text="Week"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
+        <com.example.ronald.trainjezelf.views.RadioGroupTable
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/frequencyNumberPad"
+            android:layout_below="@id/frequencyTextView" >
+
+            <TableRow>
+                <RadioButton
+                    android:text="1"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button1"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="2"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button2"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="3"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button3"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="4"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button4"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="5"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button5"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+            </TableRow>
+
+            <TableRow>
+                <RadioButton
+                    android:text="6"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button6"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="7"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button7"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="8"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button8"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="9"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button9"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="10"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/button10"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+            </TableRow>
+
+        </com.example.ronald.trainjezelf.views.RadioGroupTable>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="keer per"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="8dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/timesPerText"
+            android:gravity="center"
+            android:layout_below="@+id/frequencyNumberPad" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:id="@+id/frequencyPeriodRow"
+            android:layout_below="@+id/timesPerText" >
+
+            <RadioGroup
+                android:id="@+id/frequencyPeriodRadioGroup"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/buttonWeek"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+                android:orientation="horizontal" >
 
-            <RadioButton
-                android:text="Maand"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:id="@+id/buttonMonth"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+                <RadioButton
+                    android:text="Uur"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/buttonHour"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
 
-        </RadioGroup>
+                <RadioButton
+                    android:text="Dag"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/buttonDay"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
 
-    </LinearLayout>
+                <RadioButton
+                    android:text="Week"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/buttonWeek"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
 
-</RelativeLayout>
+                <RadioButton
+                    android:text="Maand"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:id="@+id/buttonMonth"
+                    android:button="@null"
+                    android:background="@drawable/radio_button_background"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_weight="1" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
