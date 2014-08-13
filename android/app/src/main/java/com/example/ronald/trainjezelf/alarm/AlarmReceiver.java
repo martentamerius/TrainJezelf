@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.ronald.trainjezelf.R;
@@ -26,8 +28,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_launcher)
+                        .setTicker(notificationText)
                         .setContentTitle(context.getResources().getString(R.string.app_name))
-                        .setContentText(notificationText);
+                        .setContentText(notificationText)
+                        .setOnlyAlertOnce(true)
+                        .setVibrate(new long[] {0, 350, 0})
+                        .setLights(Color.GREEN, 750, 2250) // TODO set purple
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
         // Create intent for activity in our app
         Intent resultIntent = new Intent(context, ReminderShowActivity.class);
