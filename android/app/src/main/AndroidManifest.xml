@@ -35,7 +35,7 @@
         <activity
             android:name=".ReminderShowActivity"
             android:label="@string/title_activity_reminder_show"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"
             android:launchMode="singleTask"
             android:taskAffinity=""
             android:excludeFromRecents="true" >
