@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BFLaunchViewController : UIViewController
+@class BFReminder;
 
+@interface BFLaunchViewController : UIViewController
+- (void)showReminder:(BFReminder *)reminder;
 @end

@@ -8,17 +8,14 @@
 
 #import "BFReminderEditViewController.h"
 
-@interface BFReminderEditViewController () <UITextViewDelegate, UIActionSheetDelegate>
+
+@interface BFReminderEditViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
-@property (weak, nonatomic) IBOutlet UILabel *frequencyCountLabel;
-@property (weak, nonatomic) IBOutlet UILabel *frequencyTypeLabel;
-@property (nonatomic) NSInteger selectedFrequencyType;
-
-@property (weak, nonatomic) IBOutlet UIStepper *frequencyCountStepper;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *frequencyCountButtons;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *frequencyTypeButtons;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @end
+
 
 @implementation BFReminderEditViewController
 
@@ -39,58 +36,71 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     // Set values form BFReminder object
     if (self.reminder) {
         self.messageTextView.text = self.reminder.message;
-        self.frequencyCountLabel.text = [NSString stringWithFormat:@"%d", self.reminder.frequencyCount];
-        self.frequencyCountStepper.value = self.reminder.frequencyCount;
-        self.frequencyCountStepper.stepValue = 1.0;
-        self.frequencyTypeLabel.text = [self.reminder frequencyTypeString];
-        self.selectedFrequencyType = self.reminder.frequencyType;
+        
+        if ((self.reminder.frequencyCount>0) && (self.reminder.frequencyCount<([self.frequencyCountButtons count]+1))) {
+            NSString *frequencyCount = [NSString stringWithFormat:@"%ld", (long)self.reminder.frequencyCount];
+            
+            [self.frequencyCountButtons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                UIButton *btn = (UIButton *)obj;
+                if ([frequencyCount isEqualToString:btn.titleLabel.text]) {
+                    [btn setSelected:YES];
+                    *stop = YES;
+                }
+            }];
+        }
+        
+        if ((self.reminder.frequencyType>0) && (self.reminder.frequencyType<[self.frequencyTypeButtons count])) {
+            NSString *frequencyType = [self.reminder frequencyTypeString];
+            
+            [self.frequencyTypeButtons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                UIButton *btn = (UIButton *)obj;
+                if ([frequencyType caseInsensitiveCompare:btn.titleLabel.text] == NSOrderedSame) {
+                    [btn setSelected:YES];
+                    *stop = YES;
+                }
+            }];
+        }
     }
 }
 
 
 #pragma mark - Reminder editing
 
-- (IBAction)frequencyCountStepperValueChanged:(UIStepper *)sender
-{
-    if (sender.value>1.0) {
-        self.reminder.frequencyCount = sender.value;
-        self.frequencyCountLabel.text = [NSString stringWithFormat:@"%d", self.reminder.frequencyCount];
-    } else {
-        sender.value = 1.0;
-    }
-}
-
-- (IBAction)frequencyTypeLabelTapped:(UITapGestureRecognizer *)sender
-{
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Per ..." delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"uur", @"dag", @"maand", nil];
-    
-    [actionSheet showFromRect:self.saveButton.frame inView:self.view animated:YES];
-}
-
 - (IBAction)imageViewTapped:(UITapGestureRecognizer *)sender
 {
-    
+    // TODO: Images!
 }
 
-- (IBAction)saveButtonTapped:(UIButton *)sender
+- (IBAction)frequencyCountButtonTapped:(UIButton *)sender
 {
-    // Save user input
-    if (self.reminder) {
-        self.reminder.message = self.messageTextView.text;
-        self.reminder.frequencyCount = self.frequencyCountStepper.value;
-        self.reminder.frequencyType = self.selectedFrequencyType;
-        
-        // Tell delegate that the reminder has been saved
-        if (self.delegate)
-            [self.delegate reminderSaveButtonTappedInEditViewController:self];
-    }
+    [self selectButton:sender inOutletCollection:self.frequencyCountButtons];
+}
+
+- (IBAction)frequencyTypeButtonTapped:(UIButton *)sender
+{    
+    [self selectButton:sender inOutletCollection:self.frequencyTypeButtons];
+}
+
+- (void)selectButton:(UIButton *)newSelectedButton inOutletCollection:(NSArray *)outletColletion
+{
+    __block UIButton *oldSelectedButton;
+    [outletColletion enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        UIButton *btn = (UIButton *)obj;
+        if (btn.isSelected) {
+            oldSelectedButton = btn;
+            *stop = YES;
+        }
+    }];
     
-    // And perform unwinding segue
-    UIStoryboardSegue *unwindSegue = [self segueForUnwindingToViewController:self.parentViewController fromViewController:self identifier:kBTSegueReminderSaveTapped];
-    [unwindSegue perform];
+    if (oldSelectedButton) {
+        [oldSelectedButton setSelected:NO];
+    }
+    [newSelectedButton setSelected:YES];
 }
 
 
@@ -102,21 +112,37 @@
 }
 
 
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    self.selectedFrequencyType = buttonIndex;
-    self.frequencyTypeLabel.text = [self.reminder frequencyTypeString];
-}
-
-
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:kBTSegueReminderSaveTapped]) {
-        
+    if ([[segue identifier] isEqualToString:kBFSegueUnwindFromSaveReminderTapped]) {
+        // Save user input
+        if (self.reminder) {
+            self.reminder.message = self.messageTextView.text;
+            
+            __block NSInteger frequencyCount = 0;
+            [self.frequencyCountButtons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                UIButton *btn = (UIButton *)obj;
+                if (btn.isSelected) {
+                    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                    frequencyCount = [[numberFormatter numberFromString:btn.titleLabel.text] integerValue];
+                    *stop = YES;
+                }
+            }];
+            self.reminder.frequencyCount = frequencyCount;
+            
+            __block NSString *frequencyTypeString;
+            [self.frequencyTypeButtons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                UIButton *btn = (UIButton *)obj;
+                if (btn.isSelected) {
+                    frequencyTypeString = btn.titleLabel.text;
+                    *stop = YES;
+                }
+            }];
+            if (frequencyTypeString)
+                [self.reminder setFrequencyTypeString:frequencyTypeString];
+        }
     }
 }
 

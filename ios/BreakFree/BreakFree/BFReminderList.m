@@ -42,7 +42,7 @@ static BFReminderList *_reminderList;
 {
     self = [super init];
     if (self) {
-        // Initialize an empty array
+        // Initialize an empty arrays
         self.reminders = [NSMutableArray array];
         
         // If available, load reminders directly from NSUserDefaults
@@ -60,44 +60,67 @@ static BFReminderList *_reminderList;
     return [self.reminders count];
 }
 
+- (NSUInteger)countForFrequencyType:(BFFrequencyType)frequencyType
+{
+    return [[self remindersWithFrequencyType:frequencyType] count];
+}
+
 - (void)addReminder:(BFReminder *)reminder
 {
-    [self.reminders addObject:reminder];
+    if (reminder)
+        [self.reminders addObject:reminder];
 }
 
 - (void)removeReminder:(BFReminder *)reminder
 {
-    [self.reminders removeObject:reminder];
-}
-
-- (void)removeReminderAtIndex:(NSUInteger)index
-{
-    if ([self.reminders count]>index) {
-        [self.reminders removeObjectAtIndex:index];
-    }
-}
-
-- (void)exchangeReminderAtIndex:(NSUInteger)firstIndex withReminderAtIndex:(NSUInteger)secondIndex
-{
-    if (([self.reminders count]>firstIndex) && ([self.reminders count]>secondIndex)) {
-        [self.reminders exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
-    }
+    if (reminder)
+        [self.reminders removeObject:reminder];
 }
 
 - (BFReminder *)reminderAtIndex:(NSUInteger)index
 {
     BFReminder *reminder;
     
-    if ([self.reminders count]>index) {
+    if ([self.reminders count]>index)
         reminder = [self.reminders objectAtIndex:index];
+    
+    return reminder;
+}
+
+- (BFReminder *)reminderWithUUID:(NSUUID *)uuid
+{
+    __block BFReminder *reminder;
+    
+    if ([self.reminders count]>0) {
+        [self.reminders enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            BFReminder *currentReminder = (BFReminder *)obj;
+            if ([currentReminder.uuid isEqual:uuid]) {
+                reminder = currentReminder;
+                *stop = YES;
+            }
+        }];
     }
     
     return reminder;
 }
 
+
 - (NSArray *)reminderList
 {
     return [NSArray arrayWithArray:self.reminders];
+}
+
+- (NSArray *)remindersWithFrequencyType:(BFFrequencyType)frequencyType
+{
+    __block NSMutableArray *filteredReminders = [NSMutableArray array];
+    
+    [self.reminders enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        BFReminder *currentReminder = (BFReminder *)obj;
+        if (currentReminder.frequencyType == frequencyType)
+            [filteredReminders addObject:currentReminder];
+    }];
+    
+    return [NSArray arrayWithArray:filteredReminders];
 }
 
 
@@ -107,19 +130,25 @@ static BFReminderList *_reminderList;
 {
     id remindersFromUserDefaults = [[NSUserDefaults standardUserDefaults] valueForKey:kBFUserDefaultsCurrentReminderList];
     
-    if (remindersFromUserDefaults)
+    if (remindersFromUserDefaults) {
         self.reminders = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:remindersFromUserDefaults]];
+    }
 }
 
 - (void)saveRemindersToUserDefaults
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kBFUserDefaultsCurrentReminderList];
+    [self removeRemindersFromUserDefaults];
     
     if (self.reminders) {
         [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self.reminders] forKey:kBFUserDefaultsCurrentReminderList];
-        
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+}
+
+- (void)removeRemindersFromUserDefaults
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kBFUserDefaultsCurrentReminderList];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

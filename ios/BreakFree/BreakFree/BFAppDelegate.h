@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class BFReminder;
+
 @interface BFAppDelegate : UIResponder <UIApplicationDelegate>
-
 @property (strong, nonatomic) UIWindow *window;
-
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B0BACDB1986E6F800D4CC09 /* BFReminderCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */; };
 		9B3F0DBB1966A4A30089DEC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3F0DBA1966A4A30089DEC1 /* Foundation.framework */; };
 		9B3F0DBD1966A4A30089DEC1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3F0DBC1966A4A30089DEC1 /* CoreGraphics.framework */; };
 		9B3F0DBF1966A4A30089DEC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3F0DBE1966A4A30089DEC1 /* UIKit.framework */; };
@@ -21,11 +22,11 @@
 		9B3F0DE01966A4A30089DEC1 /* BreakFreeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DDF1966A4A30089DEC1 /* BreakFreeTests.m */; };
 		9B3F0DEA1966A8450089DEC1 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B3F0DE91966A8450089DEC1 /* Storyboard.storyboard */; };
 		9B3F0DEF1966BC030089DEC1 /* BFLaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DEE1966BC030089DEC1 /* BFLaunchViewController.m */; };
-		9B3F0DF51966C09F0089DEC1 /* BFReminderListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DF41966C09F0089DEC1 /* BFReminderListTableViewCell.m */; };
+		9B3F0DF51966C09F0089DEC1 /* BFReminderCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DF41966C09F0089DEC1 /* BFReminderCollectionViewCell.m */; };
 		9B3F0DF81966C7810089DEC1 /* BFReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DF71966C7810089DEC1 /* BFReminder.m */; };
-		9B3F0DFB1966C85E0089DEC1 /* BFReminderListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DFA1966C85E0089DEC1 /* BFReminderListTableViewController.m */; };
 		9B3F0DFE1966C9990089DEC1 /* BFReminderList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DFD1966C9990089DEC1 /* BFReminderList.m */; };
 		9B3F0E011966DB6A0089DEC1 /* BFReminderEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */; };
+		9BED9694198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BED9693198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9B0BACD91986E6F800D4CC09 /* BFReminderCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderCollectionViewController.h; sourceTree = "<group>"; };
+		9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderCollectionViewController.m; sourceTree = "<group>"; };
 		9B3F0DB71966A4A30089DEC1 /* BreakFree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakFree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B3F0DBA1966A4A30089DEC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9B3F0DBC1966A4A30089DEC1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -59,16 +62,16 @@
 		9B3F0DEB1966AACA0089DEC1 /* BFAppDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFAppDefines.h; sourceTree = "<group>"; };
 		9B3F0DED1966BC030089DEC1 /* BFLaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFLaunchViewController.h; sourceTree = "<group>"; };
 		9B3F0DEE1966BC030089DEC1 /* BFLaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFLaunchViewController.m; sourceTree = "<group>"; };
-		9B3F0DF31966C09F0089DEC1 /* BFReminderListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderListTableViewCell.h; sourceTree = "<group>"; };
-		9B3F0DF41966C09F0089DEC1 /* BFReminderListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderListTableViewCell.m; sourceTree = "<group>"; };
+		9B3F0DF31966C09F0089DEC1 /* BFReminderCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderCollectionViewCell.h; sourceTree = "<group>"; };
+		9B3F0DF41966C09F0089DEC1 /* BFReminderCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderCollectionViewCell.m; sourceTree = "<group>"; };
 		9B3F0DF61966C7810089DEC1 /* BFReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminder.h; sourceTree = "<group>"; };
 		9B3F0DF71966C7810089DEC1 /* BFReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminder.m; sourceTree = "<group>"; };
-		9B3F0DF91966C85E0089DEC1 /* BFReminderListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderListTableViewController.h; sourceTree = "<group>"; };
-		9B3F0DFA1966C85E0089DEC1 /* BFReminderListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderListTableViewController.m; sourceTree = "<group>"; };
 		9B3F0DFC1966C9990089DEC1 /* BFReminderList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderList.h; sourceTree = "<group>"; };
 		9B3F0DFD1966C9990089DEC1 /* BFReminderList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderList.m; sourceTree = "<group>"; };
 		9B3F0DFF1966DB6A0089DEC1 /* BFReminderEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderEditViewController.h; sourceTree = "<group>"; };
 		9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderEditViewController.m; sourceTree = "<group>"; };
+		9BED9692198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderCollectionViewAccessoryViewHeader.h; sourceTree = "<group>"; };
+		9BED9693198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderCollectionViewAccessoryViewHeader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,8 +177,8 @@
 			children = (
 				9B3F0DED1966BC030089DEC1 /* BFLaunchViewController.h */,
 				9B3F0DEE1966BC030089DEC1 /* BFLaunchViewController.m */,
-				9B3F0DF91966C85E0089DEC1 /* BFReminderListTableViewController.h */,
-				9B3F0DFA1966C85E0089DEC1 /* BFReminderListTableViewController.m */,
+				9B0BACD91986E6F800D4CC09 /* BFReminderCollectionViewController.h */,
+				9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */,
 				9B3F0DFF1966DB6A0089DEC1 /* BFReminderEditViewController.h */,
 				9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */,
 			);
@@ -197,8 +200,10 @@
 			isa = PBXGroup;
 			children = (
 				9B3F0DE91966A8450089DEC1 /* Storyboard.storyboard */,
-				9B3F0DF31966C09F0089DEC1 /* BFReminderListTableViewCell.h */,
-				9B3F0DF41966C09F0089DEC1 /* BFReminderListTableViewCell.m */,
+				9B3F0DF31966C09F0089DEC1 /* BFReminderCollectionViewCell.h */,
+				9B3F0DF41966C09F0089DEC1 /* BFReminderCollectionViewCell.m */,
+				9BED9692198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.h */,
+				9BED9693198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -259,6 +264,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Tamerius & Bos";
 				TargetAttributes = {
+					9B3F0DB61966A4A30089DEC1 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
+					};
 					9B3F0DD11966A4A30089DEC1 = {
 						TestTargetID = 9B3F0DB61966A4A30089DEC1;
 					};
@@ -313,9 +325,10 @@
 				9B3F0DFE1966C9990089DEC1 /* BFReminderList.m in Sources */,
 				9B3F0DEF1966BC030089DEC1 /* BFLaunchViewController.m in Sources */,
 				9B3F0E011966DB6A0089DEC1 /* BFReminderEditViewController.m in Sources */,
-				9B3F0DFB1966C85E0089DEC1 /* BFReminderListTableViewController.m in Sources */,
+				9B0BACDB1986E6F800D4CC09 /* BFReminderCollectionViewController.m in Sources */,
 				9B3F0DC71966A4A30089DEC1 /* main.m in Sources */,
-				9B3F0DF51966C09F0089DEC1 /* BFReminderListTableViewCell.m in Sources */,
+				9B3F0DF51966C09F0089DEC1 /* BFReminderCollectionViewCell.m in Sources */,
+				9BED9694198C160F005E245D /* BFReminderCollectionViewAccessoryViewHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +402,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -421,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -514,6 +527,7 @@
 				9B3F0DE51966A4A30089DEC1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B3F0DE61966A4A30089DEC1 /* Build configuration list for PBXNativeTarget "BreakFreeTests" */ = {
 			isa = XCConfigurationList;
@@ -522,6 +536,7 @@
 				9B3F0DE81966A4A30089DEC1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

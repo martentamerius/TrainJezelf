@@ -9,14 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "BFReminder.h"
 
-@class BFReminderEditViewController;
-
-@protocol BFReminderEditViewControllerDelegate <NSObject>
-- (void)reminderSaveButtonTappedInEditViewController:(BFReminderEditViewController *)viewController;
-@end
-
-
 @interface BFReminderEditViewController : UIViewController
-@property (nonatomic, strong) id <BFReminderEditViewControllerDelegate> delegate;
 @property (nonatomic, strong) BFReminder *reminder;
 @end

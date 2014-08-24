@@ -14,16 +14,18 @@
 + (BFReminderList *)sharedReminderList;
 
 - (NSUInteger)count;
+- (NSUInteger)countForFrequencyType:(BFFrequencyType)frequencyType;
 
 - (void)addReminder:(BFReminder *)reminder;
 - (void)removeReminder:(BFReminder *)reminder;
-- (void)removeReminderAtIndex:(NSUInteger)index;
-
-- (void)exchangeReminderAtIndex:(NSUInteger)firstIndex withReminderAtIndex:(NSUInteger)secondIndex;
 
 - (BFReminder *)reminderAtIndex:(NSUInteger)index;
+- (BFReminder *)reminderWithUUID:(NSUUID *)uuid;
 
 - (NSArray *)reminderList;
+- (NSArray *)remindersWithFrequencyType:(BFFrequencyType)frequencyType;
 
 - (void)saveRemindersToUserDefaults;
+- (void)removeRemindersFromUserDefaults;
+
 @end

@@ -1,5 +1,5 @@
 //
-//  BFTableViewCell.h
+//  BFReminderCollectionViewCell.h
 //  BreakFree
 //
 //  Created by Marten Tamerius on 04-07-14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BFReminderListTableViewCell : UITableViewCell
+@interface BFReminderCollectionViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *frequencyLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnailImageView;
