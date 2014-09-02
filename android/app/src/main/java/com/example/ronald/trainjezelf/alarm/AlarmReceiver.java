@@ -27,7 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         final String notificationText = intent.getExtras().getString(ARGUMENT_NOTIFICATION_TEXT);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setSmallIcon(R.drawable.ic_notification)
                         .setTicker(notificationText)
                         .setContentTitle(context.getResources().getString(R.string.app_name))
                         .setContentText(notificationText)
