@@ -109,7 +109,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         Reminder reminder = new Reminder("", 5, Reminder.Period.DAILY,
                 DataStore.getInstance(getActivity()).getNextNotificationId());
         dataStore.add(reminder);
-        adapter.notifyDataSetChanged();
         return reminder.getUniqueId();
     }
 
@@ -118,6 +117,8 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
      */
     private void removeReminder(int listIndex) {
         reminders = dataStore.removeReminder(reminders.get(listIndex).getUniqueId());
+        adapter.clear();
+        adapter.addAll(reminders);
         adapter.notifyDataSetChanged();
     }
 
