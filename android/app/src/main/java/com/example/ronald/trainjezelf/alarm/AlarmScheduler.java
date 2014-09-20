@@ -10,6 +10,8 @@ import android.util.Log;
 import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Interval;
@@ -27,6 +29,15 @@ public class AlarmScheduler {
     private static final int ACTIVE_END_MINUTE = 0;
 
     private static int intentId = 0;
+
+    private static boolean jodaTimeIsInitialized = false;
+
+    private static void InitializeJodaTimeIfNeeded(Context context) {
+        if (!jodaTimeIsInitialized) {
+            JodaTimeAndroid.init(context);
+            jodaTimeIsInitialized = true;
+        }
+    }
 
     /**
      * Schedule alarm
@@ -126,6 +137,7 @@ public class AlarmScheduler {
     }
 
     public static void scheduleNextReminder(Context context, int notificationId) {
+        InitializeJodaTimeIfNeeded(context);
         Reminder reminder = DataStore.getInstance(context).get(notificationId);
         int secondsUntilNextNotification = getSecondsUntilNextNotification(reminder);
         startAlert(context, secondsUntilNextNotification, reminder.getMessage(), notificationId);

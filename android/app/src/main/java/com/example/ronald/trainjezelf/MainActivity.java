@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import net.danlew.android.joda.JodaTimeAndroid;
-
 
 /**
  * Main activity: displays a ListView with all reminders that the user has created.
@@ -34,7 +32,6 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        JodaTimeAndroid.init(this);
 
         // find our fragments
         FragmentManager manager = getSupportFragmentManager();
