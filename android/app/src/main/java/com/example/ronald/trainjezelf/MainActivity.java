@@ -2,12 +2,13 @@ package com.example.ronald.trainjezelf;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 
 /**
@@ -33,6 +34,7 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+        JodaTimeAndroid.init(this);
 
         // find our fragments
         FragmentManager manager = getSupportFragmentManager();
@@ -49,24 +51,24 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
 
         // Set up headlines fragment
         reminderListFragment.setSelectable(isDualPane);
-        restoreSelection(savedInstanceState);
+        //restoreSelection(savedInstanceState);
     }
 
-    /** Restore category/article selection from saved state. */
-    void restoreSelection(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            if (isDualPane) {
-                int reminderIndex = savedInstanceState.getInt("reminderIndex", 0);
-                reminderListFragment.setSelection(reminderIndex);
-                onReminderSelected(reminderIndex);
-            }
-        }
-    }
-
-    @Override
-    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        restoreSelection(savedInstanceState);
-    }
+//    /** Restore category/article selection from saved state. */
+//    void restoreSelection(Bundle savedInstanceState) {
+//        if (savedInstanceState != null) {
+//            if (isDualPane) {
+//                int reminderIndex = savedInstanceState.getInt("reminderIndex", 0);
+//                reminderListFragment.setSelection(reminderIndex);
+//                onReminderSelected(reminderIndex);
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+//        restoreSelection(savedInstanceState);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,22 +84,22 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            int numberOfReminders = reminderListFragment.addReminder();
-            onReminderSelected(numberOfReminders - 1);
+            int uniqueId = reminderListFragment.addReminder();
+            onReminderSelected(uniqueId);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onReminderSelected(int index) {
+    public void onReminderSelected(int uniqueId) {
         if (isDualPane) {
             // display it on the article fragment
-            reminderEditFragment.displayReminder(reminderListFragment.getReminder(index));
+            reminderEditFragment.displayReminder(reminderListFragment.getReminder(uniqueId));
         } else {
             // use separate activity
             final Intent i = new Intent(MainActivity.this, ReminderEditActivity.class);
-            i.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_KEY, index);
+            i.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_UNIQUE_ID, uniqueId);
             startActivity(i);
         }
     }

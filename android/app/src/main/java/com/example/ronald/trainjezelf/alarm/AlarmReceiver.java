@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.example.ronald.trainjezelf.R;
 import com.example.ronald.trainjezelf.ReminderShowActivity;
@@ -17,21 +18,29 @@ import com.example.ronald.trainjezelf.ReminderShowActivity;
  * Created by ronald on 8-8-14.
  */
 public class AlarmReceiver extends BroadcastReceiver {
+    private static final String LOG_TAG = "AlarmReceiver";
+
     // TODO Factor out
-    public static final String ARGUMENT_REMINDER_KEY = "reminderIndex";
     public static final String ARGUMENT_NOTIFICATION_TEXT = "notificationText";
+    public static final String ARGUMENT_NOTIFICATION_ID = "notificationId";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        final int reminderIndex = intent.getExtras().getInt(ARGUMENT_REMINDER_KEY);
         final String notificationText = intent.getExtras().getString(ARGUMENT_NOTIFICATION_TEXT);
+        final int temp = intent.getExtras().getInt(ARGUMENT_NOTIFICATION_ID);
+        final int notificationId = temp >> 16;
+        final int intentId = temp & 0xffff;
+
+        Log.d(LOG_TAG, "Notification ID: " + notificationId);
+        Log.d(LOG_TAG, "Intent ID: " + intentId);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_notification)
                         .setTicker(notificationText)
                         .setContentTitle(context.getResources().getString(R.string.app_name))
                         .setContentText(notificationText)
-                        .setOnlyAlertOnce(true)
+                        //.setNumber(intentId) // TODO set correct number
+                        .setAutoCancel(true)
                         .setVibrate(new long[] {0, 350, 0})
                         .setLights(Color.GREEN, 750, 2250) // TODO set purple
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -41,7 +50,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
         // Pass parameter to activity
-        resultIntent.putExtra(ReminderShowActivity.ARGUMENT_REMINDER_KEY, reminderIndex);
+        resultIntent.putExtra(ReminderShowActivity.ARGUMENT_NOTIFICATION_TEXT, notificationText);
 
         // Create the pending intent. Note that FLAG_UPDATE_CURRENT is essential for
         // passing intent extras to the activity.
@@ -52,6 +61,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // id allows you to update the notification later on.
-        notificationManager.notify(1, mBuilder.build());
+        notificationManager.notify(notificationId, mBuilder.build());
+
+        // Schedule new one
+        AlarmScheduler.scheduleNextReminder(context, notificationId);
     }
 }

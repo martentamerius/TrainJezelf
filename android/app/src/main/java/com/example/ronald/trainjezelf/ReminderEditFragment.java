@@ -118,9 +118,10 @@ public class ReminderEditFragment extends Fragment {
     /**
      * Saves reminder as it is currently configured in the GUI.
      */
-    public void saveReminder() {
+    public Reminder saveReminder() {
         DataStore dataStore = DataStore.getInstance(getActivity());
-        reminder = dataStore.replace(reminder, getFromView());
+        reminder = dataStore.replace(getFromView());
+        return reminder;
     }
 
     private Reminder getFromView() {
@@ -142,14 +143,7 @@ public class ReminderEditFragment extends Fragment {
         final String frequencyPeriodText = button.getText().toString();
         final Reminder.Period period = Reminder.Period.get(frequencyPeriodText);
 
-        return new Reminder(message, numberOfNotifiesPerPeriod, period);
+        // reuse unique Id
+        return new Reminder(message, numberOfNotifiesPerPeriod, period, reminder.getUniqueId());
      }
-
-    /**
-     * Get reminder text.
-     * TODO: temporary method, remove later.
-     */
-    public String getReminderText() {
-        return messageEditText.getText().toString();
-    }
 }

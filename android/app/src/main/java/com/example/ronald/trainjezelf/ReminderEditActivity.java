@@ -15,12 +15,12 @@ import com.example.ronald.trainjezelf.datastore.Reminder;
 public class ReminderEditActivity extends FragmentActivity
         implements ReminderEditFragment.OnFragmentInteractionListener {
     
-    public static final String ARGUMENT_REMINDER_KEY = "reminderIndex";
+    public static final String ARGUMENT_REMINDER_UNIQUE_ID = "reminderUniqueId";
 
     /**
      * The reminder index that we are showing
      */
-    private int reminderIndex;
+    private int reminderUniqueId;
 
     /**
      * Reference to the display fragment
@@ -31,6 +31,7 @@ public class ReminderEditActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_edit);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Get handle to embedded fragment
         FragmentManager manager = getSupportFragmentManager();
@@ -38,7 +39,7 @@ public class ReminderEditActivity extends FragmentActivity
 
         // Fill activity with data to be edited
         Intent intent = getIntent();
-        reminderIndex = intent.getExtras().getInt(ARGUMENT_REMINDER_KEY);
+        reminderUniqueId = intent.getExtras().getInt(ARGUMENT_REMINDER_UNIQUE_ID);
         refreshView();
     }
 
@@ -55,7 +56,7 @@ public class ReminderEditActivity extends FragmentActivity
     }
 
     private void refreshView() {
-        Reminder reminder = DataStore.getInstance(this).get(reminderIndex);
+        Reminder reminder = DataStore.getInstance(this).get(reminderUniqueId);
         reminderEditFragment.displayReminder(reminder);
     }
 
@@ -73,13 +74,12 @@ public class ReminderEditActivity extends FragmentActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_save) {
-            reminderEditFragment.saveReminder();
-            // TODO temporary
-            AlarmScheduler.startAlert(this, 5, reminderIndex, reminderEditFragment.getReminderText());
+            Reminder reminder = reminderEditFragment.saveReminder();
+            AlarmScheduler.scheduleNextReminder(this, reminder.getUniqueId());
             finish();
             return true;
         }
-        if (id == R.id.action_cancel) {
+        if (id == R.id.action_cancel || id == android.R.id.home) {
             finish();
             return true;
         }

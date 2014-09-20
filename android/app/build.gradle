@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 15
+    compileSdkVersion 16
     buildToolsVersion '20.0.0'
 
     defaultConfig {
         applicationId "com.example.ronald.randomnotification"
-        minSdkVersion 15
+        minSdkVersion 16
         //noinspection OldTargetApi
-        targetSdkVersion 15
+        targetSdkVersion 16
         versionCode 1
         versionName "1.0"
     }
@@ -25,4 +25,5 @@ dependencies {
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:20.0.+'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'net.danlew:android.joda:2.4.0'
 }

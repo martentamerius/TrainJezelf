@@ -25,10 +25,6 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
         this.data = data;
     }
 
-    public void setReminders(List<Reminder> reminders) {
-        this.data = reminders;
-    }
-
     // Cache view items for list scrolling performance
     // This prevents expensive calls to findViewById for each list item.
     static class ViewHolder {

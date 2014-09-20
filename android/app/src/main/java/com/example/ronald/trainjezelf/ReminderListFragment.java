@@ -14,6 +14,8 @@ import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
 import com.example.ronald.trainjezelf.datastore.ReminderAdapter;
 
+import java.util.List;
+
 /**
  * Reminder list fragment class.
  */
@@ -34,6 +36,11 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     private DataStore dataStore = null;
 
     /**
+     * The list of reminders
+     */
+    private List<Reminder> reminders = null;
+
+    /**
      * Listener that will be notified of list item selections
      */
     public interface OnReminderSelectedListener {
@@ -52,13 +59,14 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dataStore = DataStore.getInstance(getActivity());
-        adapter = new ReminderAdapter(getActivity(), android.R.layout.simple_list_item_1, dataStore.getReminders());
-        setListAdapter(adapter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        reminders = dataStore.getReminders();
+        adapter = new ReminderAdapter(getActivity(), android.R.layout.simple_list_item_1, reminders);
+        setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
         registerForContextMenu(getListView());
     }
@@ -77,7 +85,7 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mReminderSelectedListener) {
-            mReminderSelectedListener.onReminderSelected(position);
+            mReminderSelectedListener.onReminderSelected(reminders.get(position).getUniqueId());
         }
     }
 
@@ -95,18 +103,21 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
 
     /**
      * Add new reminder to the list
+     * @return unique Id of the new reminder
      */
     public int addReminder() {
-        int newSize = dataStore.add(new Reminder("", 5, Reminder.Period.DAILY));
+        Reminder reminder = new Reminder("", 5, Reminder.Period.DAILY,
+                DataStore.getInstance(getActivity()).getNextNotificationId());
+        dataStore.add(reminder);
         adapter.notifyDataSetChanged();
-        return newSize;
+        return reminder.getUniqueId();
     }
 
     /**
      * Remove reminder from the list
      */
-    private void removeReminder(int reminderId) {
-        dataStore.remove(reminderId);
+    private void removeReminder(int listIndex) {
+        reminders = dataStore.removeReminder(reminders.get(listIndex).getUniqueId());
         adapter.notifyDataSetChanged();
     }
 
@@ -116,7 +127,7 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
      * @return the reminder
      */
     public Reminder getReminder(int index) {
-        return dataStore.get(index);
+        return reminders.get(index);
     }
 
     @Override

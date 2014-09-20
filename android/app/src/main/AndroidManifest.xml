@@ -3,6 +3,7 @@
     package="com.example.ronald.trainjezelf" >
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <supports-screens
         android:smallScreens="true"
@@ -27,7 +28,12 @@
 
         <activity
             android:name=".ReminderEditActivity"
-            android:label="@string/title_activity_reminder_edit" >
+            android:label=""
+            android:parentActivityName="com.example.ronald.trainjezelf.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ronald.trainjezelf.MainActivity" />
         </activity>
 
         <!-- this is a special activity that's launched from a notification. -->
@@ -43,6 +49,16 @@
 
         <receiver android:name=".alarm.AlarmReceiver" >
         </receiver>
+
+        <!-- Ronald: TODO for now, the boot receiver is always enabled. As an optimization, it may be
+                     enabled only when needed, disabled when not needed; refer to
+                     https://developer.android.com/training/scheduling/alarms.html#boot -->
+        <receiver android:name=".alarm.BootReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

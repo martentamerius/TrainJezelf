@@ -43,13 +43,18 @@ public class Reminder {
     /**
      * The reminder message
      */
-    private String message;
+    private final String message;
 
     /**
      * The reminder frequency
      */
-    private int numberOfNotifiesPerPeriod;
-    private Period period;
+    private final int numberOfNotifiesPerPeriod;
+    private final Period period;
+
+    /**
+     * The reminder unique ID
+     */
+    private final int uniqueId;
 
     /**
      * Constructor
@@ -57,10 +62,11 @@ public class Reminder {
      * @param numberOfNotifiesPerPeriod number of notifies per period
      * @param period period
      */
-    public Reminder(String message, int numberOfNotifiesPerPeriod, Period period) {
+    public Reminder(String message, int numberOfNotifiesPerPeriod, Period period, int uniqueId) {
         this.message = message;
         this.numberOfNotifiesPerPeriod = numberOfNotifiesPerPeriod;
         this.period = period;
+        this.uniqueId = uniqueId;
     }
 
     public String getMessage() {
@@ -79,4 +85,5 @@ public class Reminder {
         return String.format("%d keer per %s", numberOfNotifiesPerPeriod, period);
     }
 
+    public int getUniqueId() { return uniqueId; }
 }
