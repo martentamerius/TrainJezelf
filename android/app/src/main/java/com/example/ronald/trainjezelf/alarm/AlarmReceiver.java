@@ -27,12 +27,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String notificationText = intent.getExtras().getString(ARGUMENT_NOTIFICATION_TEXT);
-        final int temp = intent.getExtras().getInt(ARGUMENT_NOTIFICATION_ID);
-        final int notificationId = temp >> 16;
-        final int intentId = temp & 0xffff;
+        final int notificationId = intent.getExtras().getInt(ARGUMENT_NOTIFICATION_ID);
 
         Log.d(LOG_TAG, "Notification ID: " + notificationId);
-        Log.d(LOG_TAG, "Intent ID: " + intentId);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_notification)

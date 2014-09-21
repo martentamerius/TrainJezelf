@@ -120,7 +120,7 @@ public class ReminderEditFragment extends Fragment {
      */
     public Reminder saveReminder() {
         DataStore dataStore = DataStore.getInstance(getActivity());
-        reminder = dataStore.replace(getFromView());
+        reminder = dataStore.put(getFromView());
         return reminder;
     }
 

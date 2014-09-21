@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
 import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
 import com.example.ronald.trainjezelf.datastore.ReminderAdapter;
@@ -108,7 +109,7 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     public int addReminder() {
         Reminder reminder = new Reminder("", 5, Reminder.Period.DAILY,
                 DataStore.getInstance(getActivity()).getNextNotificationId());
-        dataStore.add(reminder);
+        dataStore.put(reminder);
         return reminder.getUniqueId();
     }
 
@@ -116,7 +117,9 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
      * Remove reminder from the list
      */
     private void removeReminder(int listIndex) {
-        reminders = dataStore.removeReminder(reminders.get(listIndex).getUniqueId());
+        int uniqueId = reminders.get(listIndex).getUniqueId();
+        AlarmScheduler.cancelScheduledReminder(getActivity().getApplicationContext(), uniqueId);
+        reminders = dataStore.removeReminder(uniqueId);
         adapter.clear();
         adapter.addAll(reminders);
         adapter.notifyDataSetChanged();

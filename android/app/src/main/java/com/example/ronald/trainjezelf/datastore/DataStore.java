@@ -75,25 +75,14 @@ public final class DataStore {
     }
 
     /**
-     * Add reminder to data store
+     * Put reminder in data store, possibly replacing an existing one with the same unique Id
      * @param reminder the reminder
-     * @return new size of the reminder list
+     * @return the reminder
      */
-    public int add(Reminder reminder) {
+    public Reminder put(Reminder reminder) {
         reminders.put(reminder.getUniqueId(), reminder);
         saveReminders();
-        return reminders.size();
-    }
-
-    /**
-     * Remove oldReminder from data store
-     * @param newReminder the new reminder that replaces the old one
-     * @return the new Reminder
-     */
-    public Reminder replace(Reminder newReminder) {
-        reminders.put(newReminder.getUniqueId(), newReminder);
-        saveReminders();
-        return newReminder;
+        return reminder;
     }
 
     /**
