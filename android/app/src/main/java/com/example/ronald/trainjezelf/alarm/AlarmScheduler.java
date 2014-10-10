@@ -25,15 +25,15 @@ import java.util.Random;
 public class AlarmScheduler {
     private static final String LOG_TAG = "AlarmScheduler";
 
-    private static final int ACTIVE_START_HOUR = 9;
+    private static final int ACTIVE_START_HOUR = 8;
     private static final int ACTIVE_START_MINUTE = 0;
-    private static final int ACTIVE_END_HOUR = 20;
+    private static final int ACTIVE_END_HOUR = 22;
     private static final int ACTIVE_END_MINUTE = 0;
 
     private static final int MIN_SECONDS_UNTIL_NEXT_NOTIFICATION = 10;
     private static final int SCHEDULER_INACCURACY_SLACK_SECONDS = 10;
 
-    private static final int JITTER_PERCENTAGE = 25;
+    private static final float JITTER_PERCENTAGE = 50.0f;
 
     private static boolean jodaTimeIsInitialized = false;
 
@@ -79,8 +79,35 @@ public class AlarmScheduler {
         return new Interval(activeBegin, activeEnd);
     }
 
-    private static long getMillisOfNextNotification(Reminder reminder) {
-        DateTime now = new DateTime();
+    private static DateTime roundUpToNextMultipleOfSubPeriodMillis(DateTime reference, DateTime now, long millis) {
+        long deltaMillis = Math.max(now.getMillis() - reference.getMillis(), 0L);
+        long nextMultipleMillis = roundUp(deltaMillis, millis);
+        return new DateTime(reference.getMillis() + nextMultipleMillis);
+    }
+
+    /**
+     * Add milliseconds to date/time moment, skipping over inactive time if needed.
+     * @param moment moment to add milliseconds to
+     * @param millis milliseconds to add
+     * @return resulting DateTime
+     */
+    private static DateTime addInactiveMillis(DateTime moment, int millis) {
+        Interval activeInterval = getActiveIntervalFor(moment);
+        final int activeMillis = (int)(activeInterval.getEndMillis() - activeInterval.getStartMillis());
+        final int inactiveMillis = 24 * 60 * 60 * 1000 - activeMillis;
+        while (millis > 0) {
+            int millisToAdd = Math.min(activeMillis, millis);
+            moment = moment.plusMillis(millisToAdd);
+            millis = Math.max(0, millis - millisToAdd);
+            activeInterval = getActiveIntervalFor(moment);
+            if (!activeInterval.contains(moment)) {
+                moment = moment.plusMillis(inactiveMillis);
+            }
+        }
+        return moment;
+    }
+
+    public static long getMillisOfNextNotification(DateTime now, Reminder reminder) {
         Log.d(LOG_TAG, "now is: " + now);
         // Slackednow is slightly more in the future than 'now'.
         // The Android alarm manager may trigger an alarm just before the intended time we set,
@@ -91,7 +118,6 @@ public class AlarmScheduler {
         // Calculate duration of active period
         Interval activeInterval = getActiveIntervalFor(now);
         int activeMillis = (int)(activeInterval.getEndMillis() - activeInterval.getStartMillis());
-        int inactiveMillis = 24 * 60 * 60 * 1000 - activeMillis;
 
         DateTime startOfNextSubperiod = null;
         int subPeriodMillis = 0;
@@ -99,14 +125,16 @@ public class AlarmScheduler {
             case HOURLY: {
                 final int periodMillis = 60 * 60 * 1000;
                 subPeriodMillis = periodMillis / reminder.getNumberOfNotifiesPerPeriod();
-                long nextSubPeriodMillis = roundUp(slackedNow.getMillis(), subPeriodMillis);
-                startOfNextSubperiod = new DateTime(nextSubPeriodMillis);
+                startOfNextSubperiod = now.withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+                startOfNextSubperiod = roundUpToNextMultipleOfSubPeriodMillis(startOfNextSubperiod, slackedNow,
+                        subPeriodMillis);
                 DateTime endOfNextSubPeriod = startOfNextSubperiod.plusMillis(subPeriodMillis);
                 Interval currentSubPeriodInterval = new Interval(startOfNextSubperiod, endOfNextSubPeriod);
                 if (!activeInterval.contains(currentSubPeriodInterval)) {
                     // Shift sub period begin to next active period
-                    nextSubPeriodMillis = roundUp(activeInterval.getStart().getMillis(), subPeriodMillis);
-                    startOfNextSubperiod = new DateTime(nextSubPeriodMillis);
+                    startOfNextSubperiod = roundUpToNextMultipleOfSubPeriodMillis(
+                            activeInterval.getStart().withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0),
+                            activeInterval.getStart(), subPeriodMillis);
                     if (activeInterval.isBefore(now)) {
                         startOfNextSubperiod = startOfNextSubperiod.plusDays(1);
                     }
@@ -114,30 +142,33 @@ public class AlarmScheduler {
             }
             break;
             case DAILY: {
-                final int periodMillis = activeMillis;
+                final int periodMillis;
+                periodMillis = activeMillis;
                 subPeriodMillis = periodMillis / reminder.getNumberOfNotifiesPerPeriod();
-                startOfNextSubperiod = activeInterval.getStart();
-                if (activeInterval.isBefore(now)) {
-                    Log.d(LOG_TAG, "in inactive period, increasing start of next subperiod by 24h");
-                    startOfNextSubperiod = startOfNextSubperiod.plusDays(1);
-                }
-                while (slackedNow.isAfter(startOfNextSubperiod)) {
-                    Log.d(LOG_TAG, slackedNow + " is before " + startOfNextSubperiod + ", adding sub period millis");
-                    startOfNextSubperiod = startOfNextSubperiod.plusMillis(subPeriodMillis);
+                for (int i = 0; i <= 1; i++) {
+                    startOfNextSubperiod = roundUpToNextMultipleOfSubPeriodMillis(activeInterval.getStart().plusDays(i),
+                            slackedNow, subPeriodMillis);
+                    if (!activeInterval.isBefore(startOfNextSubperiod)) {
+                        break;
+                    }
                 }
             }
             break;
             case WEEKLY: {
                 final int periodMillis = activeMillis * 7;
                 subPeriodMillis = periodMillis / reminder.getNumberOfNotifiesPerPeriod();
-                DateTime firstActiveTimeOfPeriod = now.withDayOfWeek(DateTimeConstants.MONDAY).
+                DateTime firstActiveTimeOfPeriod = now.withDayOfWeek(DateTimeConstants.SUNDAY).
                         withHourOfDay(ACTIVE_START_HOUR).withMinuteOfHour(ACTIVE_START_MINUTE).
                         withSecondOfMinute(0).withMillisOfSecond(0);
-                final int nrofDays = (int) (now.getMillis() - firstActiveTimeOfPeriod.getMillis()) /
-                        (24 * 60 * 60 * 1000);
-                startOfNextSubperiod = firstActiveTimeOfPeriod.plusMillis(nrofDays * inactiveMillis);
+                // Not sure how JodaTime rounds the .withDayOfWeek() calculation. To be sure,
+                // subtract one week if firstActiveTimeOfPeriod is later than now.
+                if (slackedNow.isBefore(firstActiveTimeOfPeriod)) {
+                    firstActiveTimeOfPeriod = firstActiveTimeOfPeriod.minusDays(7);
+                }
+                // Add sub period millis until start of next sub period is later than now.
+                startOfNextSubperiod = firstActiveTimeOfPeriod;
                 while (slackedNow.isAfter(startOfNextSubperiod)) {
-                    startOfNextSubperiod = startOfNextSubperiod.plusMillis(subPeriodMillis);
+                    startOfNextSubperiod = addInactiveMillis(startOfNextSubperiod, subPeriodMillis);
                 }
             }
             break;
@@ -145,12 +176,17 @@ public class AlarmScheduler {
                 final int periodMillis = activeMillis * now.dayOfMonth().getMaximumValue();
                 subPeriodMillis = periodMillis / reminder.getNumberOfNotifiesPerPeriod();
                 DateTime firstActiveTimeOfPeriod = now.withDayOfMonth(1).
-                        withHourOfDay(ACTIVE_START_HOUR).withMinuteOfHour(ACTIVE_START_MINUTE).withSecondOfMinute(0);
-                final int nrofDays = (int) (now.getMillis() - firstActiveTimeOfPeriod.getMillis()) /
-                        (24 * 60 * 60 * 1000);
-                startOfNextSubperiod = firstActiveTimeOfPeriod.plusMillis(nrofDays * inactiveMillis);
+                        withHourOfDay(ACTIVE_START_HOUR).withMinuteOfHour(ACTIVE_START_MINUTE).
+                        withSecondOfMinute(0).withMillisOfSecond(0);
+                // Not sure how JodaTime rounds the .withDayOfWeek() calculation. To be sure,
+                // subtract one month if firstActiveTimeOfPeriod is later than now.
+                if (slackedNow.isBefore(firstActiveTimeOfPeriod)) {
+                    firstActiveTimeOfPeriod = firstActiveTimeOfPeriod.minusMonths(1);
+                }
+                // Add sub period millis until start of next sub period is later than now.
+                startOfNextSubperiod = firstActiveTimeOfPeriod;
                 while (slackedNow.isAfter(startOfNextSubperiod)) {
-                    startOfNextSubperiod = startOfNextSubperiod.plusMillis(subPeriodMillis);
+                    startOfNextSubperiod = addInactiveMillis(startOfNextSubperiod, subPeriodMillis);
                 }
             }
             break;
@@ -158,31 +194,25 @@ public class AlarmScheduler {
 
         // Add random offset
         Log.d(LOG_TAG, "start of next sub period: " + startOfNextSubperiod);
-        int randomOffsetMillis = (int)(new Random().nextFloat() /  100.0f * JITTER_PERCENTAGE * subPeriodMillis);
-        Log.d(LOG_TAG, "random offset millis is: " + randomOffsetMillis);
-        startOfNextSubperiod.plusMillis(randomOffsetMillis);
-
-        // Make sure that startOfNextSubperiod is in active time
-        activeInterval = getActiveIntervalFor(startOfNextSubperiod);
-        if (!activeInterval.contains(startOfNextSubperiod)) {
-            // Add inactive time to startOfNextSubperiod
-            Log.d(LOG_TAG, "start of next period (" + startOfNextSubperiod + ") is in inactive period");
-            startOfNextSubperiod = startOfNextSubperiod.plusMillis(inactiveMillis);
-            Log.d(LOG_TAG, "start of next period increased to " + startOfNextSubperiod);
-        }
+        float randomFactor = new Random().nextFloat() / 100.0f * JITTER_PERCENTAGE;
+        int randomOffsetMillis = (int) (randomFactor * subPeriodMillis);
+        float shiftFactor = (100.0f - JITTER_PERCENTAGE) / 200.0f;
+        int offsetMillis = (int) (subPeriodMillis * shiftFactor);
+        startOfNextSubperiod = addInactiveMillis(startOfNextSubperiod, offsetMillis + randomOffsetMillis);
 
         return startOfNextSubperiod.getMillis();
     }
 
     public static void scheduleNextReminder(Context context, int notificationId) {
         InitializeJodaTimeIfNeeded(context);
-        Reminder reminder = DataStore.getInstance(context).get(notificationId);
+        final Reminder reminder = DataStore.getInstance(context).get(notificationId);
         if (reminder == null) {
             // User may have deleted the reminder in the meanwhile
             Log.d(LOG_TAG, "ERROR, trying to schedule reminder that does not exist anymore");
             return;
         }
-        long millisOfNextNotification = getMillisOfNextNotification(reminder);
+        final DateTime now = new DateTime();
+        final long millisOfNextNotification = getMillisOfNextNotification(now, reminder);
         startAlert(context, millisOfNextNotification, reminder.getMessage(), notificationId);
     }
 
