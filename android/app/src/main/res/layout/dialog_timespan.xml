@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/buttons_from_until"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/timespan_button_background"
+            style="@style/timespan_button_style"
+            android:gravity="center"
+            android:text="van">
+        </Button>
+
+        <Button
+            android:id="@+id/button_until"
+            android:layout_toRightOf="@+id/button_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/timespan_button_background"
+            style="@style/timespan_button_style"
+            android:gravity="center"
+            android:text="tot">
+        </Button>
+
+    </LinearLayout>
+
+    <ViewSwitcher
+        android:id="@+id/timespan_viewswitcher"
+        android:layout_below="@+id/buttons_from_until"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ViewSwitcher>
+
+</RelativeLayout>

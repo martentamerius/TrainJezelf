@@ -5,10 +5,13 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.ronald.trainjezelf.datastore.DataStore;
 import com.example.ronald.trainjezelf.datastore.Reminder;
+import com.example.ronald.trainjezelf.datastore.TimeRange;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -20,15 +23,19 @@ import java.util.Random;
 
 /**
  * Schedules alarms (notifications) on behalf of the app.
- * Created by ronald on 8-8-14.
  */
 public class AlarmScheduler {
+
+    public static final String DEFAULT_ACTIVE_TIME_RANGE = "8:00-22:00";
+    public static final int MINIMUM_ACTIVE_MINUTES = 60;
+
     private static final String LOG_TAG = "AlarmScheduler";
 
-    private static final int ACTIVE_START_HOUR = 8;
-    private static final int ACTIVE_START_MINUTE = 0;
-    private static final int ACTIVE_END_HOUR = 22;
-    private static final int ACTIVE_END_MINUTE = 0;
+    private static boolean preferencesLoaded = false;
+    private static int activeStartHour = 8;
+    private static int activeStartMinute = 0;
+    private static int activeEndHour = 22;
+    private static int activeEndMinute = 0;
 
     private static final int MIN_SECONDS_UNTIL_NEXT_NOTIFICATION = 10;
     private static final int SCHEDULER_INACCURACY_SLACK_SECONDS = 10;
@@ -50,6 +57,36 @@ public class AlarmScheduler {
             JodaTimeAndroid.init(context);
             jodaTimeIsInitialized = true;
         }
+    }
+
+    private static void loadActiveIntervalFromPreferences(Context context) {
+        if (!preferencesLoaded) {
+            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            final String encoded = preferences.getString("active_period", DEFAULT_ACTIVE_TIME_RANGE);
+            setActiveRangeFromEncoded(encoded);
+            // Sanity check: we must at least have MINIMUM_ACTIVE_MINUTES in the specified time range
+            final int beginMinutes = activeStartHour * 60 + activeStartMinute;
+            final int endMinutes = activeEndHour * 60 + activeEndMinute;
+            if (endMinutes - beginMinutes < MINIMUM_ACTIVE_MINUTES) {
+                setActiveRangeFromEncoded(DEFAULT_ACTIVE_TIME_RANGE);
+            }
+            // State handling
+            preferencesLoaded = true;
+        }
+        Log.d(LOG_TAG, String.format("%d:%d - %d:%d", activeStartHour, activeStartMinute,
+                activeEndHour, activeEndMinute));
+    }
+
+    private static void setActiveRangeFromEncoded(String encoded) {
+        final TimeRange range = new TimeRange(encoded);
+        activeStartHour = range.getFromHour();
+        activeStartMinute = range.getFromMinute();
+        activeEndHour = range.getUntilHour();
+        activeEndMinute = range.getUntilMinute();
+    }
+
+    public static void invalidatePreferencesLoaded() {
+        preferencesLoaded = false;
     }
 
     /**
@@ -81,9 +118,9 @@ public class AlarmScheduler {
      * @return resulting DateTime
      */
     private static Interval getActiveIntervalFor(DateTime moment) {
-        DateTime activeBegin = moment.withHourOfDay(ACTIVE_START_HOUR).withMinuteOfHour(ACTIVE_START_MINUTE)
+        DateTime activeBegin = moment.withHourOfDay(activeStartHour).withMinuteOfHour(activeStartMinute)
                 .withSecondOfMinute(0).withMillisOfSecond(0);
-        DateTime activeEnd = moment.withHourOfDay(ACTIVE_END_HOUR).withMinuteOfHour(ACTIVE_END_MINUTE)
+        DateTime activeEnd = moment.withHourOfDay(activeEndHour).withMinuteOfHour(activeEndMinute)
                 .withSecondOfMinute(0).withMillisOfSecond(0);
         return new Interval(activeBegin, activeEnd);
     }
@@ -166,13 +203,13 @@ public class AlarmScheduler {
         switch (reminder.getPeriod()) {
             case HOURLY:
             case DAILY:
-                firstActiveTimeOfPeriod = now.withHourOfDay(ACTIVE_START_HOUR).
-                        withMinuteOfHour(ACTIVE_START_MINUTE).
+                firstActiveTimeOfPeriod = now.withHourOfDay(activeStartHour).
+                        withMinuteOfHour(activeStartMinute).
                         withSecondOfMinute(0).withMillisOfSecond(0);
                 break;
             case WEEKLY:
                 firstActiveTimeOfPeriod = now.withDayOfWeek(DateTimeConstants.SUNDAY).
-                        withHourOfDay(ACTIVE_START_HOUR).withMinuteOfHour(ACTIVE_START_MINUTE).
+                        withHourOfDay(activeStartHour).withMinuteOfHour(activeStartMinute).
                         withSecondOfMinute(0).withMillisOfSecond(0);
                 // Not sure how JodaTime rounds the .withDayOfWeek() calculation. To be sure,
                 // subtract one week if firstActiveTimeOfPeriod is later than now.
@@ -182,7 +219,7 @@ public class AlarmScheduler {
                 break;
             case MONTHLY:
                 firstActiveTimeOfPeriod = now.withDayOfMonth(1).
-                        withHourOfDay(ACTIVE_START_HOUR).withMinuteOfHour(ACTIVE_START_MINUTE).
+                        withHourOfDay(activeStartHour).withMinuteOfHour(activeStartMinute).
                         withSecondOfMinute(0).withMillisOfSecond(0);
                 // Not sure how JodaTime rounds the .withDayOfWeek() calculation. To be sure,
                 // subtract one month if firstActiveTimeOfPeriod is later than now.
@@ -195,7 +232,9 @@ public class AlarmScheduler {
         return firstActiveTimeOfPeriod;
     }
 
-    public static long getMillisOfNextNotification(DateTime now, Reminder reminder) {
+    public static long getMillisOfNextNotification(Context context, DateTime now, Reminder reminder) {
+
+        loadActiveIntervalFromPreferences(context);
 
         // Slackednow is slightly more in the future than 'now'.
         // The Android alarm manager may trigger an alarm just before the intended time we set,
@@ -239,7 +278,7 @@ public class AlarmScheduler {
             return;
         }
         final DateTime now = new DateTime();
-        final long millisOfNextNotification = getMillisOfNextNotification(now, reminder);
+        final long millisOfNextNotification = getMillisOfNextNotification(context, now, reminder);
         startAlert(context, millisOfNextNotification, reminder.getMessage(), notificationId);
     }
 
@@ -255,5 +294,27 @@ public class AlarmScheduler {
         pendingIntent.cancel();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
+    }
+
+    private static boolean hasPendingAlarm(Context context, int reminderUniqueId) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        boolean alarmUp = (PendingIntent.getBroadcast(context, reminderUniqueId, intent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+        Log.d(LOG_TAG, String.format("Reminder %d has pending intent: %s", reminderUniqueId, alarmUp));
+        return alarmUp;
+    }
+
+    /**
+     * Re-schedule all reminders
+     */
+    public static void reScheduleAllReminders(Context context) {
+        final DataStore dataStore = DataStore.getInstance(context);
+        for (Reminder reminder : dataStore.getReminders()) {
+            final int uniqueId = reminder.getUniqueId();
+            if (hasPendingAlarm(context, uniqueId)) {
+                cancelScheduledReminder(context, reminder.getUniqueId());
+                scheduleNextReminder(context, reminder.getUniqueId());
+            }
+        }
     }
 }

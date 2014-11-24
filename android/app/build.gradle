@@ -23,7 +23,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // You must install or update the Support Repository through the SDK manager to use this dependency.
-    compile 'com.android.support:support-v4:20.0.+'
+    compile 'com.android.support:support-v4:20.0.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'net.danlew:android.joda:2.4.0'
 }

@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
 import com.example.ronald.trainjezelf.datastore.DataStore;
@@ -55,7 +54,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         super();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,29 +88,6 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         }
     }
 
-    /** Sets choice mode for the list
-     *
-     * @param selectable whether list is to be selectable.
-     */
-    public void setSelectable(boolean selectable) {
-        if (selectable) {
-            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        } else {
-            getListView().setChoiceMode(ListView.CHOICE_MODE_NONE);
-        }
-    }
-
-    /**
-     * Add new reminder to the list
-     * @return unique Id of the new reminder
-     */
-    public int addReminder() {
-        Reminder reminder = new Reminder("", 5, Reminder.Period.DAILY,
-                DataStore.getInstance(getActivity()).getNextNotificationId());
-        dataStore.put(reminder);
-        return reminder.getUniqueId();
-    }
-
     /**
      * Remove reminder from the list
      */
@@ -120,18 +95,13 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         int uniqueId = reminders.get(listIndex).getUniqueId();
         AlarmScheduler.cancelScheduledReminder(getActivity().getApplicationContext(), uniqueId);
         reminders = dataStore.removeReminder(uniqueId);
+        notifyDataSetChanged();
+    }
+
+    public void notifyDataSetChanged() {
         adapter.clear();
         adapter.addAll(reminders);
         adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Get reminder from the list
-     * @param index in the list
-     * @return the reminder
-     */
-    public Reminder getReminder(int index) {
-        return reminders.get(index);
     }
 
     @Override

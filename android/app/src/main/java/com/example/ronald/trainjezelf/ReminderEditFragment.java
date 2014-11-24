@@ -1,13 +1,12 @@
 package com.example.ronald.trainjezelf;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,11 +18,13 @@ import com.example.ronald.trainjezelf.views.RadioGroupTable;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ReminderEditFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  */
 public class ReminderEditFragment extends Fragment {
+
+    /**
+     * Unique ID of the reminder to edit.
+     */
+    private int uniqueId;
 
     /**
      * The reminder to edit
@@ -37,13 +38,16 @@ public class ReminderEditFragment extends Fragment {
     private RadioGroupTable frequencyNumberGroup;
     private RadioGroup frequencyPeriodGroup;
 
-    /**
-     * Fragment callback
-     */
-    private OnFragmentInteractionListener mListener;
-
     public ReminderEditFragment() {
         // Required empty constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
     }
 
     @Override
@@ -62,45 +66,22 @@ public class ReminderEditFragment extends Fragment {
         frequencyPeriodGroup = (RadioGroup) getView().findViewById(R.id.frequencyPeriodRadioGroup);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    /**
+     * Displays a particular reminder for editing.
+     * @param uniqueId of the reminder to edit
+     */
+    public void displayReminder(int uniqueId) {
+        this.uniqueId = uniqueId;
+
+        if (uniqueId != Reminder.NEW_REMINDER_UID) {
+            reminder = DataStore.getInstance(getActivity().getApplicationContext()).get(uniqueId);
+            populateView();
         }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
-    /**
-     * Displays a particular reminder.
-     * @param reminder the reminder to display
-     */
-    public void displayReminder(Reminder reminder) {
-        this.reminder = reminder;
-        populateView();
+        // Hide keyboard when there is already some text
+        if (!messageEditText.getText().toString().isEmpty()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
     }
 
     /**
@@ -117,11 +98,12 @@ public class ReminderEditFragment extends Fragment {
 
     /**
      * Saves reminder as it is currently configured in the GUI.
+     * @return unique ID of reminder
      */
-    public Reminder saveReminder() {
-        DataStore dataStore = DataStore.getInstance(getActivity());
+    public int saveReminder() {
+        DataStore dataStore = DataStore.getInstance(getActivity().getApplicationContext());
         reminder = dataStore.put(getFromView());
-        return reminder;
+        return reminder.getUniqueId();
     }
 
     private Reminder getFromView() {
@@ -143,7 +125,14 @@ public class ReminderEditFragment extends Fragment {
         final String frequencyPeriodText = button.getText().toString();
         final Reminder.Period period = Reminder.Period.get(frequencyPeriodText);
 
-        // reuse unique Id
-        return new Reminder(message, numberOfNotifiesPerPeriod, period, reminder.getUniqueId());
+        // Reminder unique ID; either create a new one, or reuse UID of existing reminder
+        int myUniqueId;
+        if (uniqueId == Reminder.NEW_REMINDER_UID) {
+            myUniqueId = DataStore.getInstance(getActivity().getApplicationContext()).getNextNotificationId();
+        } else {
+            myUniqueId = reminder.getUniqueId();
+        }
+
+        return new Reminder(message, numberOfNotifiesPerPeriod, period, myUniqueId);
      }
 }

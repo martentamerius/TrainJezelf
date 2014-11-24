@@ -1,5 +1,6 @@
 package com.example.ronald.trainjezelf.test;
 
+import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
@@ -15,15 +16,17 @@ public class AlarmSchedulerTest extends InstrumentationTestCase {
 
     public void testGetMillisOfNextReminder() {
 
+        Context context = null; // TODO
+
         for (Reminder.Period period : Reminder.Period.values()) {
             period = Reminder.Period.WEEKLY;
-            for (int nrPerPeriod = 10; nrPerPeriod <= 10; nrPerPeriod++) {
+            for (int nrPerPeriod = 1; nrPerPeriod <= 10; nrPerPeriod++) {
                 DateTime now = new DateTime(1388534400000L); // 1-1-2014 00:00
                 //DateTime now = new DateTime(1388604600000L); // 1-1-2014 19:30
                 Reminder reminder = new Reminder("", nrPerPeriod, period, 0);
 
                 for (int i = 0; i < nrPerPeriod * 8; i++) {
-                    final long millisOfNextNotification = AlarmScheduler.getMillisOfNextNotification(now, reminder);
+                    final long millisOfNextNotification = AlarmScheduler.getMillisOfNextNotification(context, now, reminder);
                     now = new DateTime(millisOfNextNotification);
                     Log.d("tag", now.toString());
                 }

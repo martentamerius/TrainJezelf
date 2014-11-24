@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.example.ronald.trainjezelf.views.TimePreference
+        android:key="active_period"
+        android:title="@string/pref_active_period_title"
+        android:defaultValue="08:00-22:00" />
+
+    <!-- Allows the user to choose a ringtone in the 'notification' category. -->
+    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+    <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
+    <!--<RingtonePreference-->
+        <!--android:key="notifications_new_message_ringtone"-->
+        <!--android:title="@string/pref_title_ringtone"-->
+        <!--android:ringtoneType="notification"-->
+        <!--android:defaultValue="content://settings/system/notification_sound" />-->
+
+    <!--&lt;!&ndash; NOTE: This preference will be enabled only when the checkbox above is checked. &ndash;&gt;-->
+    <!--<CheckBoxPreference-->
+        <!--android:key="notifications_new_message_vibrate"-->
+        <!--android:title="@string/pref_title_vibrate"-->
+        <!--android:defaultValue="true" />-->
+
+</PreferenceScreen>

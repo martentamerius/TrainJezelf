@@ -9,6 +9,8 @@
     <string name="action_edit">Bewerken</string>
     <string name="action_save">Opslaan</string>
     <string name="action_cancel">Annuleren</string>
+    <string name="action_preferences">Instellingen</string>
+    <string name="action_about">Over</string>
     <string name="delete">Verwijderen</string>
     <string name="message">Melding</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque tortor purus, porta sit amet elit luctus, eleifend mattis lorem.</string>
@@ -29,6 +31,6 @@
     <string name="week">Week</string>
     <string name="month">Maand</string>
     <string name="background_photo">achtergrondfoto</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_about">Over Break free!</string>
 
 </resources>

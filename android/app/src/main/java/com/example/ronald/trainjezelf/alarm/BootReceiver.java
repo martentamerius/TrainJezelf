@@ -9,7 +9,6 @@ import com.example.ronald.trainjezelf.datastore.Reminder;
 
 /**
  * Class that receives the boot intent and starts the relevant process.
- * Created by ronald on 19-9-14.
  */
 public class BootReceiver extends BroadcastReceiver {
 

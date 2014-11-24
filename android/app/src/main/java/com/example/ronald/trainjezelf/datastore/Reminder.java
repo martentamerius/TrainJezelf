@@ -5,6 +5,8 @@ package com.example.ronald.trainjezelf.datastore;
  */
 public class Reminder {
 
+    public static final int NEW_REMINDER_UID = -1;
+
     /**
      * Period enum for defining the frequency of the reminder
      */

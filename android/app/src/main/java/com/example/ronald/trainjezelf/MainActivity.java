@@ -2,70 +2,33 @@ package com.example.ronald.trainjezelf;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import com.example.ronald.trainjezelf.datastore.Reminder;
 
 
 /**
- * Main activity: displays a ListView with all reminders that the user has created.
+ * Main activity: displays a fragment that lists all reminders that the user has created.
  */
 public class MainActivity extends FragmentActivity implements ReminderListFragment.OnReminderSelectedListener {
-    /**
-     * Whether or not we are in dual-pane mode
-     */
-    private boolean isDualPane = false;
-
-    /**
-     * The fragment where the reminder list is displayed
-     */
-    private ReminderListFragment reminderListFragment;
-
-    /**
-     * The fragment where the reminder details are displayed (null if absent)
-     */
-    private ReminderEditFragment reminderEditFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        // find our fragments
+        // Load preference defaults, if they have no value yet
+        PreferenceManager.setDefaultValues(this, R.xml.pref_notification, false);
+
+        // Set fragment callback for when someone clicks in the list
         FragmentManager manager = getSupportFragmentManager();
-        reminderListFragment = (ReminderListFragment) manager.findFragmentById(R.id.headlines);
-        reminderEditFragment = (ReminderEditFragment) manager.findFragmentById(R.id.article);
-
-        // Determine whether we are in single-pane or dual-pane mode by testing the visibility
-        // of the reminder view.
-        View reminderView = findViewById(R.id.article);
-        isDualPane = reminderView != null && reminderView.getVisibility() == View.VISIBLE;
-
-        // what to do when someone clicks in the list
+        ReminderListFragment reminderListFragment = (ReminderListFragment) manager.findFragmentById(R.id.headlines);
         reminderListFragment.setOnReminderSelectedListener(this);
-
-        // Set up headlines fragment
-        reminderListFragment.setSelectable(isDualPane);
-        //restoreSelection(savedInstanceState);
     }
-
-//    /** Restore category/article selection from saved state. */
-//    void restoreSelection(Bundle savedInstanceState) {
-//        if (savedInstanceState != null) {
-//            if (isDualPane) {
-//                int reminderIndex = savedInstanceState.getInt("reminderIndex", 0);
-//                reminderListFragment.setSelection(reminderIndex);
-//                onReminderSelected(reminderIndex);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-//        restoreSelection(savedInstanceState);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,8 +44,15 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            int uniqueId = reminderListFragment.addReminder();
-            onReminderSelected(uniqueId);
+            onReminderSelected(Reminder.NEW_REMINDER_UID);
+            return true;
+        } else if (id == R.id.action_preferences) {
+            final Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(i);
+            return true;
+        } else if (id == R.id.action_about) {
+            final Intent i = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(i);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -90,14 +60,9 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
 
     @Override
     public void onReminderSelected(int uniqueId) {
-        if (isDualPane) {
-            // display it on the article fragment
-            reminderEditFragment.displayReminder(reminderListFragment.getReminder(uniqueId));
-        } else {
-            // use separate activity
-            final Intent i = new Intent(MainActivity.this, ReminderEditActivity.class);
-            i.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_UNIQUE_ID, uniqueId);
-            startActivity(i);
-        }
+        // Edit reminder in a new activity
+        final Intent intent = new Intent(MainActivity.this, ReminderEditActivity.class);
+        intent.putExtra(ReminderEditActivity.ARGUMENT_REMINDER_UNIQUE_ID, uniqueId);
+        startActivity(intent);
     }
 }

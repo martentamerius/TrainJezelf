@@ -1,7 +1,8 @@
 package com.example.ronald.trainjezelf;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -9,21 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
-import com.example.ronald.trainjezelf.datastore.DataStore;
-import com.example.ronald.trainjezelf.datastore.Reminder;
 
-public class ReminderEditActivity extends FragmentActivity
-        implements ReminderEditFragment.OnFragmentInteractionListener {
+public class ReminderEditActivity extends FragmentActivity {
     
     public static final String ARGUMENT_REMINDER_UNIQUE_ID = "reminderUniqueId";
 
     /**
-     * The reminder index that we are showing
-     */
-    private int reminderUniqueId;
-
-    /**
-     * Reference to the display fragment
+     * Reference to the edit fragment
      */
     private ReminderEditFragment reminderEditFragment = null;
 
@@ -31,33 +24,24 @@ public class ReminderEditActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_edit);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        setupActionBar();
 
-        // Get handle to embedded fragment
+        // Get handle to editing fragment
         FragmentManager manager = getSupportFragmentManager();
         reminderEditFragment = (ReminderEditFragment) manager.findFragmentById(R.id.reminderEditFragment);
 
         // Fill activity with data to be edited
         Intent intent = getIntent();
-        reminderUniqueId = intent.getExtras().getInt(ARGUMENT_REMINDER_UNIQUE_ID);
-        refreshView();
+        int reminderUniqueId = intent.getExtras().getInt(ARGUMENT_REMINDER_UNIQUE_ID);
+        reminderEditFragment.displayReminder(reminderUniqueId);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        reminderEditFragment.saveReminder();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshView();
-    }
-
-    private void refreshView() {
-        Reminder reminder = DataStore.getInstance(this).get(reminderUniqueId);
-        reminderEditFragment.displayReminder(reminder);
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // Show the Up button in the action bar.
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -72,22 +56,19 @@ public class ReminderEditActivity extends FragmentActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
         if (id == R.id.action_save) {
-            Reminder reminder = reminderEditFragment.saveReminder();
-            AlarmScheduler.scheduleNextReminder(this, reminder.getUniqueId());
+            int uniqueId = reminderEditFragment.saveReminder();
+            AlarmScheduler.scheduleNextReminder(this, uniqueId);
+            setResult(RESULT_OK, getIntent());
             finish();
             return true;
         }
         if (id == R.id.action_cancel || id == android.R.id.home) {
+            setResult(RESULT_CANCELED, getIntent());
             finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        // TODO?
     }
 }
