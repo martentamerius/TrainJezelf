@@ -9,8 +9,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 /**
- * Helper class for creating a table view of radio buttons.
- * Created by ronald on 9-8-14.
+ * Creates a table of radio buttons.
  */
 public class RadioGroupTable extends TableLayout implements View.OnClickListener {
 

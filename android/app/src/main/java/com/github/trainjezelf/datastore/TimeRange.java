@@ -1,7 +1,7 @@
 package com.github.trainjezelf.datastore;
 
 /**
- * Created by ronald on 23-9-14.
+ * Data class that holds a time range hh:mm -- hh:mm
  */
 public class TimeRange {
 
@@ -11,6 +11,10 @@ public class TimeRange {
     private int untilHour;
     private int untilMinute;
 
+    /**
+     * Construct new TimeRange object from String containing the encoded version
+     * @param encoded the encoded TimeRange
+     */
     public TimeRange(String encoded) {
         final String[] times = encoded.split("-");
         final String[] fromPieces = times[0].split(":");
@@ -21,6 +25,10 @@ public class TimeRange {
         untilMinute = decodeInteger(untilPieces[1], 0, 59);
     }
 
+    /**
+     * Copy constructor
+     * @param other TimeRange to copy
+     */
     public TimeRange(TimeRange other) {
         this.fromHour = other.getFromHour();
         this.fromMinute = other.getFromMinute();
@@ -28,6 +36,10 @@ public class TimeRange {
         this.untilMinute = other.getUntilMinute();
     }
 
+    /**
+     * Encode this TimeRange to a String
+     * @return encoded TimeRange
+     */
     public String encode() {
         return String.format("%02d:%02d-%02d:%02d", fromHour, fromMinute, untilHour, untilMinute);
     }
@@ -48,6 +60,13 @@ public class TimeRange {
         return untilMinute;
     }
 
+    /**
+     * Update this TimeRange
+     * @param fromHour the fromHour
+     * @param fromMinute the fromMinute
+     * @param untilHour the untilHour
+     * @param untilMinute the untilMinute
+     */
     public void update(int fromHour, int fromMinute, int untilHour, int untilMinute) {
         this.fromHour = fromHour;
         this.fromMinute = fromMinute;
@@ -55,10 +74,17 @@ public class TimeRange {
         this.untilMinute = untilMinute;
     }
 
+    /**
+     * Decodes string to integer number, with upper and lower bound
+     * @param string to decode
+     * @param min lower bound; result will be minimal this value
+     * @param max upper bound; result will be maximal this value
+     * @return number decoded from String and bounded
+     */
     private int decodeInteger(String string, int min, int max) {
-        int hour = Integer.parseInt(string);
-        hour = Math.max(hour, min);
-        hour = Math.min(hour, max);
-        return hour;
+        int number = Integer.parseInt(string);
+        number = Math.max(number, min);
+        number = Math.min(number, max);
+        return number;
     }
 }

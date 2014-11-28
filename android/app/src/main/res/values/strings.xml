@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Break free!</string>
+    <string name="app_name">Break out!</string>
     <string name="action_add">Toevoegen</string>
-    <string name="title_activity_reminder_edit">Bewerken</string>
     <string name="action_delete">Verwijderen</string>
-    <string name="title_activity_reminder_show">Herinnering</string>
     <string name="action_edit">Bewerken</string>
     <string name="action_save">Opslaan</string>
     <string name="action_cancel">Annuleren</string>
@@ -13,7 +11,6 @@
     <string name="action_about">Over</string>
     <string name="delete">Verwijderen</string>
     <string name="message">Melding</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque tortor purus, porta sit amet elit luctus, eleifend mattis lorem.</string>
     <string name="frequency">Frequentie</string>
     <string name="number_1">1</string>
     <string name="number_2">2</string>
@@ -30,7 +27,6 @@
     <string name="day">Dag</string>
     <string name="week">Week</string>
     <string name="month">Maand</string>
-    <string name="background_photo">achtergrondfoto</string>
-    <string name="title_activity_about">Over Break free!</string>
+    <string name="title_activity_about">Over Break out!</string>
 
 </resources>

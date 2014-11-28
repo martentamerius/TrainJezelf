@@ -12,8 +12,7 @@ import com.github.trainjezelf.R;
 import java.util.List;
 
 /**
- * List adapter for Reminder.
- * Created by Ronald on 4-7-2014.
+ * Renders a view for one reminder list element.
  */
 public class ReminderAdapter extends ArrayAdapter<Reminder> {
     private final Context context;
@@ -30,7 +29,6 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
     static class ViewHolder {
         TextView message;
         TextView frequency;
-        //ImageView icon; TODO icon
     }
 
     @Override
@@ -43,7 +41,6 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
             viewHolder = new ViewHolder();
             viewHolder.message = (TextView) rowView.findViewById(R.id.message);
             viewHolder.frequency = (TextView) rowView.findViewById(R.id.frequency);
-            //viewHolder.icon = (ImageView) rowView.findViewById(R.id.icon);
             rowView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) rowView.getTag();

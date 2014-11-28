@@ -1,5 +1,9 @@
 <resources>
 
+    <!--<style name="AppTheme" parent="android:Theme.Holo.Light">-->
+        <!--<item name="android:windowBackground">@android:color/white</item>-->
+    <!--</style>-->
+
     <style name="ReminderShowText">
         <item name="android:paddingLeft">4dp</item>
         <item name="android:paddingBottom">4dp</item>

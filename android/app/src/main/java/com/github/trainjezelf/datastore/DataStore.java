@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -15,11 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * App-wide persistent data storage.
- * Created by Ronald on 4-7-2014.
+ * Provides app data storage and retrieval via singleton pattern.
  */
 public final class DataStore {
-    private final static String LOG_TAG = "DataStore";
     private final static String REMINDERS_KEY = "Reminders";
     private final static String LAST_NOTIFICATION_ID_KEY = "LastNotificationId";
 
@@ -31,7 +28,7 @@ public final class DataStore {
     /**
      * The preferences object
      */
-    private final SharedPreferences sharedPref;
+    private final SharedPreferences sharedPreferences;
 
     /**
      * The list of reminders
@@ -45,18 +42,17 @@ public final class DataStore {
 
     /**
      * Constructor
-     *
-     * @param context any context within the app
+     * @param context the context
      */
     private DataStore(Context context) {
-        this.sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         loadReminders();
         loadLastNotificationId();
     }
 
     /**
      * Get data store instance (singleton pattern)
-     * @param context the activity
+     * @param context the context
      * @return the data store
      */
     public static DataStore getInstance(Context context) {
@@ -88,7 +84,7 @@ public final class DataStore {
     /**
      * Remove item from data store
      * @param uniqueId the unique Id of the reminder
-     * @return resulting list of reminders
+     * @return updated list of reminders
      */
     public List<Reminder> removeReminder(int uniqueId) {
         reminders.remove(uniqueId);
@@ -99,7 +95,7 @@ public final class DataStore {
     /**
      * Get item from data store
      * @param uniqueId the unique Id of the reminder
-     * @return reminder the reminder
+     * @return the reminder
      */
     public Reminder get(int uniqueId) {
         return reminders.get(uniqueId);
@@ -123,29 +119,35 @@ public final class DataStore {
     private void saveReminders() {
         final Gson gson = new Gson();
         final String json = gson.toJson(reminders);
-        Log.d(LOG_TAG, "save reminders JSON: " + json);
-        final SharedPreferences.Editor editor = sharedPref.edit();
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(REMINDERS_KEY, json);
         editor.commit();
     }
 
     /**
      * Get reminders from data store
+     * @return list of reminders
      */
     private void loadReminders() {
         final Gson gson = new Gson();
         final Type listType = new TypeToken<Map<Integer, Reminder>>() {}.getType();
-        final String json = sharedPref.getString(REMINDERS_KEY, "[]");
+        final String json = sharedPreferences.getString(REMINDERS_KEY, "[]");
         reminders = gson.fromJson(json, listType);
-        Log.d(LOG_TAG, "loaded reminders: " + json + " size of map: " + reminders.size());
     }
 
+    /**
+     * Get last notification ID from data store
+     * @return last notification ID
+     */
     private void loadLastNotificationId() {
-        lastNotificationId = sharedPref.getInt(LAST_NOTIFICATION_ID_KEY, 0);
+        lastNotificationId = sharedPreferences.getInt(LAST_NOTIFICATION_ID_KEY, 0);
     }
 
+    /**
+     * Save last notification to data store
+     */
     private void saveLastNotificationId() {
-        final SharedPreferences.Editor editor = sharedPref.edit();
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(LAST_NOTIFICATION_ID_KEY, lastNotificationId);
         editor.commit();
     }

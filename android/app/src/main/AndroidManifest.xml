@@ -36,17 +36,6 @@
                 android:value="com.github.trainjezelf.MainActivity" />
         </activity>
 
-        <!-- this is a special activity that's launched from a notification. -->
-        <!-- refer to http://developer.android.com/guide/topics/ui/notifiers/notifications.html -->
-        <activity
-            android:name="com.github.trainjezelf.ReminderShowActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/title_activity_reminder_show"
-            android:launchMode="singleTask"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
-        </activity>
-
         <receiver android:name="com.github.trainjezelf.alarm.AlarmReceiver" >
         </receiver>
 

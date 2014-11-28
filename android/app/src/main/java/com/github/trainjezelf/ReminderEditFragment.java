@@ -17,7 +17,7 @@ import com.github.trainjezelf.views.RadioGroupTable;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for editing a reminder.
  */
 public class ReminderEditFragment extends Fragment {
 
@@ -27,7 +27,7 @@ public class ReminderEditFragment extends Fragment {
     private int uniqueId;
 
     /**
-     * The reminder to edit
+     * The reminder being edited.
      */
     private Reminder reminder;
 
@@ -109,7 +109,7 @@ public class ReminderEditFragment extends Fragment {
     private Reminder getFromView() {
         final String message = messageEditText.getText().toString();
 
-        // TODO bit hacky
+        // TODO bit hacky, but works
         final int selectedFrequencyNumberId = frequencyNumberGroup.getCheckedRadioButtonId();
         RadioButton button = (RadioButton)getView().findViewById(selectedFrequencyNumberId);
         final String frequencyNumberText = button.getText().toString();

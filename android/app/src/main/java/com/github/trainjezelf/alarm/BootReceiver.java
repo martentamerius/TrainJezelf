@@ -8,7 +8,7 @@ import com.github.trainjezelf.datastore.DataStore;
 import com.github.trainjezelf.datastore.Reminder;
 
 /**
- * Class that receives the boot intent and starts the relevant process.
+ * Receives the boot intent and starts the relevant process.
  */
 public class BootReceiver extends BroadcastReceiver {
 

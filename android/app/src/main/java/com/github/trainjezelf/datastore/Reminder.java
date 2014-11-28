@@ -1,7 +1,7 @@
 package com.github.trainjezelf.datastore;
 
 /**
- * Reminder class for holding the settings for one reminder
+ * Data class that holds the settings for one reminder
  */
 public class Reminder {
 

@@ -17,9 +17,8 @@ import com.github.trainjezelf.datastore.TimeRange;
 
 /**
  * Time preference, allows the user to select a time range.
- * Created by ronald on 21-9-14.
  */
-public class TimePreference extends DialogPreference implements View.OnClickListener, TimePicker.OnTimeChangedListener {
+public class TimePreference extends DialogPreference implements View.OnClickListener {
 
     private TimePicker picker_from = null;
     private TimePicker picker_until = null;
@@ -67,10 +66,6 @@ public class TimePreference extends DialogPreference implements View.OnClickList
         picker_from.setIs24HourView(true);
         picker_until = (TimePicker)view.findViewById(R.id.time_until);
         picker_until.setIs24HourView(true);
-
-        // Handle time changed events
-        picker_from.setOnTimeChangedListener(this);
-        picker_until.setOnTimeChangedListener(this);
 
         // Handle button clicks
         Button buttonFrom = (Button) view.findViewById(R.id.button_from);
@@ -149,29 +144,5 @@ public class TimePreference extends DialogPreference implements View.OnClickList
                 viewSwitcher.showNext();
                 break;
         }
-    }
-
-    // Handle time changed events
-    @Override
-    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-        // TODO
-//        Log.d("TimePreference", String.format("time picker changed value: %d %d:%d", view.getId(), hourOfDay, minute));
-//        int viewId = view.getId();
-//        int newMinuteOfDay = hourOfDay * 60 + minute;
-//        if (viewId == R.id.time_from) {
-//            int untilMinuteOfDay = range.getUntilHour() * 60 + range.getUntilMinute();
-//            if (newMinuteOfDay > untilMinuteOfDay) {
-//                TimePicker picker = view;
-//                picker.setCurrentHour(range.getUntilHour());
-//                picker.setCurrentMinute(range.getUntilMinute());
-//            }
-//        } else if (viewId == R.id.time_until) {
-//            int fromMinuteOfDay = range.getFromHour() * 60 + range.getFromMinute();
-//            if (newMinuteOfDay < fromMinuteOfDay) {
-//                TimePicker picker = view;
-//                picker.setCurrentHour(range.getFromHour());
-//                picker.setCurrentMinute(range.getFromMinute());
-//            }
-//        }
     }
 }
