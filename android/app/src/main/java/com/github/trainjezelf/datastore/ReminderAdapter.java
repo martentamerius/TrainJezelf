@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.datastore;
+package com.github.trainjezelf.datastore;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.ronald.trainjezelf.R;
+import com.github.trainjezelf.R;
 
 import java.util.List;
 

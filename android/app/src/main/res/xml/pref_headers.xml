@@ -3,7 +3,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.example.ronald.trainjezelf.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.github.trainjezelf.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
 </preference-headers>

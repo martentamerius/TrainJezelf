@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.views;
+package com.github.trainjezelf.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.datastore;
+package com.github.trainjezelf.datastore;
 
 /**
  * Reminder class for holding the settings for one reminder

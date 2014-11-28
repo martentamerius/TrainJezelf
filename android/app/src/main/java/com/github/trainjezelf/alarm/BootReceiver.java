@@ -1,11 +1,11 @@
-package com.example.ronald.trainjezelf.alarm;
+package com.github.trainjezelf.alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.ronald.trainjezelf.datastore.DataStore;
-import com.example.ronald.trainjezelf.datastore.Reminder;
+import com.github.trainjezelf.datastore.DataStore;
+import com.github.trainjezelf.datastore.Reminder;
 
 /**
  * Class that receives the boot intent and starts the relevant process.

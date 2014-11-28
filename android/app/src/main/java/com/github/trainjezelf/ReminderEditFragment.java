@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf;
+package com.github.trainjezelf;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +11,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.example.ronald.trainjezelf.datastore.DataStore;
-import com.example.ronald.trainjezelf.datastore.Reminder;
-import com.example.ronald.trainjezelf.views.RadioGroupTable;
+import com.github.trainjezelf.datastore.DataStore;
+import com.github.trainjezelf.datastore.Reminder;
+import com.github.trainjezelf.views.RadioGroupTable;
 
 
 /**

@@ -8,7 +8,7 @@
     android:paddingTop="0dp"
     android:paddingBottom="0dp" >
 
-    <fragment class="com.example.ronald.trainjezelf.ReminderEditFragment"
+    <fragment class="com.github.trainjezelf.ReminderEditFragment"
               android:id="@+id/reminderEditFragment"
               android:layout_width="match_parent"
               android:layout_height="match_parent"

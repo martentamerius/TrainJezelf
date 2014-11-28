@@ -1,9 +1,9 @@
-package com.example.ronald.trainjezelf;
+package com.github.trainjezelf;
 
 import android.app.Application;
 import android.util.Log;
 
-import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
+import com.github.trainjezelf.alarm.AlarmScheduler;
 
 /**
  * Application wrapper class to handle execute-once actions.

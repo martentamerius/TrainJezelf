@@ -22,7 +22,7 @@
 
     <fragment android:id="@+id/headlines"
               android:layout_height="fill_parent"
-              android:name="com.example.ronald.trainjezelf.ReminderListFragment"
+              android:name="com.github.trainjezelf.ReminderListFragment"
               android:layout_width="match_parent" />
 
 </LinearLayout>

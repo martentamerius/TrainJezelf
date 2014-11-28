@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.views;
+package com.github.trainjezelf.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.ViewSwitcher;
 
-import com.example.ronald.trainjezelf.R;
-import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
-import com.example.ronald.trainjezelf.datastore.TimeRange;
+import com.github.trainjezelf.R;
+import com.github.trainjezelf.alarm.AlarmScheduler;
+import com.github.trainjezelf.datastore.TimeRange;
 
 /**
  * Time preference, allows the user to select a time range.

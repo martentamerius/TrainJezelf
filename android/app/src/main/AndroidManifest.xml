@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ronald.trainjezelf" >
+    package="com.github.trainjezelf" >
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -12,13 +12,13 @@
         android:xlargeScreens="true" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.github.trainjezelf.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.ronald.trainjezelf.MainActivity"
+            android:name="com.github.trainjezelf.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,20 +26,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.ronald.trainjezelf.ReminderEditActivity"
+            android:name="com.github.trainjezelf.ReminderEditActivity"
             android:label=""
-            android:parentActivityName="com.example.ronald.trainjezelf.MainActivity" >
+            android:parentActivityName="com.github.trainjezelf.MainActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ronald.trainjezelf.MainActivity" />
+                android:value="com.github.trainjezelf.MainActivity" />
         </activity>
 
         <!-- this is a special activity that's launched from a notification. -->
         <!-- refer to http://developer.android.com/guide/topics/ui/notifiers/notifications.html -->
         <activity
-            android:name="com.example.ronald.trainjezelf.ReminderShowActivity"
+            android:name="com.github.trainjezelf.ReminderShowActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_reminder_show"
             android:launchMode="singleTask"
@@ -47,7 +47,7 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
         </activity>
 
-        <receiver android:name="com.example.ronald.trainjezelf.alarm.AlarmReceiver" >
+        <receiver android:name="com.github.trainjezelf.alarm.AlarmReceiver" >
         </receiver>
 
         <!--
@@ -56,7 +56,7 @@
                      https://developer.android.com/training/scheduling/alarms.html#boot
         -->
         <receiver
-            android:name="com.example.ronald.trainjezelf.alarm.BootReceiver"
+            android:name="com.github.trainjezelf.alarm.BootReceiver"
             android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -64,21 +64,21 @@
         </receiver>
 
         <activity
-            android:name="com.example.ronald.trainjezelf.SettingsActivity"
+            android:name="com.github.trainjezelf.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.example.ronald.trainjezelf.MainActivity" >
+            android:parentActivityName="com.github.trainjezelf.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ronald.trainjezelf.MainActivity" />
+                android:value="com.github.trainjezelf.MainActivity" />
         </activity>
 
         <activity
-            android:name=".AboutActivity"
+            android:name="com.github.trainjezelf.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="com.example.ronald.trainjezelf.MainActivity" >
+            android:parentActivityName="com.github.trainjezelf.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ronald.trainjezelf.MainActivity" />
+                android:value="com.github.trainjezelf.MainActivity" />
         </activity>
     </application>
 

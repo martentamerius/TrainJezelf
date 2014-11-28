@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ronald.trainjezelf.ReminderShowActivity">
+    tools:context="com.github.trainjezelf.ReminderShowActivity">
 
-    <fragment class="com.example.ronald.trainjezelf.ReminderShowFragment"
+    <fragment class="com.github.trainjezelf.ReminderShowFragment"
         android:id="@+id/reminderShowFragment"
         android:layout_width="match_parent" android:layout_height="match_parent"
         tools:layout="@layout/fragment_reminder_show"/>

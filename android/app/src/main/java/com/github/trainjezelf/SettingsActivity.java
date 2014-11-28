@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf;
+package com.github.trainjezelf;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
+import com.github.trainjezelf.alarm.AlarmScheduler;
 
 import java.util.List;
 

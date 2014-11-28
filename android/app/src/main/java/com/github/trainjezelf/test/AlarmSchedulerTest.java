@@ -1,11 +1,11 @@
-package com.example.ronald.trainjezelf.test;
+package com.github.trainjezelf.test;
 
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
-import com.example.ronald.trainjezelf.datastore.Reminder;
+import com.github.trainjezelf.alarm.AlarmScheduler;
+import com.github.trainjezelf.datastore.Reminder;
 
 import org.joda.time.DateTime;
 

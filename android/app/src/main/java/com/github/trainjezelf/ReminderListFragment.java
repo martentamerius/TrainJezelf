@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf;
+package com.github.trainjezelf;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.example.ronald.trainjezelf.alarm.AlarmScheduler;
-import com.example.ronald.trainjezelf.datastore.DataStore;
-import com.example.ronald.trainjezelf.datastore.Reminder;
-import com.example.ronald.trainjezelf.datastore.ReminderAdapter;
+import com.github.trainjezelf.alarm.AlarmScheduler;
+import com.github.trainjezelf.datastore.DataStore;
+import com.github.trainjezelf.datastore.Reminder;
+import com.github.trainjezelf.datastore.ReminderAdapter;
 
 import java.util.List;
 

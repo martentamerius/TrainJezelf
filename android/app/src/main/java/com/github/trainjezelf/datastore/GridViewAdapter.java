@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.datastore;
+package com.github.trainjezelf.datastore;
 
 import android.content.Context;
 import android.view.View;

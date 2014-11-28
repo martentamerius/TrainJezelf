@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.alarm;
+package com.github.trainjezelf.alarm;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -8,7 +8,7 @@ import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.ronald.trainjezelf.R;
+import com.github.trainjezelf.R;
 
 /**
  * Receives alarms from the app, even when the app is not running.

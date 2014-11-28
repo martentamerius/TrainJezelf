@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.alarm;
+package com.github.trainjezelf.alarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.ronald.trainjezelf.datastore.DataStore;
-import com.example.ronald.trainjezelf.datastore.Reminder;
-import com.example.ronald.trainjezelf.datastore.TimeRange;
+import com.github.trainjezelf.datastore.DataStore;
+import com.github.trainjezelf.datastore.Reminder;
+import com.github.trainjezelf.datastore.TimeRange;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -312,6 +312,7 @@ public class AlarmScheduler {
         for (Reminder reminder : dataStore.getReminders()) {
             final int uniqueId = reminder.getUniqueId();
             if (hasPendingAlarm(context, uniqueId)) {
+                // TODO: cancel not needed?
                 cancelScheduledReminder(context, reminder.getUniqueId());
                 scheduleNextReminder(context, reminder.getUniqueId());
             }

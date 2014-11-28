@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf;
+package com.github.trainjezelf;
 
 import android.app.Activity;
 import android.net.Uri;

@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.example.ronald.trainjezelf.views.TimePreference
+    <com.github.trainjezelf.views.TimePreference
         android:key="active_period"
         android:title="@string/pref_active_period_title"
         android:defaultValue="08:00-22:00" />

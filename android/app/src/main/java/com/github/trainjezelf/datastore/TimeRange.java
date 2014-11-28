@@ -1,4 +1,4 @@
-package com.example.ronald.trainjezelf.datastore;
+package com.github.trainjezelf.datastore;
 
 /**
  * Created by ronald on 23-9-14.
