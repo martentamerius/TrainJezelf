@@ -5,7 +5,7 @@ android {
     buildToolsVersion '20.0.0'
 
     defaultConfig {
-        applicationId "com.example.ronald.randomnotification"
+        applicationId "com.github.randomnotification"
         minSdkVersion 16
         //noinspection OldTargetApi
         targetSdkVersion 16
