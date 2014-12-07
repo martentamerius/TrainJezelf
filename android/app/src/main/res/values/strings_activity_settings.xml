@@ -1,0 +1,8 @@
+<resources>
+    <string name="title_activity_settings">Instellingen</string>
+
+    <!-- Settings for Notifications -->
+    <string name="pref_active_period_title">Meldingen geven</string>
+    <string name="pref_header_notifications">Meldingen</string>
+
+</resources>

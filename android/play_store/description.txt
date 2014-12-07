@@ -1,0 +1,7 @@
+Title=Break out!
+Short description=Break out! herinnert je op eenvoudige manier aan voor jou belangrijke zaken.
+Full description=Break out! helpt je om 'los te breken' van gedrag waar je op dat moment mee bezig bent. Dit kun je gebruiken om o.a. nieuwe gewoontes aan te leren, terug in het hier-en-nu te komen of je gewaarzijn te trainen. In essentie helpt Break out! je om op een eenvoudige manier jezelf regelmatig ergens aan te herinneren.
+Type=Apps
+Category=Productivity
+Content=Everyone
+

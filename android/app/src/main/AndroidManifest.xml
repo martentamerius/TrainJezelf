@@ -1,22 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ronald.randomnotification" >
+    package="com.github.trainjezelf" >
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <supports-screens
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
+        android:name="com.github.trainjezelf.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.github.trainjezelf.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.github.trainjezelf.ReminderEditActivity"
+            android:label=""
+            android:parentActivityName="com.github.trainjezelf.MainActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.trainjezelf.MainActivity" />
+        </activity>
+
+        <receiver android:name="com.github.trainjezelf.alarm.AlarmReceiver" >
+        </receiver>
+
+        <!--
+             Ronald: TODO for now, the boot receiver is always enabled. As an optimization, it may be
+                     enabled only when needed, disabled when not needed; refer to
+                     https://developer.android.com/training/scheduling/alarms.html#boot
+        -->
+        <receiver
+            android:name="com.github.trainjezelf.alarm.BootReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.github.trainjezelf.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.github.trainjezelf.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.trainjezelf.MainActivity" />
+        </activity>
+
+        <activity
+            android:name="com.github.trainjezelf.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="com.github.trainjezelf.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.trainjezelf.MainActivity" />
         </activity>
     </application>
 
