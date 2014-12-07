@@ -8,6 +8,13 @@ public class Reminder {
     public static final int NEW_REMINDER_UID = -1;
 
     /**
+     * Default values for a new reminder
+     */
+    public static final String DEFAULT_REMINDER_MESSAGE = "";
+    public static final int DEFAULT_NUMBER_OF_NOTIFIES_PER_PERIOD = 5;
+    public static final Period DEFAULT_PERIOD = Period.DAILY;
+
+    /**
      * Period enum for defining the frequency of the reminder
      */
     public enum Period {

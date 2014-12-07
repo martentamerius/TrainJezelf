@@ -279,6 +279,8 @@ public class AlarmScheduler {
         }
         final DateTime now = new DateTime();
         final long millisOfNextNotification = getMillisOfNextNotification(context, now, reminder);
+        Log.d(LOG_TAG, String.format("scheduling next reminder for uid %d at %s", reminder.getUniqueId(),
+                new DateTime(millisOfNextNotification).toString()));
         startAlert(context, millisOfNextNotification, reminder.getMessage(), notificationId);
     }
 

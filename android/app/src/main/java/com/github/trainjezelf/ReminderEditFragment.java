@@ -76,6 +76,8 @@ public class ReminderEditFragment extends Fragment {
         if (uniqueId != Reminder.NEW_REMINDER_UID) {
             reminder = DataStore.getInstance(getActivity().getApplicationContext()).get(uniqueId);
             populateView();
+        } else {
+            populateViewWithDefaults();
         }
 
         // Hide keyboard when there is already some text
@@ -97,6 +99,18 @@ public class ReminderEditFragment extends Fragment {
     }
 
     /**
+     * Loads default reminder data into the UI.
+     */
+    private void populateViewWithDefaults() {
+        messageEditText.setText(Reminder.DEFAULT_REMINDER_MESSAGE);
+        messageEditText.setSelection(Reminder.DEFAULT_REMINDER_MESSAGE.length());
+        frequencyNumberGroup.check(getResources().getIdentifier(
+                "button" + Reminder.DEFAULT_NUMBER_OF_NOTIFIES_PER_PERIOD, "id", getActivity().getPackageName()));
+        frequencyPeriodGroup.check(getResources().getIdentifier(Reminder.DEFAULT_PERIOD.getButtonId(), "id",
+                getActivity().getPackageName()));
+    }
+
+    /**
      * Saves reminder as it is currently configured in the GUI.
      * @return unique ID of reminder
      */
@@ -112,18 +126,23 @@ public class ReminderEditFragment extends Fragment {
         // TODO bit hacky, but works
         final int selectedFrequencyNumberId = frequencyNumberGroup.getCheckedRadioButtonId();
         RadioButton button = (RadioButton)getView().findViewById(selectedFrequencyNumberId);
-        final String frequencyNumberText = button.getText().toString();
         int numberOfNotifiesPerPeriod = 1;
-        try {
-            numberOfNotifiesPerPeriod = Integer.parseInt(frequencyNumberText);
-        } catch (NumberFormatException e) {
-            // nothing to do
+        if (button != null) {
+            final String frequencyNumberText = button.getText().toString();
+            try {
+                numberOfNotifiesPerPeriod = Integer.parseInt(frequencyNumberText);
+            } catch (NumberFormatException e) {
+                // nothing to do
+            }
         }
 
         final int buttonId = frequencyPeriodGroup.getCheckedRadioButtonId();
         button = (RadioButton)getView().findViewById(buttonId);
-        final String frequencyPeriodText = button.getText().toString();
-        final Reminder.Period period = Reminder.Period.get(frequencyPeriodText);
+        Reminder.Period period = Reminder.Period.DAILY;
+        if (button != null) {
+            final String frequencyPeriodText = button.getText().toString();
+            period = Reminder.Period.get(frequencyPeriodText);
+        }
 
         // Reminder unique ID; either create a new one, or reuse UID of existing reminder
         int myUniqueId;

@@ -16,10 +16,10 @@ public class AlarmSchedulerTest extends InstrumentationTestCase {
 
     public void testGetMillisOfNextReminder() {
 
-        Context context = null; // TODO
+        Context context = getInstrumentation().getContext();
 
         for (Reminder.Period period : Reminder.Period.values()) {
-            period = Reminder.Period.WEEKLY;
+            period = Reminder.Period.DAILY;
             for (int nrPerPeriod = 1; nrPerPeriod <= 10; nrPerPeriod++) {
                 DateTime now = new DateTime(1388534400000L); // 1-1-2014 00:00
                 //DateTime now = new DateTime(1388604600000L); // 1-1-2014 19:30
