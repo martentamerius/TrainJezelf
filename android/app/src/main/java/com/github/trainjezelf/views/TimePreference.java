@@ -124,7 +124,7 @@ public class TimePreference extends DialogPreference implements View.OnClickList
 
     @Override
     public CharSequence getSummary() {
-        return String.format("Van %02d:%02d tot %02d:%02d", range.getFromHour(), range.getFromMinute(),
+        return String.format("Tussen %d:%02d en %d:%02d", range.getFromHour(), range.getFromMinute(),
                 range.getUntilHour(), range.getUntilMinute());
     }
 

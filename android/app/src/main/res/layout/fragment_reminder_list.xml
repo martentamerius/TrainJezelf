@@ -16,6 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
         app:floatingActionButtonColor="@color/fab_color"
         android:src="@drawable/ic_action_new" />
 

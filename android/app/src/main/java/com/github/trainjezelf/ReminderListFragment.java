@@ -27,6 +27,8 @@ import java.util.List;
 public class ReminderListFragment extends Fragment implements ReminderAdapter.IReminderViewHolderClickListener,
         View.OnClickListener, ReminderAdapter.IReminderViewHolderCardMenuListener {
 
+    private static final float MINIMUM_CARD_WIDTH_DIP = 300.0f;
+
     /**
      * The floating action button
      */
@@ -86,7 +88,7 @@ public class ReminderListFragment extends Fragment implements ReminderAdapter.IR
         final DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
         final float widthDp = dm.widthPixels / dm.density;
-        final int nrofGridColumns = (int)(widthDp / 300.0f);
+        final int nrofGridColumns = (int)(widthDp / MINIMUM_CARD_WIDTH_DIP);
 
         // Attach layout manager to recycler view
         recyclerView = (RecyclerView)view.findViewById(R.id.cardList);

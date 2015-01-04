@@ -5,5 +5,6 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:theme="@style/GalaxyZooThemeToolbarDarkOverflow"
+    app:theme="@style/ActionBarStyle"
+    app:popupTheme="@style/ActionBarPopupStyle"
     android:background="?attr/colorPrimaryDark" />
