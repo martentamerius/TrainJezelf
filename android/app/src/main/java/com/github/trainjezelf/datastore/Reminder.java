@@ -1,5 +1,9 @@
 package com.github.trainjezelf.datastore;
 
+import android.content.Context;
+
+import com.github.trainjezelf.R;
+
 /**
  * Data class that holds the settings for one reminder
  */
@@ -18,36 +22,40 @@ public class Reminder {
      * Period enum for defining the frequency of the reminder
      */
     public enum Period {
-        HOURLY ("uur", "buttonHour"),
-        DAILY ("dag","buttonDay"),
-        WEEKLY ("week", "buttonWeek"),
-        MONTHLY ("maand", "buttonMonth");
+        HOURLY (R.string.hour, "buttonHour"),
+        DAILY (R.string.day,"buttonDay"),
+        WEEKLY (R.string.week, "buttonWeek"),
+        MONTHLY (R.string.month, "buttonMonth");
 
-        private final String name;
+        private final int nameResource;
         private final String buttonId;
 
-        Period(String name, String buttonId) {
-            this.name = name;
+        Period(int nameResource, String buttonId) {
+            this.nameResource = nameResource;
             this.buttonId = buttonId;
         }
 
-        @Override
-        public String toString() {
-            return name;
+        public String toString(Context context) {
+            return context.getResources().getString(nameResource);
         }
 
         public String getButtonId() { return buttonId; }
 
-        public static Period get(String id) {
-            final String lowerCase = id.toLowerCase();
+        public static Period get(Context context, String id) {
             for (Period candidate : Period.values()) {
-                if (lowerCase.equals(candidate.toString())) {
+                if (id.equals(candidate.toString(context))) {
                     return candidate;
                 }
             }
             throw new IllegalArgumentException(id + " not found");
         }
     }
+
+    /**
+     * Android context
+     * transient: exclude from GSON serialization/deserialization
+     */
+    private transient Context context;
 
     /**
      * The reminder message
@@ -78,6 +86,10 @@ public class Reminder {
         this.uniqueId = uniqueId;
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -91,7 +103,8 @@ public class Reminder {
     }
 
     public String frequencyToString() {
-        return String.format("%d keer per %s", numberOfNotifiesPerPeriod, period);
+        return String.format("%d %s %s", numberOfNotifiesPerPeriod,
+                context.getResources().getString(R.string.times_per), period.toString(context).toLowerCase());
     }
 
     public int getUniqueId() { return uniqueId; }

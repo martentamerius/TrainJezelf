@@ -24,6 +24,7 @@ public class AlarmSchedulerTest extends InstrumentationTestCase {
                 DateTime now = new DateTime(1388534400000L); // 1-1-2014 00:00
                 //DateTime now = new DateTime(1388604600000L); // 1-1-2014 19:30
                 Reminder reminder = new Reminder("", nrPerPeriod, period, 0);
+                reminder.setContext(context);
 
                 for (int i = 0; i < nrPerPeriod * 8; i++) {
                     final long millisOfNextNotification = AlarmScheduler.getMillisOfNextNotification(context, now, reminder);

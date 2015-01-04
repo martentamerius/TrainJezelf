@@ -41,10 +41,16 @@ public final class DataStore {
     private int lastNotificationId = 0;
 
     /**
+     * Reference to Android app context
+     */
+    private final Context context;
+
+    /**
      * Constructor
      * @param context the context
      */
     private DataStore(Context context) {
+        this.context = context;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         loadReminders();
         loadLastNotificationId();
@@ -133,6 +139,9 @@ public final class DataStore {
         final Type listType = new TypeToken<Map<Integer, Reminder>>() {}.getType();
         final String json = sharedPreferences.getString(REMINDERS_KEY, "[]");
         reminders = gson.fromJson(json, listType);
+        for (Reminder reminder : reminders.values()) {
+            reminder.setContext(context);
+        }
     }
 
     /**

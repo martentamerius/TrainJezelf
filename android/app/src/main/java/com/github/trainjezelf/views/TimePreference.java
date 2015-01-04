@@ -24,6 +24,7 @@ public class TimePreference extends DialogPreference implements View.OnClickList
     private TimePicker picker_until = null;
     private ViewSwitcher viewSwitcher = null;
     private View view;
+    private Context context;
 
     // Result
     private TimeRange range;
@@ -39,6 +40,7 @@ public class TimePreference extends DialogPreference implements View.OnClickList
 
     public TimePreference(Context ctxt, AttributeSet attrs, int defStyle) {
         super(ctxt, attrs, defStyle);
+        context = ctxt;
         setPositiveButtonText(R.string.action_save);
         setNegativeButtonText(R.string.action_cancel);
     }
@@ -124,7 +126,10 @@ public class TimePreference extends DialogPreference implements View.OnClickList
 
     @Override
     public CharSequence getSummary() {
-        return String.format("Tussen %d:%02d en %d:%02d", range.getFromHour(), range.getFromMinute(),
+        return String.format("%s %d:%02d %s %d:%02d",
+                context.getResources().getString(R.string.timerange_from),
+                range.getFromHour(), range.getFromMinute(),
+                context.getResources().getString(R.string.timerange_to),
                 range.getUntilHour(), range.getUntilMinute());
     }
 

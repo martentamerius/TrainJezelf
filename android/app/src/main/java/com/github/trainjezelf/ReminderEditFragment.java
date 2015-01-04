@@ -141,7 +141,7 @@ public class ReminderEditFragment extends Fragment {
         Reminder.Period period = Reminder.Period.DAILY;
         if (button != null) {
             final String frequencyPeriodText = button.getText().toString();
-            period = Reminder.Period.get(frequencyPeriodText);
+            period = Reminder.Period.get(getActivity().getApplicationContext(), frequencyPeriodText);
         }
 
         // Reminder unique ID; either create a new one, or reuse UID of existing reminder
@@ -152,6 +152,9 @@ public class ReminderEditFragment extends Fragment {
             myUniqueId = reminder.getUniqueId();
         }
 
-        return new Reminder(message, numberOfNotifiesPerPeriod, period, myUniqueId);
+        final Reminder reminder = new Reminder(message, numberOfNotifiesPerPeriod, period, myUniqueId);
+        reminder.setContext(getActivity().getApplicationContext());
+
+        return reminder;
      }
 }
