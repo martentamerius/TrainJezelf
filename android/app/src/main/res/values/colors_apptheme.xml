@@ -5,5 +5,5 @@
 
     <color name="color_primary">@color/holo_purple_light</color>
     <color name="color_primary_dark">@android:color/holo_purple</color>
-    <color name="color_accent">@android:color/holo_orange_light</color>
+    <color name="color_accent">@color/holo_purple_light</color>
 </resources>

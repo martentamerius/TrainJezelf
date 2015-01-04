@@ -23,4 +23,6 @@
     <string name="timerange_from">Between</string>
     <string name="timerange_to">and</string>
     <string name="about_version">Version</string>
+    <string name="dialog_timespan_from">From</string>
+    <string name="dialog_timespan_to">To</string>
 </resources>

@@ -37,132 +37,68 @@
         <com.github.trainjezelf.views.RadioGroupTable
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="98dp"
             android:id="@+id/frequencyNumberPad"
             android:layout_below="@id/frequencyTextView" >
 
-            <TableRow>
+            <TableRow
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
                 <RadioButton
                     android:text="@string/number_1"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button1"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_2"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button2"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_3"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button3"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_4"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button4"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_5"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button5"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
             </TableRow>
 
-            <TableRow>
+            <TableRow
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
                 <RadioButton
                     android:text="@string/number_6"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button6"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_7"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button7"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_8"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button8"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_9"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button9"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
 
                 <RadioButton
                     android:text="@string/number_10"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
                     android:id="@+id/button10"
-                    android:button="@null"
-                    android:background="@drawable/radio_button_background"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_weight="1" />
+                    style="@style/RadioGroupButtonStyle" />
             </TableRow>
 
         </com.github.trainjezelf.views.RadioGroupTable>
@@ -188,51 +124,23 @@
 
             <RadioButton
                 android:text="@string/hour"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
                 android:id="@+id/buttonHour"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+                style="@style/RadioGroupButtonStyle" />
 
             <RadioButton
                 android:text="@string/day"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_margin="1dp"
                 android:id="@+id/buttonDay"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+                style="@style/RadioGroupButtonStyle" />
 
             <RadioButton
                 android:text="@string/week"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
                 android:id="@+id/buttonWeek"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+                style="@style/RadioGroupButtonStyle" />
 
             <RadioButton
                 android:text="@string/month"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
                 android:id="@+id/buttonMonth"
-                android:button="@null"
-                android:background="@drawable/radio_button_background"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_weight="1" />
+                style="@style/RadioGroupButtonStyle" />
 
         </RadioGroup>
 

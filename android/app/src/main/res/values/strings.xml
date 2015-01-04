@@ -31,5 +31,7 @@
     <string name="timerange_from">Tussen</string>
     <string name="timerange_to">en</string>
     <string name="about_version">Versie</string>
+    <string name="dialog_timespan_from">Van</string>
+    <string name="dialog_timespan_to">Tot</string>
 
 </resources>

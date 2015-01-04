@@ -11,11 +11,12 @@
         <item name="android:shadowRadius">2</item>
     </style>
 
-    <style name="timespan_button_style">
+    <style name="timespan_button_style" parent="android:style/Widget.Button">
         <item name="android:textColor">@color/timespan_button_text_color</item>
+        <item name="android:background">@drawable/timespan_button_background</item>
     </style>
 
-    <style name="TextAppearance.EditEvent_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+    <style name="TextAppearance.EditEvent_Spinner" parent="@android:style/Widget.Holo.Light.Spinner">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FF333333</item>
         <item name="android:layout_marginRight">12dp</item>
@@ -25,6 +26,21 @@
     <style name="TextAppearance.EditEvent_SpinnerButton" parent="TextAppearance.EditEvent_Spinner">
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <style name="RadioGroupButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/radio_button_background</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="date_picker">
+        <item name="android:divider">@drawable/timepicker_divider</item>
+        <!--<item name="android:background">@color/color_primary</item>-->
     </style>
 
 </resources>
