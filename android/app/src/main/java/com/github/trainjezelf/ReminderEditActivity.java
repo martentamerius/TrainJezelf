@@ -1,17 +1,16 @@
 package com.github.trainjezelf;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.github.trainjezelf.alarm.AlarmScheduler;
 
-public class ReminderEditActivity extends FragmentActivity {
+public class ReminderEditActivity extends ActionBarActivity {
     
     public static final String ARGUMENT_REMINDER_UNIQUE_ID = "reminderUniqueId";
 
@@ -24,7 +23,13 @@ public class ReminderEditActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_edit);
-        setupActionBar();
+
+        // Set up action bar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // Get handle to editing fragment
         FragmentManager manager = getSupportFragmentManager();
@@ -34,14 +39,6 @@ public class ReminderEditActivity extends FragmentActivity {
         Intent intent = getIntent();
         int reminderUniqueId = intent.getExtras().getInt(ARGUMENT_REMINDER_UNIQUE_ID);
         reminderEditFragment.displayReminder(reminderUniqueId);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override

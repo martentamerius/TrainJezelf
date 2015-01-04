@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blue_focused">#c1e8f7</color>
+    <color name="holo_purple_light">#ffbe7ae0</color>
+
+    <color name="color_primary">@color/holo_purple_light</color>
+    <color name="color_primary_dark">@android:color/holo_purple</color>
+    <color name="color_accent">@android:color/holo_orange_light</color>
 </resources>

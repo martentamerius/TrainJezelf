@@ -1,25 +1,42 @@
 package com.github.trainjezelf;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.github.trainjezelf.alarm.AlarmScheduler;
 import com.github.trainjezelf.datastore.DataStore;
 import com.github.trainjezelf.datastore.Reminder;
 import com.github.trainjezelf.datastore.ReminderAdapter;
+import com.shamanland.fab.FloatingActionButton;
 
 import java.util.List;
 
 /**
  * Reminder list fragment class.
  */
-public class ReminderListFragment extends ListFragment implements OnItemClickListener {
+public class ReminderListFragment extends Fragment implements ReminderAdapter.IReminderViewHolderClickListener,
+        View.OnClickListener, ReminderAdapter.IReminderViewHolderCardMenuListener {
+
+    /**
+     * The floating action button
+     */
+    FloatingActionButton fab;
+
+    /**
+     * RecyclerView that handles display of the list
+     */
+    private RecyclerView recyclerView;
+
     /**
      * Adapter that handles filling of the list view
      */
@@ -61,13 +78,44 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_reminder_list, container, false);
+
+        // Get width of screen
+        final DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        final float widthDp = dm.widthPixels / dm.density;
+        final int nrofGridColumns = (int)(widthDp / 300.0f);
+
+        // Attach layout manager to recycler view
+        recyclerView = (RecyclerView)view.findViewById(R.id.cardList);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(nrofGridColumns,
+                StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Populate adapter
+        reminders = dataStore.getReminders();
+        adapter = new ReminderAdapter(getActivity().getApplicationContext(), reminders);
+        adapter.setOnClickListener(this);
+        adapter.setCardMenuListener(this);
+        recyclerView.setAdapter(adapter);
+        registerForContextMenu(recyclerView);
+
+        // Get handle to floating action button
+        fab = (FloatingActionButton)view.findViewById(R.id.fab_new);
+        fab.setOnClickListener(this);
+
+        return view;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
+        // Re-populate adapter, as the user might have added a notification (in the edit screen)
         reminders = dataStore.getReminders();
-        adapter = new ReminderAdapter(getActivity(), android.R.layout.simple_list_item_1, reminders);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
-        registerForContextMenu(getListView());
+        adapter.replace(reminders);
     }
 
     /**
@@ -78,30 +126,32 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         mReminderSelectedListener = listener;
     }
 
-    /**
-     * Handles a click on a list item.
-     */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mReminderSelectedListener) {
-            mReminderSelectedListener.onReminderSelected(reminders.get(position).getUniqueId());
+    public void onReminderClicked(int uniqueId) {
+        if (mReminderSelectedListener != null) {
+            mReminderSelectedListener.onReminderSelected(uniqueId);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == fab) {
+            this.onReminderClicked(Reminder.NEW_REMINDER_UID);
+        }
+    }
+
+    @Override
+    public void onReminderDelete(int uniqueId) {
+        removeReminder(uniqueId);
     }
 
     /**
      * Remove reminder from the list
      */
-    private void removeReminder(int listIndex) {
-        int uniqueId = reminders.get(listIndex).getUniqueId();
+    private void removeReminder(int uniqueId) {
         AlarmScheduler.cancelScheduledReminder(getActivity().getApplicationContext(), uniqueId);
         reminders = dataStore.removeReminder(uniqueId);
-        notifyDataSetChanged();
-    }
-
-    public void notifyDataSetChanged() {
-        adapter.clear();
-        adapter.addAll(reminders);
-        adapter.notifyDataSetChanged();
+        adapter.replace(reminders);
     }
 
     @Override
@@ -116,7 +166,8 @@ public class ReminderListFragment extends ListFragment implements OnItemClickLis
         switch (item.getItemId()) {
             case R.id.menu_delete:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-                removeReminder(info.position);
+                int uniqueId = reminders.get(info.position).getUniqueId();
+                removeReminder(uniqueId);
                 return true;
         }
         return super.onContextItemSelected(item);

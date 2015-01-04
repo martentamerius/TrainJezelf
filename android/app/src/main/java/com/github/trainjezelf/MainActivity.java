@@ -3,23 +3,28 @@ package com.github.trainjezelf;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.github.trainjezelf.datastore.Reminder;
 
 
 /**
  * Main activity: displays a fragment that lists all reminders that the user has created.
  */
-public class MainActivity extends FragmentActivity implements ReminderListFragment.OnReminderSelectedListener {
+public class MainActivity extends ActionBarActivity implements ReminderListFragment.OnReminderSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+
+        // Set up action bar
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
 
         // Load preference defaults, if they have no value yet
         PreferenceManager.setDefaultValues(this, R.xml.pref_notification, false);
@@ -43,10 +48,7 @@ public class MainActivity extends FragmentActivity implements ReminderListFragme
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_add) {
-            onReminderSelected(Reminder.NEW_REMINDER_UID);
-            return true;
-        } else if (id == R.id.action_preferences) {
+        if (id == R.id.action_preferences) {
             final Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
             return true;

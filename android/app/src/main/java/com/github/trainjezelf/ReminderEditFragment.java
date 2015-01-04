@@ -123,7 +123,7 @@ public class ReminderEditFragment extends Fragment {
     private Reminder getFromView() {
         final String message = messageEditText.getText().toString();
 
-        // TODO bit hacky, but works
+        // bit hacky, but works
         final int selectedFrequencyNumberId = frequencyNumberGroup.getCheckedRadioButtonId();
         RadioButton button = (RadioButton)getView().findViewById(selectedFrequencyNumberId);
         int numberOfNotifiesPerPeriod = 1;

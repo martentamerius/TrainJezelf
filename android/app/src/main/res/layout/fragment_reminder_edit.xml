@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/messageEditText"
             android:layout_below="@+id/messageTextView"
+            android:background="@drawable/apptheme_edit_text_holo_light"
             android:inputType="textMultiLine|textCapSentences" />
 
         <TextView

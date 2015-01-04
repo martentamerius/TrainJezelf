@@ -1,17 +1,22 @@
-<RelativeLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:paddingBottom="0dp" >
+    android:paddingBottom="0dp">
+
+    <include layout="@layout/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <fragment class="com.github.trainjezelf.ReminderEditFragment"
-              android:id="@+id/reminderEditFragment"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:layout="@layout/fragment_reminder_edit"/>
+        android:id="@+id/reminderEditFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_reminder_edit" />
 
-</RelativeLayout>
+</LinearLayout>

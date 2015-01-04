@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name="com.github.trainjezelf.ReminderEditActivity"
-            android:label=""
+            android:label="@string/title_activity_edit"
             android:parentActivityName="com.github.trainjezelf.MainActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
