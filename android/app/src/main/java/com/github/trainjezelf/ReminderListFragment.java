@@ -35,11 +35,6 @@ public class ReminderListFragment extends Fragment implements ReminderAdapter.IR
     FloatingActionButton fab;
 
     /**
-     * RecyclerView that handles display of the list
-     */
-    private RecyclerView recyclerView;
-
-    /**
      * Adapter that handles filling of the list view
      */
     private ReminderAdapter adapter = null;
@@ -91,7 +86,7 @@ public class ReminderListFragment extends Fragment implements ReminderAdapter.IR
         final int nrofGridColumns = (int)(widthDp / MINIMUM_CARD_WIDTH_DIP);
 
         // Attach layout manager to recycler view
-        recyclerView = (RecyclerView)view.findViewById(R.id.cardList);
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.cardList);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(nrofGridColumns,
                 StaggeredGridLayoutManager.VERTICAL);

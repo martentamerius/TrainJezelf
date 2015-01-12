@@ -52,6 +52,9 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".alarm.DismissReceiver">
+        </receiver>
+
         <activity
             android:name="com.github.trainjezelf.SettingsActivity"
             android:label="@string/title_activity_settings"

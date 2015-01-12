@@ -73,7 +73,7 @@ public final class DataStore {
      * @return list of reminders
      */
     public List<Reminder> getReminders() {
-        return new ArrayList<Reminder>(reminders.values());
+        return new ArrayList<>(reminders.values());
     }
 
     /**
@@ -119,6 +119,36 @@ public final class DataStore {
     }
 
     /**
+     * Get next number to show in notification. Note that this method, which is called from the context
+     * of the AlarmReceiver at the moment the alarm goes off and the notification is built,
+     * might race with clearNumberOfNotifications, which is called when the user dismisses the notification.
+     * @param uniqueId notification ID
+     * @return number to show in notification
+     */
+    public synchronized int getNextNumberOfNotifications(int uniqueId) {
+        final Reminder reminder = reminders.get(uniqueId);
+        if (reminder == null) {
+            return 0;
+        }
+        final int result = reminder.getNumberOfNotifications();
+        reminder.setNumberOfNotifications(result + 1);
+        saveReminders();
+        return result;
+    }
+
+    /**
+     * Reset notification number to 0
+     * @param uniqueId notification ID
+     */
+    public synchronized void clearNumberOfNotifications(int uniqueId) {
+        final Reminder reminder = reminders.get(uniqueId);
+        if (reminder != null) {
+            reminder.setNumberOfNotifications(0);
+            saveReminders();
+        }
+    }
+
+    /**
      * Save reminders to data store
      */
     @SuppressLint("CommitPrefEdits")
@@ -132,7 +162,6 @@ public final class DataStore {
 
     /**
      * Get reminders from data store
-     * @return list of reminders
      */
     private void loadReminders() {
         final Gson gson = new Gson();
@@ -146,7 +175,6 @@ public final class DataStore {
 
     /**
      * Get last notification ID from data store
-     * @return last notification ID
      */
     private void loadLastNotificationId() {
         lastNotificationId = sharedPreferences.getInt(LAST_NOTIFICATION_ID_KEY, 0);

@@ -1,6 +1,7 @@
 package com.github.trainjezelf.views;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.TableRow;
 public class RadioGroupTable extends TableLayout implements View.OnClickListener {
 
     private RadioButton activeRadioButton;
-    private SparseArray<RadioButton> buttons = new SparseArray<RadioButton>();
+    private SparseArray<RadioButton> buttons = new SparseArray<>();
 
     /**
      * @param context the context
@@ -45,7 +46,7 @@ public class RadioGroupTable extends TableLayout implements View.OnClickListener
      * @see android.widget.TableLayout#addView(android.view.View, int, android.view.ViewGroup.LayoutParams)
      */
     @Override
-    public void addView(View child, int index, android.view.ViewGroup.LayoutParams params) {
+    public void addView(@NonNull View child, int index, android.view.ViewGroup.LayoutParams params) {
         super.addView(child, index, params);
         setChildrenOnClickListener((TableRow)child);
         addRadioButton(child);
@@ -55,7 +56,7 @@ public class RadioGroupTable extends TableLayout implements View.OnClickListener
      * @see android.widget.TableLayout#addView(android.view.View, android.view.ViewGroup.LayoutParams)
      */
     @Override
-    public void addView(View child, android.view.ViewGroup.LayoutParams params) {
+    public void addView(@NonNull View child, android.view.ViewGroup.LayoutParams params) {
         super.addView(child, params);
         setChildrenOnClickListener((TableRow)child);
         addRadioButton(child);

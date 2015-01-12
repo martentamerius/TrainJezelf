@@ -74,6 +74,11 @@ public class Reminder {
     private final int uniqueId;
 
     /**
+     * Number of notifications that occurred before the user cancelled them
+     */
+    private int numberOfNotifications;
+
+    /**
      * Constructor
      * @param message message next
      * @param numberOfNotifiesPerPeriod number of notifies per period
@@ -84,6 +89,7 @@ public class Reminder {
         this.numberOfNotifiesPerPeriod = numberOfNotifiesPerPeriod;
         this.period = period;
         this.uniqueId = uniqueId;
+        this.numberOfNotifications = 0;
     }
 
     public void setContext(Context context) {
@@ -108,4 +114,12 @@ public class Reminder {
     }
 
     public int getUniqueId() { return uniqueId; }
+
+    public int getNumberOfNotifications() {
+        return numberOfNotifications;
+    }
+
+    public void setNumberOfNotifications(int number) {
+        numberOfNotifications = number;
+    }
 }

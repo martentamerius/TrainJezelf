@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -49,7 +48,6 @@ public class AboutActivity extends ActionBarActivity {
         final WebView webView = (WebView)findViewById(R.id.about_webview);
         String fileName = String.format("about-%s.html", Locale.getDefault().getLanguage());
         try {
-            List list = Arrays.asList(getResources().getAssets().list(""));
             if (!Arrays.asList(getResources().getAssets().list("")).contains(fileName)) {
                 fileName = "about.html";
             }
@@ -58,7 +56,7 @@ public class AboutActivity extends ActionBarActivity {
         }
         final String url = String.format("file:///android_asset/%s", fileName);
         webView.loadUrl(url);
-        // Set webview background color to transparent (alpha = 0)
+        // Set WebView background color to transparent (alpha = 0)
         webView.setBackgroundColor(0x00000000);
     }
 }
