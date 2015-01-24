@@ -7,25 +7,38 @@
 //
 
 #import "BFReminderCollectionViewController.h"
+#import "BFNavigationController.h"
+#import "BFReminderViewController.h"
 #import "BFReminderList.h"
 #import "BFReminderEditViewController.h"
 #import "BFReminderCollectionViewCell.h"
-#import "BFReminderCollectionViewAccessoryViewHeader.h"
 #import "BFAppDelegate.h"
 
 
-@interface BFReminderCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface BFReminderCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+@property (nonatomic, strong) NSIndexPath *longPressedIndexPath;
+@property (nonatomic, strong) UIBarButtonItem *playAllBarButton;
+@property (nonatomic, strong) UIBarButtonItem *pauseAllBarButton;
 @end
 
 @implementation BFReminderCollectionViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if ((self = [super initWithCoder:aDecoder])) {
         // Custom initialization
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        
+        self.playAllBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(pauseOrPlayAllReminders:)];
+        self.pauseAllBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pauseOrPlayAllReminders:)];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    // Clean up notification center observing
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -34,100 +47,208 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidRotate:(NSNotification *)notification
+{
+    // Recalculate layout when device was rotated
+    [self.collectionViewLayout invalidateLayout];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self correctLeftNavigationBarItem];
+}
+
+
+#pragma mark - Pausing reminders
+
+- (void)correctLeftNavigationBarItem
+{
+    // Set left barbutton item to pause (default) or play (if all reminders are paused)
+    NSArray *reminderList = [[BFReminderList sharedReminderList] reminderList];
+    __block BOOL showPausedButton = ([reminderList count]==0);
+    [reminderList enumerateObjectsUsingBlock:^(BFReminder *reminder, NSUInteger idx, BOOL *stop) {
+        if (![reminder isPaused]) {
+            showPausedButton = YES;
+            *stop = YES;
+        }
+    }];
+    
+    self.navigationItem.leftBarButtonItem = (showPausedButton)?self.pauseAllBarButton:self.playAllBarButton;
+    self.navigationItem.leftBarButtonItem.enabled = ([reminderList count]>0);
+}
+
+- (IBAction)pauseOrPlayAllReminders:(UIBarButtonItem *)sender
+{
+    BOOL pauseAll = (sender == self.pauseAllBarButton);
+    
+    [[[BFReminderList sharedReminderList] reminderList] enumerateObjectsUsingBlock:^(BFReminder *reminder, NSUInteger idx, BOOL *stop) {
+        reminder.paused = pauseAll;
+    }];
+    [[BFReminderList sharedReminderList] saveRemindersToUserDefaults];
+    
+    // Reload the currently visible items to show/hide pause image in background
+    [self.collectionView reloadItemsAtIndexPaths:[self.collectionView indexPathsForVisibleItems]];
+    
+    if (self.longPressedIndexPath) {
+        // Stop wiggling
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        if (cell) {
+            [cell stopWiggling];
+        }
+        self.longPressedIndexPath = nil;
+    }
+    
+    [self correctLeftNavigationBarItem];
+}
+
+- (IBAction)trashSelectedReminder:(UIGestureRecognizer *)sender
+{
+    if (self.longPressedIndexPath) {
+        BFReminder *reminder = [[BFReminderList sharedReminderList] reminderAtIndex:self.longPressedIndexPath.row];
+        if (reminder)
+            [[BFReminderList sharedReminderList] removeReminder:reminder];
+        
+        [self.collectionView deleteItemsAtIndexPaths:@[ self.longPressedIndexPath ]];
+        self.longPressedIndexPath = nil;
+    }
+
+    [self correctLeftNavigationBarItem];
+}
+
+- (IBAction)playOrPauseSelectedReminder:(UIGestureRecognizer *)sender
+{
+    if (self.longPressedIndexPath) {
+        BFReminder *reminder = [[BFReminderList sharedReminderList] reminderAtIndex:self.longPressedIndexPath.row];
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        
+        if (cell && reminder) {
+            reminder.paused = (![reminder isPaused]);            
+            [[BFReminderList sharedReminderList] saveRemindersToUserDefaults];
+            
+            // Show/hide the pause background image
+            cell.pauseBackgroundImageView.hidden = (![reminder isPaused]);
+        }
+        
+        self.longPressedIndexPath = nil;
+        [cell stopWiggling];
+    }
+    
+    [self correctLeftNavigationBarItem];
+}
+
+- (IBAction)longPressActivated:(UILongPressGestureRecognizer *)sender
+{
+    if (self.longPressedIndexPath) {
+        // Stop wiggling of currently selected cell
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        if (cell) {
+            [cell stopWiggling];
+        }
+    }
+    
+    // Get the indexpath of the long pressed cell
+    CGPoint tapPoint = [sender locationInView:self.collectionView];
+    self.longPressedIndexPath = [self.collectionView indexPathForItemAtPoint:tapPoint];
+    
+    if (self.longPressedIndexPath) {
+        // Show wriggling animation
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        if (cell) {
+            [cell startWiggling];
+        }
+    }
+}
+
+- (IBAction)handleUserTap:(UITapGestureRecognizer *)sender
+{
+    CGPoint tapPoint = [sender locationInView:self.collectionView];
+    NSIndexPath *tappedIndexPath = [self.collectionView indexPathForItemAtPoint:tapPoint];
+    
+    if (tappedIndexPath && (!self.longPressedIndexPath)) {
+        
+        // No cell is wiggling; just set the cell selected state and perform segue to edit the tapped reminder
+        [self.collectionView selectItemAtIndexPath:tappedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self performSegueWithIdentifier:kBFSegueReminderTapped sender:self];
+        
+    } else if (tappedIndexPath && ([tappedIndexPath isEqual:self.longPressedIndexPath])) {
+        
+        // The tapped reminder is equal to the currently wiggling reminder
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        if (cell) {
+            // Check the touch inside the cell
+            CGPoint touchPointInCell = [cell convertPoint:tapPoint fromView:self.collectionView];
+            if (CGRectContainsPoint(cell.bounds, touchPointInCell)) {
+                
+                if (touchPointInCell.x<(cell.bounds.size.width / 3.0f)) {
+                    // Trash button tapped
+                    [self trashSelectedReminder:sender];
+                    
+                } else if (touchPointInCell.x>(2*(cell.bounds.size.width / 3.0f))) {
+                    // Play/pause button tapped
+                    [self playOrPauseSelectedReminder:sender];
+                }
+                
+                // Stop wiggling anyway
+                [cell stopWiggling];
+                self.longPressedIndexPath = nil;
+            }
+        }
+        
+    } else {
+        
+        // Just stop wiggling...
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        if (cell)
+            [cell stopWiggling];
+    }
+}
+
 
 #pragma mark - UICollectionViewDataSource
 
-- (NSArray *)remindersForSection:(NSInteger)section
-{
-    NSArray *hourArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyHourly];
-    NSArray *dayArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyDaily];
-    NSArray *weekArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyWeekly];
-    NSArray *monthArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyMonthly];
-    
-    NSMutableArray *listArray = [NSMutableArray array];
-    if (hourArray && ([hourArray count]>0))
-        [listArray addObject:hourArray];
-    if (dayArray && ([dayArray count]>0))
-        [listArray addObject:dayArray];
-    if (weekArray && ([weekArray count]>0))
-        [listArray addObject:weekArray];
-    if (monthArray && ([monthArray count]>0))
-        [listArray addObject:monthArray];
-    
-    return ([listArray count]>section)?[listArray objectAtIndex:section]:nil;
-}
-
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    NSInteger sectionCount = 0;
-    
-    NSArray *hourArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyHourly];
-    NSArray *dayArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyDaily];
-    NSArray *weekArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyWeekly];
-    NSArray *monthArray = [[BFReminderList sharedReminderList] remindersWithFrequencyType:BFFrequencyMonthly];
-    
-    if (hourArray && ([hourArray count]>0))
-        sectionCount++;
-    if (dayArray && ([dayArray count]>0))
-        sectionCount++;
-    if (weekArray && ([weekArray count]>0))
-        sectionCount++;
-    if (monthArray && ([monthArray count]>0))
-        sectionCount++;
-
-    return MAX(sectionCount, 1);
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [[self remindersForSection:section] count];
+    return [[BFReminderList sharedReminderList].reminderList count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kBFReuseIDReminderCVCell forIndexPath:indexPath];
     
-    // Configure the cell
-    NSArray *reminderSectionArray = [self remindersForSection:indexPath.section];
-    BFReminder *reminder = ([reminderSectionArray count]>indexPath.row)?[reminderSectionArray objectAtIndex:indexPath.row]:nil;
+    // Configure the content
+    BFReminder *reminder;
+    if ([[BFReminderList sharedReminderList].reminderList count]>indexPath.row)
+        reminder = [[BFReminderList sharedReminderList].reminderList objectAtIndex:indexPath.row];
     
     if (reminder) {
         cell.messageLabel.text = reminder.message;
-        cell.frequencyLabel.text = [NSString stringWithFormat:@"%ldx", (long)reminder.frequencyCount];
+        cell.pauseBackgroundImageView.hidden = (![reminder isPaused]);
+        
+        NSString *freqText = [NSString stringWithFormat:@"%@x per %@", @(reminder.frequencyCount), [reminder frequencyTypeString]];
+        
+        // Create italic body style font for frequency string
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+        UIFontDescriptor *fontDesc = [[font fontDescriptor] fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
+        UIFont *italicsFont = [UIFont fontWithDescriptor:fontDesc size:font.pointSize];
+        NSAttributedString *attrFreqText = [[NSAttributedString alloc] initWithString:freqText
+                                                                           attributes:@{ NSFontAttributeName: italicsFont }];
+        cell.frequencyLabel.attributedText = attrFreqText;
     }
-    
+
+    // Configure the cell
     cell.layer.cornerRadius = 4.0f;
     
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    BFReminderCollectionViewAccessoryViewHeader *headerCell;
-    
-    if (indexPath && [kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        headerCell = (BFReminderCollectionViewAccessoryViewHeader *)[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kBFReminderCVAccViewHeader forIndexPath:indexPath];
-        
-        NSArray *sectionReminderArray = [self remindersForSection:indexPath.section];
-        if (sectionReminderArray && ([sectionReminderArray count]>0)) {
-            BFReminder *firstReminder = (BFReminder *)[sectionReminderArray firstObject];
-            
-            NSString *headerTitle;
-            switch (firstReminder.frequencyType) {
-                case BFFrequencyHourly: headerTitle = @"Per uur"; break;
-                case BFFrequencyDaily: headerTitle = @"Dagelijks"; break;
-                case BFFrequencyWeekly: headerTitle = @"Wekelijks"; break;
-                case BFFrequencyMonthly: headerTitle = @"Maandelijks"; break;
-            }
-            headerCell.headerTitleLabel.text = headerTitle;
-        }
-    }
-    
-    return headerCell;
-}
-
 
 #pragma mark - UICollectionViewDelegate
+
 
 
 #pragma mark - Reminder Edit unwinding
@@ -135,15 +256,56 @@
 - (IBAction)reminderEditFinished:(UIStoryboardSegue *)segue
 {
     [self.collectionView reloadData];
-    
-    /*
+    [self.collectionViewLayout invalidateLayout];
+
     // Check to see if reminder needs scheduling
-    BFReminderEditViewController *editVC = [segue sourceViewController];
-    BFReminder *reminder = editVC.reminder;
-    if ((!reminder.localNotificationFireDate) || ([reminder.localNotificationFireDate timeIntervalSinceNow]<0)) {
-        BFAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate scheduleNextLocalNotificationForReminder:reminder];
-    }*/
+    [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
+    
+    [self correctLeftNavigationBarItem];
+}
+
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGSize cellBounds = CGSizeZero;
+    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
+        // Orientation is landscape: use the max of the frame's sizes
+        cellBounds.width = (MAX(self.collectionView.frame.size.width, self.collectionView.frame.size.height) / 2.0f) - 16.0f;
+    } else {
+        // The orientation is portrait: the width is the smallest of the frame's sizes
+        cellBounds.width = MIN(self.collectionView.frame.size.width, self.collectionView.frame.size.height) - 16.0f;
+    }
+    BFReminder *reminder;
+    if ([[BFReminderList sharedReminderList].reminderList count]>indexPath.row)
+        reminder = [[BFReminderList sharedReminderList].reminderList objectAtIndex:indexPath.row];
+    
+    if (reminder) {
+        // Calculate height from the actual reminder message
+        cellBounds.height = ceilf([reminder.message boundingRectWithSize:CGSizeMake(cellBounds.width - 16.0f, 80.0f) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody] } context:nil].size.height) + 32.0f;
+    } else {
+        // Assume the reminder message has one line
+        cellBounds.height = 50.0f;
+    }
+
+    return cellBounds;
+}
+
+
+#pragma mark - Shake gesture
+
+- (BOOL)canBecomeFirstResponder
+{
+    // To support shake gesture
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (motion == UIEventSubtypeMotionShake) {
+        [self performSegueWithIdentifier:kBFSegueReminderListToReminderShake sender:self];
+    }
 }
 
 
@@ -151,14 +313,23 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if (self.longPressedIndexPath) {
+        // Stop wiggling anyway
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        if (cell) {
+            [cell stopWiggling];
+        }
+        self.longPressedIndexPath = nil;
+    }
+    
+    if ([segue.identifier isEqualToString:kBFSegueReminderListToReminder]) {
+        BFReminder *reminder = ((BFNavigationController *)self.navigationController).receivedReminder;
+        [[segue destinationViewController] showReminder:reminder];
+    }
     if ([[segue identifier] isEqualToString:kBFSegueAddReminder]) {
-        // Create a new instance of the appropriate class, insert it into the array and pass it to editing view
+        // Create a new instance of a reminder and pass it to editing view
+        // Note: do not insert it into the reminder list yet; only upon save tapped
         BFReminder *reminder = [[BFReminder alloc] init];
-        reminder.message = @"Nieuwe reminder...";
-        reminder.frequencyCount = 1;
-        reminder.frequencyType = BFFrequencyDaily;
-        
-        [[BFReminderList sharedReminderList] addReminder:reminder];
         
         BFReminderEditViewController *editVC = (BFReminderEditViewController *)[segue destinationViewController];
         editVC.reminder = reminder;
@@ -173,6 +344,5 @@
         editVC.reminder = reminder;
     }
 }
-
 
 @end

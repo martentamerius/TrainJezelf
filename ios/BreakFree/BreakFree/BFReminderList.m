@@ -20,6 +20,7 @@ static BFReminderList *_reminderList;
 
 @implementation BFReminderList
 
+
 #pragma mark - Singleton
 
 + (BFReminderList *)sharedReminderList
@@ -36,7 +37,7 @@ static BFReminderList *_reminderList;
 }
 
 
-#pragma mark - Initialisation
+#pragma mark - Initialization
 
 - (BFReminderList *)init
 {
@@ -60,21 +61,20 @@ static BFReminderList *_reminderList;
     return [self.reminders count];
 }
 
-- (NSUInteger)countForFrequencyType:(BFFrequencyType)frequencyType
-{
-    return [[self remindersWithFrequencyType:frequencyType] count];
-}
-
 - (void)addReminder:(BFReminder *)reminder
 {
-    if (reminder)
+    if (reminder) {
         [self.reminders addObject:reminder];
+        [self saveRemindersToUserDefaults];
+    }
 }
 
 - (void)removeReminder:(BFReminder *)reminder
 {
-    if (reminder)
+    if (reminder) {
         [self.reminders removeObject:reminder];
+        [self saveRemindersToUserDefaults];
+    }
 }
 
 - (BFReminder *)reminderAtIndex:(NSUInteger)index
@@ -82,8 +82,8 @@ static BFReminderList *_reminderList;
     BFReminder *reminder;
     
     if ([self.reminders count]>index)
-        reminder = [self.reminders objectAtIndex:index];
-    
+        reminder = [[self reminderList] objectAtIndex:index];
+
     return reminder;
 }
 
@@ -104,23 +104,11 @@ static BFReminderList *_reminderList;
     return reminder;
 }
 
-
 - (NSArray *)reminderList
 {
-    return [NSArray arrayWithArray:self.reminders];
-}
-
-- (NSArray *)remindersWithFrequencyType:(BFFrequencyType)frequencyType
-{
-    __block NSMutableArray *filteredReminders = [NSMutableArray array];
-    
-    [self.reminders enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        BFReminder *currentReminder = (BFReminder *)obj;
-        if (currentReminder.frequencyType == frequencyType)
-            [filteredReminders addObject:currentReminder];
-    }];
-    
-    return [NSArray arrayWithArray:filteredReminders];
+    NSSortDescriptor *frequencyTypeSort = [[NSSortDescriptor alloc] initWithKey:@"frequencyType" ascending:YES];
+    NSSortDescriptor *messageSort = [[NSSortDescriptor alloc] initWithKey:@"message" ascending:NO];
+    return [self.reminders sortedArrayUsingDescriptors:@[ frequencyTypeSort, messageSort ]];
 }
 
 
@@ -137,8 +125,10 @@ static BFReminderList *_reminderList;
 
 - (void)saveRemindersToUserDefaults
 {
+    // First, clean up any old garbage
     [self removeRemindersFromUserDefaults];
     
+    // Then save the new reminder list
     if (self.reminders) {
         [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self.reminders] forKey:kBFUserDefaultsCurrentReminderList];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -150,5 +140,23 @@ static BFReminderList *_reminderList;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kBFUserDefaultsCurrentReminderList];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+
+#pragma mark - Local Notification scheduling
+
+- (void)checkSchedulingOfLocalNotificationsForAllReminders
+{
+    // Iterate over all reminders in the list
+    [self.reminderList enumerateObjectsUsingBlock:^(BFReminder *reminder, NSUInteger idx, BOOL *stop) {
+        if ([reminder isPaused]) {
+            // This reminder has been paused: remove all current local notifications for it
+            [reminder removeAllLocalNotificationsForCurrentReminder];
+        } else {
+            // Check if the reminder needs some extra local notifications scheduling after the last fire date
+            [reminder scheduleLocalNotificationsForCurrentReminder];
+        }
+    }];
+}
+
 
 @end

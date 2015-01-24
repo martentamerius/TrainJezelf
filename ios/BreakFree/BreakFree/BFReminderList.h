@@ -14,7 +14,6 @@
 + (BFReminderList *)sharedReminderList;
 
 - (NSUInteger)count;
-- (NSUInteger)countForFrequencyType:(BFFrequencyType)frequencyType;
 
 - (void)addReminder:(BFReminder *)reminder;
 - (void)removeReminder:(BFReminder *)reminder;
@@ -23,9 +22,10 @@
 - (BFReminder *)reminderWithUUID:(NSUUID *)uuid;
 
 - (NSArray *)reminderList;
-- (NSArray *)remindersWithFrequencyType:(BFFrequencyType)frequencyType;
 
 - (void)saveRemindersToUserDefaults;
 - (void)removeRemindersFromUserDefaults;
+
+- (void)checkSchedulingOfLocalNotificationsForAllReminders;
 
 @end

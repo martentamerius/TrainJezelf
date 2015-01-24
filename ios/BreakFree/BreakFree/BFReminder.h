@@ -20,10 +20,12 @@ typedef NS_ENUM(NSUInteger, BFFrequencyType) {
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic) NSInteger frequencyCount;
 @property (nonatomic) BFFrequencyType frequencyType;
+@property (nonatomic, getter=isPaused) BOOL paused;
 
 - (NSString *)frequencyTypeString;
 - (void)setFrequencyTypeString:(NSString *)frequencyTypeString;
 
-- (NSDate *)calculateNextLocalNotificationFireDate;
+- (void)removeAllLocalNotificationsForCurrentReminder;
+- (void)scheduleLocalNotificationsForCurrentReminder;
 
 @end
