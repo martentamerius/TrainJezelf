@@ -9,16 +9,27 @@
 #ifndef BreakFree_BFAppDefines_h
 #define BreakFree_BFAppDefines_h
 
+// Time in seconds the reminder view should be modally displayed
+#define kBFReminderViewPeriod                           5
+
+// Number of (sequentially numbered) images to show in reminder view
+#define kBFReminderImageCount                           6
+
 // Local notification user info
 #define kBFLocalNotificationReminderUUIDString          @"BFLocalNotificationReminderUUIDString"
 
 // Storyboard segues
-#define kBFSegueAutomaticLaunchViewToRemindersCV        @"BFTappedLaunchViewToRemindersCVSegue"
-#define kBFSegueTappedLaunchViewToRemindersCV           @"BFAutomaticLaunchViewToRemindersCVSegue"
-
 #define kBFSegueAddReminder                             @"BFAddReminderSegue"
 #define kBFSegueReminderTapped                          @"BFReminderTappedSegue"
 #define kBFSegueUnwindFromSaveReminderTapped            @"BFSaveReminderUnwindSegue"
+
+#define kBFSegueReminderListToReminderShake             @"BFReminderListToReminderShakeSegue"
+#define kBFSegueReminderListToReminder                  @"BFReminderListToReminderSegue"
+#define kBFSegueUnwindFromReminderToReminderList        @"BFUnwindFromReminderToReminderListSegue"
+
+#define kBFSegueReminderEditToReminderShake             @"BFReminderEditToReminderShakeSegue"
+#define kBFSegueReminderEditToReminder                  @"BFReminderEditToReminderSegue"
+#define kBFSegueUnwindFromReminderToReminderEdit        @"BFUnwindFromReminderToReminderEditSegue"
 
 // UITableViewCell identifiers
 #define kBFReuseIDReminderCVCell                        @"BFReminderCVCell"

@@ -9,24 +9,42 @@
 #import "BFAppDelegate.h"
 #import "BFAppDefines.h"
 #import "BFReminderList.h"
-#import "BFLaunchViewController.h"
+#import "BFNavigationController.h"
 
 @implementation BFAppDelegate
-
 
 #pragma mark - App startup
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Set minimum background fetch interval
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    // iOS 8: Register the app for alert notifications.
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+    }
+
+    // Check if the app was started up because of a local notification
     UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    [self ingestLocalNotification:localNotification];
+    if (localNotification)
+        [self ingestLocalNotification:localNotification];
+    
+    // Check if any reminders need local notification scheduling
+    [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
     
     return YES;
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
+    // Handle the local notification
     [self ingestLocalNotification:notification];
+    
+    // Then check if any reminders need local notification scheduling
+    [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -37,6 +55,9 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    // Reset app icon badge number when the app is active
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 
@@ -46,12 +67,6 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    
-    if ([[BFReminderList sharedReminderList].reminderList count]>0) {
-        [[BFReminderList sharedReminderList].reminderList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [self scheduleNextLocalNotificationForReminder:(BFReminder *)obj];
-        }];
-    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -59,66 +74,43 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
+    // Start by saving the current reminder to the user defaults
     [[BFReminderList sharedReminderList] saveRemindersToUserDefaults];
+    
+    // Then check if any reminders need local notification scheduling
+    [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
 }
 
 
-#pragma mark - Local notifications
+#pragma mark - Background fetch
 
-- (void)scheduleNextLocalNotificationForReminder:(BFReminder *)reminder
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    __block BOOL reminderIsAlreadyScheduled = NO;
+    // Check the list of reminders whether any new local notifications need scheduling
+    NSLog(@"Checking scheduling of all reminders!");
+    [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
     
-    // Check if the reminder is already scheduled
-    [[[UIApplication sharedApplication] scheduledLocalNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        UILocalNotification *currentNotification = (UILocalNotification *)obj;
-        NSString *uuidString =[currentNotification.userInfo objectForKey:kBFLocalNotificationReminderUUIDString];
-        if (uuidString && ([uuidString isEqualToString:reminder.uuid.UUIDString])) {
-            // Current notification is the same as the parameter...
-            reminderIsAlreadyScheduled = YES;
-            *stop = YES;
-        }
-    }];
-    
-    if (!reminderIsAlreadyScheduled) {
-        // If not, create a new local notification
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        if (localNotification == nil)
-            return;
-        
-        localNotification.fireDate = [reminder calculateNextLocalNotificationFireDate];
-        localNotification.timeZone = [NSTimeZone defaultTimeZone];
-        localNotification.alertBody = [NSString stringWithString:reminder.message];
-        localNotification.alertAction = NSLocalizedString(@"View Details", nil);
-        
-        localNotification.soundName = UILocalNotificationDefaultSoundName;
-        localNotification.applicationIconBadgeNumber = 1;
-        
-        NSDictionary *infoDict = [NSDictionary dictionaryWithObject:reminder.uuid.UUIDString forKey:kBFLocalNotificationReminderUUIDString];
-        localNotification.userInfo = infoDict;
-        
-        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-    }
+    // Don't forget to run the completion handler! (With fail result to ensure quick retry)
+    completionHandler(UIBackgroundFetchResultFailed);
 }
+
+
+#pragma mark - Receiving local notifications
 
 - (void)ingestLocalNotification:(UILocalNotification *)localNotification
 {
     if (localNotification) {
+        // Retrieve the actual reminder using the UUID string in the UserInfo dictionary
         NSString *reminderUUIDString = [localNotification.userInfo objectForKey:kBFLocalNotificationReminderUUIDString];
         if (reminderUUIDString) {
             NSUUID *reminderUUID = [[NSUUID alloc] initWithUUIDString:reminderUUIDString];
             BFReminder *reminder = [[BFReminderList sharedReminderList] reminderWithUUID:reminderUUID];
             if (reminder) {
-                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:nil];
-                BFLaunchViewController *launchVC = [storyBoard instantiateInitialViewController];
-                [launchVC showReminder:reminder];
-                
-                self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-                self.window.rootViewController = launchVC;
-                [self.window makeKeyAndVisible];
+                // Show the reminder to the user...
+                BFNavigationController *initialVC = (BFNavigationController *)self.window.rootViewController;
+                [initialVC applicationDidReceiveNotificationWithReminder:reminder];
             }
         }
-        [UIApplication sharedApplication].applicationIconBadgeNumber = localNotification.applicationIconBadgeNumber-1;
     }
 }
 

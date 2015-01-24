@@ -12,5 +12,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *frequencyLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnailImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *pauseBackgroundImageView;
 
+- (void)startWiggling;
+- (void)stopWiggling;
 @end
