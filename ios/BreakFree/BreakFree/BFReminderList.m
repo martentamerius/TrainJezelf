@@ -13,6 +13,7 @@
 
 @interface BFReminderList ()
 @property (nonatomic, strong) NSMutableArray *reminders;
+@property (nonatomic, strong) NSOperationQueue *backgroundQueue;
 @end
 
 
@@ -64,6 +65,7 @@ static BFReminderList *_reminderList;
 - (void)addReminder:(BFReminder *)reminder
 {
     if (reminder) {
+        [reminder scheduleLocalNotificationsForCurrentReminder];
         [self.reminders addObject:reminder];
         [self saveRemindersToUserDefaults];
     }
@@ -72,6 +74,7 @@ static BFReminderList *_reminderList;
 - (void)removeReminder:(BFReminder *)reminder
 {
     if (reminder) {
+        [reminder removeAllLocalNotificationsForCurrentReminder];
         [self.reminders removeObject:reminder];
         [self saveRemindersToUserDefaults];
     }
@@ -146,15 +149,21 @@ static BFReminderList *_reminderList;
 
 - (void)checkSchedulingOfLocalNotificationsForAllReminders
 {
-    // Iterate over all reminders in the list
-    [self.reminderList enumerateObjectsUsingBlock:^(BFReminder *reminder, NSUInteger idx, BOOL *stop) {
-        if ([reminder isPaused]) {
-            // This reminder has been paused: remove all current local notifications for it
-            [reminder removeAllLocalNotificationsForCurrentReminder];
-        } else {
-            // Check if the reminder needs some extra local notifications scheduling after the last fire date
-            [reminder scheduleLocalNotificationsForCurrentReminder];
-        }
+    // Iterate over all reminders in the list on a background operation queue
+    if (!self.backgroundQueue)
+        self.backgroundQueue = [[NSOperationQueue alloc] init];
+    
+    __weak typeof(self) weakSelf = self;
+    [self.backgroundQueue addOperationWithBlock:^{
+        [weakSelf.reminderList enumerateObjectsUsingBlock:^(BFReminder *reminder, NSUInteger idx, BOOL *stop) {
+            if ([reminder isPaused]) {
+                // This reminder has been paused: remove all current local notifications for it (if any)
+                [reminder removeAllLocalNotificationsForCurrentReminder];
+            } else {
+                // Just reschedule the reminder notifications
+                [reminder scheduleLocalNotificationsForCurrentReminder];
+            }
+        }];
     }];
 }
 

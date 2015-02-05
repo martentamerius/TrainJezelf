@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9B0BACDB1986E6F800D4CC09 /* BFReminderCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */; };
+		9B271AA81A7C20D8005ABF81 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B271AA71A7C20D8005ABF81 /* Launch Screen.xib */; };
 		9B3F0DBB1966A4A30089DEC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3F0DBA1966A4A30089DEC1 /* Foundation.framework */; };
 		9B3F0DBD1966A4A30089DEC1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3F0DBC1966A4A30089DEC1 /* CoreGraphics.framework */; };
 		9B3F0DBF1966A4A30089DEC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3F0DBE1966A4A30089DEC1 /* UIKit.framework */; };
@@ -24,8 +25,8 @@
 		9B3F0DFE1966C9990089DEC1 /* BFReminderList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0DFD1966C9990089DEC1 /* BFReminderList.m */; };
 		9B3F0E011966DB6A0089DEC1 /* BFReminderEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */; };
 		9B4C2C661A7443F90031C568 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B4C2C651A7443F90031C568 /* Images.xcassets */; };
+		9BD27BB21A78144A00CA3F8B /* BFFirePeriodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD27BB11A78144A00CA3F8B /* BFFirePeriodViewController.m */; };
 		9BE90DE519D1FF0300B75439 /* BFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BE90DE419D1FF0300B75439 /* BFNavigationController.m */; };
-		9BEDCFBF19E96A7F001341B6 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9BEDCFBE19E96A7F001341B6 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		9B0BACD91986E6F800D4CC09 /* BFReminderCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderCollectionViewController.h; sourceTree = "<group>"; };
 		9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderCollectionViewController.m; sourceTree = "<group>"; };
+		9B271AA71A7C20D8005ABF81 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		9B3F0DB71966A4A30089DEC1 /* BreakFree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakFree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B3F0DBA1966A4A30089DEC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9B3F0DBC1966A4A30089DEC1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -67,9 +69,10 @@
 		9B3F0DFF1966DB6A0089DEC1 /* BFReminderEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderEditViewController.h; sourceTree = "<group>"; };
 		9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderEditViewController.m; sourceTree = "<group>"; };
 		9B4C2C651A7443F90031C568 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9BD27BB01A78144A00CA3F8B /* BFFirePeriodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFFirePeriodViewController.h; sourceTree = "<group>"; };
+		9BD27BB11A78144A00CA3F8B /* BFFirePeriodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFFirePeriodViewController.m; sourceTree = "<group>"; };
 		9BE90DE319D1FF0300B75439 /* BFNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFNavigationController.h; sourceTree = "<group>"; };
 		9BE90DE419D1FF0300B75439 /* BFNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFNavigationController.m; sourceTree = "<group>"; };
-		9BEDCFBE19E96A7F001341B6 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +150,6 @@
 				9B3F0DC21966A4A30089DEC1 /* BreakFree-Info.plist */,
 				9B3F0DC61966A4A30089DEC1 /* main.m */,
 				9B3F0DC81966A4A30089DEC1 /* BreakFree-Prefix.pch */,
-				9BEDCFBE19E96A7F001341B6 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -180,6 +182,8 @@
 				9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */,
 				9B3F0DFF1966DB6A0089DEC1 /* BFReminderEditViewController.h */,
 				9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */,
+				9BD27BB01A78144A00CA3F8B /* BFFirePeriodViewController.h */,
+				9BD27BB11A78144A00CA3F8B /* BFFirePeriodViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -199,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				9B3F0DE91966A8450089DEC1 /* Storyboard.storyboard */,
+				9B271AA71A7C20D8005ABF81 /* Launch Screen.xib */,
 				9B3F0DF31966C09F0089DEC1 /* BFReminderCollectionViewCell.h */,
 				9B3F0DF41966C09F0089DEC1 /* BFReminderCollectionViewCell.m */,
 			);
@@ -298,8 +303,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B4C2C661A7443F90031C568 /* Images.xcassets in Resources */,
-				9BEDCFBF19E96A7F001341B6 /* Settings.bundle in Resources */,
 				9B3F0DEA1966A8450089DEC1 /* Storyboard.storyboard in Resources */,
+				9B271AA81A7C20D8005ABF81 /* Launch Screen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B3F0DF81966C7810089DEC1 /* BFReminder.m in Sources */,
+				9BD27BB21A78144A00CA3F8B /* BFFirePeriodViewController.m in Sources */,
 				9B3F0DCB1966A4A30089DEC1 /* BFAppDelegate.m in Sources */,
 				9B3F0DFE1966C9990089DEC1 /* BFReminderList.m in Sources */,
 				9B3F0DEF1966BC030089DEC1 /* BFReminderViewController.m in Sources */,
@@ -380,7 +386,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -412,7 +418,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

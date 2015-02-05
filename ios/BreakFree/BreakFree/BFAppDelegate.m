@@ -90,8 +90,8 @@
     NSLog(@"Checking scheduling of all reminders!");
     [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
     
-    // Don't forget to run the completion handler! (With fail result to ensure quick retry)
-    completionHandler(UIBackgroundFetchResultFailed);
+    // Don't forget to run the completion handler!
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 

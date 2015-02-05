@@ -10,14 +10,17 @@
 #import "BFReminderViewController.h"
 #import "BFNavigationController.h"
 #import "BFReminderList.h"
+#import "BFFirePeriodViewController.h"
 
 
-@interface BFReminderEditViewController () <UITextViewDelegate>
+@interface BFReminderEditViewController () <UITextViewDelegate, UITextFieldDelegate, BFFirePeriodViewControllerDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *frequencyCountButtons;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *frequencyTypeButtons;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIView *frequencyBackgroundView;
+@property (weak, nonatomic) IBOutlet UITextField *dailyFirePeriodTextField;
+@property (weak, nonatomic) IBOutlet UISwitch *weekendSwitch;
 @end
 
 
@@ -35,13 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
     self.frequencyBackgroundView.layer.cornerRadius = 4.0f;
     self.messageTextView.layer.cornerRadius = 4.0f;
     
@@ -73,6 +70,10 @@
             }];
         }
         
+        self.weekendSwitch.on = self.reminder.shouldFireDuringWeekends;
+        self.dailyFirePeriodTextField.text = [self.reminder dailyFirePeriodString];
+        [self.view setNeedsUpdateConstraints];
+        
     } else {
         
         // Show placeholder message
@@ -103,22 +104,17 @@
     }
 }
 
-- (IBAction)imageViewTapped:(UITapGestureRecognizer *)sender
-{
-    // TODO: Images!
-}
-
 - (IBAction)frequencyCountButtonTapped:(UIButton *)sender
 {
-    [self selectButton:sender inOutletCollection:self.frequencyCountButtons];
+    [self selectFrequencyCountButton:sender inOutletCollection:self.frequencyCountButtons];
 }
 
 - (IBAction)frequencyTypeButtonTapped:(UIButton *)sender
 {    
-    [self selectButton:sender inOutletCollection:self.frequencyTypeButtons];
+    [self selectFrequencyCountButton:sender inOutletCollection:self.frequencyTypeButtons];
 }
 
-- (void)selectButton:(UIButton *)newSelectedButton inOutletCollection:(NSArray *)outletCollection
+- (void)selectFrequencyCountButton:(UIButton *)newSelectedButton inOutletCollection:(NSArray *)outletCollection
 {
     __block UIButton *oldSelectedButton;
     [outletCollection enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -135,12 +131,56 @@
     [newSelectedButton setSelected:YES];
 }
 
+- (IBAction)weekendSwitchValueChanged:(UISwitch *)sender
+{
+    if (self.reminder) {
+        self.reminder.shouldFireDuringWeekends = self.weekendSwitch.on;
+    }
+}
+
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField != self.dailyFirePeriodTextField)
+        return YES;
+    
+    // Only for the daily fire period textfield:
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        // iPads: show time picker in popover
+        [self performSegueWithIdentifier:kBFSegueChooseDailyFirePeriodAsPopover sender:self];
+    } else {
+        // iPhones: show time picker as a modal sheet
+        [self performSegueWithIdentifier:kBFSegueChooseDailyFirePeriodModally sender:self];
+    }
+
+    // Finally: don't let the daily fire textfield become first responder!
+    return NO;
+}
+
+
+#pragma mark - BFFirePeriodViewControllerDelegate
+
+- (void)firePeriodViewController:(BFFirePeriodViewController *)viewController didFinish:(BOOL)finish withStartDateComponents:(NSDateComponents *)startDateComps andEndDateComponents:(NSDateComponents *)endDateComps
+{
+    if (finish && self.reminder) {
+        self.reminder.dailyPeriodStartComponents = startDateComps;
+        self.reminder.dailyPeriodEndComponents = endDateComps;
+        
+        // Refresh daily fire time textfield
+        self.dailyFirePeriodTextField.text = [self.reminder dailyFirePeriodString];
+        [self.view setNeedsUpdateConstraints];
+    }
+}
+
 
 #pragma mark - UITextViewDelegate
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     if ([self.messageTextView.text isEqualToString:@"Waaraan wil je herinnerd worden?"]) {
+        // Do some magic to remove the placeholder text
         self.messageTextView.text = @"";
         self.messageTextView.textColor = [UIColor darkTextColor];
     }
@@ -152,10 +192,23 @@
 
 - (IBAction)userWantsToDismissKeyboard:(UIGestureRecognizer *)sender
 {
-    // Dismiss keyboard, if present
     if ([self.messageTextView isFirstResponder]) {
+        // User tapped or swiped down on text view while it is first responder: dismiss keyboard
         [self.messageTextView resignFirstResponder];
+    } else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
+        // If user tapped on inactive message text view: make it first responder again!
+        [self.messageTextView becomeFirstResponder];
     }
+}
+
+
+#pragma mark - UIAlertView delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    // This alertview was shown because the user did not enter a message in the UITextView.
+    // The user dismissed the alertview; now automatically let the UITextView become first responder.
+    [self.messageTextView becomeFirstResponder];
 }
 
 
@@ -177,13 +230,30 @@
 
 #pragma mark - Navigation
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if (![identifier isEqualToString:kBFSegueUnwindFromSaveReminderTapped])
+        return YES;
+    
+    // If the save button has been tapped, check if the reminder text message has been entered
+    if (([self.messageTextView.text length]>0) &&
+        (![self.messageTextView.text isEqualToString:@"Waaraan wil je herinnerd worden?"]))
+        return YES;
+
+    // If not: show an alert and cancel the segue transition
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Let op" message:@"Er is geen bericht ingevoerd." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alertView show];
+    
+    return NO;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:kBFSegueReminderEditToReminder]) {
         BFReminder *reminder = ((BFNavigationController *)self.navigationController).receivedReminder;
         [[segue destinationViewController] showReminder:reminder];
     }
-    if ([[segue identifier] isEqualToString:kBFSegueUnwindFromSaveReminderTapped]) {
+    if ([segue.identifier isEqualToString:kBFSegueUnwindFromSaveReminderTapped]) {
         // Save user input
         if (self.reminder && [self messageText]) {
             self.reminder.message = [self messageText];
@@ -212,15 +282,25 @@
             
             // Check if the reminder is already saved into the reminder list
             if ([[BFReminderList sharedReminderList] reminderWithUUID:self.reminder.uuid]) {
-                // Saving the changes to the user defaults will suffice
+                // Save the changes to the user defaults
                 [[BFReminderList sharedReminderList] saveRemindersToUserDefaults];
+                // And adjust the scheduled local notifications
+                [self.reminder scheduleLocalNotificationsForCurrentReminder];
             } else {
                 // The reminder has never been saved before; add the reminder to the reminder list!
                 [[BFReminderList sharedReminderList] addReminder:self.reminder];
             }
+        }
+    }
+    if ([segue.identifier isEqualToString:kBFSegueChooseDailyFirePeriodAsPopover] || [[segue identifier] isEqualToString:kBFSegueChooseDailyFirePeriodModally]) {
+        
+        if (self.reminder) {
+            // Set initial start and end time interval of the reminder in the BFFirePeriodViewController
+            UINavigationController *destinationVC = segue.destinationViewController;
+            BFFirePeriodViewController *firePeriodVC = (BFFirePeriodViewController *)[destinationVC topViewController];
             
-            // Also check if any reminders need any local notification (re-)scheduling
-            [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
+            firePeriodVC.delegate = self;
+            [firePeriodVC initTimePickersWithStartDateComponents:self.reminder.dailyPeriodStartComponents andEndDateComponents:self.reminder.dailyPeriodEndComponents];
         }
     }
 }

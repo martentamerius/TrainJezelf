@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>987B7A9F-CD74-46ED-A6C9-CDC67AA2163A</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BreakFree</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>425232F8-CA42-4664-B0E9-263829CA6D9C</key>
+		<string>https://github.com/martentamerius/TrainJezelf.git</string>
+		<key>A6F7DEDA2627B3810A68D277194DC63B52AF18F9</key>
+		<string>https://github.com/martentamerius/TrainJezelf.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ios/BreakFree/BreakFree.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>425232F8-CA42-4664-B0E9-263829CA6D9C</key>
+		<string>../../../../../•TrainJezelf</string>
+		<key>A6F7DEDA2627B3810A68D277194DC63B52AF18F9</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/martentamerius/TrainJezelf.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>A6F7DEDA2627B3810A68D277194DC63B52AF18F9</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A6F7DEDA2627B3810A68D277194DC63B52AF18F9</string>
+			<key>IDESourceControlWCCName</key>
+			<string>%E2%80%A2TrainJezelf</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>425232F8-CA42-4664-B0E9-263829CA6D9C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>•TrainJezelf</string>
+		</dict>
+	</array>
+</dict>
+</plist>

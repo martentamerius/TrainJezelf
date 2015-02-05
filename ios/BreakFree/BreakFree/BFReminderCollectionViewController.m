@@ -55,6 +55,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     [self correctLeftNavigationBarItem];
 }
 
@@ -103,13 +105,26 @@
 
 - (IBAction)trashSelectedReminder:(UIGestureRecognizer *)sender
 {
+    NSIndexPath *indexPathToDelete;
+    
     if (self.longPressedIndexPath) {
-        BFReminder *reminder = [[BFReminderList sharedReminderList] reminderAtIndex:self.longPressedIndexPath.row];
+        // Set initial indexpath to delete to the wiggling cell and in any case: stop wiggling!
+        indexPathToDelete = self.longPressedIndexPath;
+        BFReminderCollectionViewCell *cell = (BFReminderCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.longPressedIndexPath];
+        [cell stopWiggling];
+    }
+    if ([sender isKindOfClass:[UISwipeGestureRecognizer class]]) {
+        // If the gesture was a swipe on a different cell, get the swiped cell's indexpath
+        CGPoint tapPoint = [sender locationInView:self.collectionView];
+        indexPathToDelete = [self.collectionView indexPathForItemAtPoint:tapPoint];
+    }
+    
+    if (indexPathToDelete) {
+        BFReminder *reminder = [[BFReminderList sharedReminderList] reminderAtIndex:indexPathToDelete.row];
         if (reminder)
             [[BFReminderList sharedReminderList] removeReminder:reminder];
         
-        [self.collectionView deleteItemsAtIndexPaths:@[ self.longPressedIndexPath ]];
-        self.longPressedIndexPath = nil;
+        [self.collectionView deleteItemsAtIndexPaths:@[ indexPathToDelete ]];
     }
 
     [self correctLeftNavigationBarItem];
@@ -238,6 +253,8 @@
         NSAttributedString *attrFreqText = [[NSAttributedString alloc] initWithString:freqText
                                                                            attributes:@{ NSFontAttributeName: italicsFont }];
         cell.frequencyLabel.attributedText = attrFreqText;
+        
+        [cell setNeedsLayout];
     }
 
     // Configure the cell
@@ -255,12 +272,11 @@
 
 - (IBAction)reminderEditFinished:(UIStoryboardSegue *)segue
 {
-    [self.collectionView reloadData];
+    // Collection view should reload its data and refresh UI
     [self.collectionViewLayout invalidateLayout];
-
-    // Check to see if reminder needs scheduling
-    [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
+    [self.collectionView reloadData];
     
+    // Quite possibly the pause-button should be dis-/enabled or so
     [self correctLeftNavigationBarItem];
 }
 
@@ -283,7 +299,9 @@
     
     if (reminder) {
         // Calculate height from the actual reminder message
-        cellBounds.height = ceilf([reminder.message boundingRectWithSize:CGSizeMake(cellBounds.width - 16.0f, 80.0f) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody] } context:nil].size.height) + 32.0f;
+        CGRect messageSize = [reminder.message boundingRectWithSize:CGSizeMake(cellBounds.width - 16.0f, 80.0f) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody] } context:nil];
+        cellBounds.height = ceilf(messageSize.size.height) + 32.0f;
+        
     } else {
         // Assume the reminder message has one line
         cellBounds.height = 50.0f;
