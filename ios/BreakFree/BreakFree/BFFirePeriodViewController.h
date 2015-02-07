@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Tamerius & Bos. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 @class BFFirePeriodViewController;
 
 

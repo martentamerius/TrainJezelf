@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 Tamerius & Bos. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "BFReminder.h"
-
+@class BFReminder;
 
 @interface BFReminderList : NSObject
 + (BFReminderList *)sharedReminderList;

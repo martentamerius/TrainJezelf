@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Tamerius & Bos. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "BFReminder.h"
+@class BFReminder;
 
 @interface BFReminderEditViewController : UIViewController
 @property (nonatomic, strong) BFReminder *reminder;

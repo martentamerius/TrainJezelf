@@ -92,23 +92,23 @@
 {
     NSString *frequencyTypeString = @"";
     switch (self.frequencyType) {
-        case BFFrequencyHourly: frequencyTypeString = @"uur"; break;
-        case BFFrequencyDaily: frequencyTypeString = @"dag"; break;
-        case BFFrequencyWeekly: frequencyTypeString = @"week"; break;
-        case BFFrequencyMonthly: frequencyTypeString = @"maand"; break;
+        case BFFrequencyHourly: frequencyTypeString = NSLocalizedString(@"hour", @"Frequency type"); break;
+        case BFFrequencyDaily: frequencyTypeString = NSLocalizedString(@"day", @"Frequency type"); break;
+        case BFFrequencyWeekly: frequencyTypeString = NSLocalizedString(@"week", @"Frequency type"); break;
+        case BFFrequencyMonthly: frequencyTypeString = NSLocalizedString(@"month", @"Frequency type"); break;
     }
     return frequencyTypeString;
 }
 
 - (void)setFrequencyTypeString:(NSString *)frequencyTypeString
 {
-    if ([frequencyTypeString caseInsensitiveCompare:@"uur"] == NSOrderedSame) {
+    if ([frequencyTypeString caseInsensitiveCompare:NSLocalizedString(@"hour", @"Frequency type")] == NSOrderedSame) {
         self.frequencyType = BFFrequencyHourly;
-    } else if ([frequencyTypeString caseInsensitiveCompare:@"dag"] == NSOrderedSame) {
+    } else if ([frequencyTypeString caseInsensitiveCompare:NSLocalizedString(@"day", @"Frequency type")] == NSOrderedSame) {
         self.frequencyType = BFFrequencyDaily;
-    } else if ([frequencyTypeString caseInsensitiveCompare:@"week"] == NSOrderedSame) {
+    } else if ([frequencyTypeString caseInsensitiveCompare:NSLocalizedString(@"week", @"Frequency type")] == NSOrderedSame) {
         self.frequencyType = BFFrequencyWeekly;
-    } else if ([frequencyTypeString caseInsensitiveCompare:@"maand"] == NSOrderedSame) {
+    } else if ([frequencyTypeString caseInsensitiveCompare:NSLocalizedString(@"month", @"Frequency type")] == NSOrderedSame) {
         self.frequencyType = BFFrequencyMonthly;
     }
 }
@@ -116,7 +116,7 @@
 - (NSString *)dailyFirePeriodString
 {
     // Assemble the string
-    NSMutableString *periodString = [NSMutableString string];
+    NSString *periodString;
     if (self.dailyPeriodStartComponents && self.dailyPeriodEndComponents) {
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         numberFormatter.minimumIntegerDigits = 2;
@@ -124,12 +124,12 @@
         NSInteger startHour = (self.dailyPeriodStartComponents.hour != NSUndefinedDateComponent)?self.dailyPeriodStartComponents.hour:0;
         NSInteger startMinute = (self.dailyPeriodStartComponents.minute != NSUndefinedDateComponent)?self.dailyPeriodStartComponents.minute:0;
         
-        [periodString appendFormat:@"%@:%@", @(startHour), [numberFormatter stringFromNumber:@(startMinute)]];
-        
         NSInteger endHour = (self.dailyPeriodEndComponents.hour != NSUndefinedDateComponent)?self.dailyPeriodEndComponents.hour:0;
         NSInteger endMinute = (self.dailyPeriodEndComponents.minute != NSUndefinedDateComponent)?self.dailyPeriodEndComponents.minute:0;
         
-        [periodString appendFormat:@" en %@:%@", @(endHour), [numberFormatter stringFromNumber:@(endMinute)]];
+        periodString = [NSString stringWithFormat:NSLocalizedString(@"%@:%@ and %@:%@", @"Daily fire period string"),
+                        @(startHour), [numberFormatter stringFromNumber:@(startMinute)],
+                        @(endHour), [numberFormatter stringFromNumber:@(endMinute)]];
     }
     
     return [NSString stringWithString:periodString];
@@ -166,11 +166,10 @@
         // Construct the local notification content
         localNotification.fireDate = date;
         localNotification.alertBody = [NSString stringWithString:self.message];
-        localNotification.alertAction = NSLocalizedString(@"View Details", nil);
+        localNotification.alertAction = NSLocalizedString(@"View details", @"Local notification alert action title");
         
-        // TODO: Sound
-        //localNotification.soundName = UILocalNotificationDefaultSoundName;
-        localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+        localNotification.applicationIconBadgeNumber = 1;
         
         NSDictionary *infoDict = [NSDictionary dictionaryWithObject:self.uuid.UUIDString forKey:kBFLocalNotificationReminderUUIDString];
         localNotification.userInfo = infoDict;
@@ -178,7 +177,7 @@
         // Schedule the new local notification
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
         
-        NSLog(@"Scheduled a local notification on %@ for %@", date, self);
+        DLog(@"Scheduled a local notification on %@ for %@", date, self);
     }
 }
 
@@ -372,7 +371,7 @@
         }
     }];
     
-    NSLog(@"All notifications removed for %@", self);
+    DLog(@"All notifications removed for %@", self);
 }
 
 - (void)scheduleLocalNotificationsForCurrentReminder

@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Tamerius & Bos. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 @interface BFReminderCollectionViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *frequencyLabel;

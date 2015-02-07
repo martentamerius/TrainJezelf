@@ -7,13 +7,14 @@
 //
 
 #import "BFReminderList.h"
+#import "BFReminder.h"
 
 #define kBFUserDefaultsCurrentReminderList     @"BFCurrentReminderList"
 
 
 @interface BFReminderList ()
 @property (nonatomic, strong) NSMutableArray *reminders;
-@property (nonatomic, strong) NSOperationQueue *backgroundQueue;
+@property (atomic) dispatch_queue_t backgroundQueue;
 @end
 
 
@@ -151,10 +152,10 @@ static BFReminderList *_reminderList;
 {
     // Iterate over all reminders in the list on a background operation queue
     if (!self.backgroundQueue)
-        self.backgroundQueue = [[NSOperationQueue alloc] init];
+        self.backgroundQueue = dispatch_queue_create("nl.cerium.breakout.backgroundscheduling", NULL);
     
     __weak typeof(self) weakSelf = self;
-    [self.backgroundQueue addOperationWithBlock:^{
+    dispatch_async(self.backgroundQueue, ^{
         [weakSelf.reminderList enumerateObjectsUsingBlock:^(BFReminder *reminder, NSUInteger idx, BOOL *stop) {
             if ([reminder isPaused]) {
                 // This reminder has been paused: remove all current local notifications for it (if any)
@@ -164,7 +165,7 @@ static BFReminderList *_reminderList;
                 [reminder scheduleLocalNotificationsForCurrentReminder];
             }
         }];
-    }];
+    });
 }
 
 

@@ -1,0 +1,93 @@
+
+/* Class = "IBUIBarButtonItem"; title = "Terug"; ObjectID = "2cU-Nl-ABp"; */
+"2cU-Nl-ABp.title" = "Terug";
+
+/* Class = "IBUILabel"; text = "WEEKEINDEN"; ObjectID = "67z-8o-ZRP"; */
+"67z-8o-ZRP.text" = "WEEKEINDEN";
+
+/* Class = "IBUICollectionViewController"; title = "Reminder List"; ObjectID = "8jS-ib-WhK"; */
+"8jS-ib-WhK.title" = "Reminder List";
+
+/* Class = "IBUIViewController"; title = "Reminder View"; ObjectID = "8oS-gX-YgP"; */
+"8oS-gX-YgP.title" = "Reminder View";
+
+/* Class = "IBUIButton"; normalTitle = "7"; ObjectID = "9ZN-uX-Sff"; */
+"9ZN-uX-Sff.normalTitle" = "7";
+
+/* Class = "IBUINavigationItem"; title = "Reminders"; ObjectID = "AWg-Ru-89U"; */
+"AWg-Ru-89U.title" = "Reminders";
+
+/* Class = "IBUILabel"; text = "TUSSEN"; ObjectID = "Cs1-Re-SKV"; */
+"Cs1-Re-SKV.text" = "TUSSEN";
+
+/* Class = "IBUILabel"; text = "EINDE"; ObjectID = "FaP-gJ-cDt"; */
+"FaP-gJ-cDt.text" = "EINDE";
+
+/* Class = "IBUILabel"; text = "KEER PER"; ObjectID = "Ip8-aF-JOr"; */
+"Ip8-aF-JOr.text" = "KEER PER";
+
+/* Class = "IBUITextField"; text = "8:00 en 19:00"; ObjectID = "KDP-yZ-agt"; */
+"KDP-yZ-agt.text" = "8:00 en 19:00";
+
+/* Class = "IBUIButton"; normalTitle = "8"; ObjectID = "LIK-Iv-463"; */
+"LIK-Iv-463.normalTitle" = "8";
+
+/* Class = "IBUIButton"; normalTitle = "6"; ObjectID = "PXw-a8-ryd"; */
+"PXw-a8-ryd.normalTitle" = "6";
+
+/* Class = "IBUIButton"; normalTitle = "UUR"; ObjectID = "RQ4-J0-DEZ"; */
+"RQ4-J0-DEZ.normalTitle" = "UUR";
+
+/* Class = "IBUIButton"; normalTitle = "1"; ObjectID = "RcU-7b-2vL"; */
+"RcU-7b-2vL.normalTitle" = "1";
+
+/* Class = "IBUIButton"; normalTitle = "4"; ObjectID = "SW4-cG-3HH"; */
+"SW4-cG-3HH.normalTitle" = "4";
+
+/* Class = "IBUIButton"; normalTitle = "MAAND"; ObjectID = "SxZ-Ky-9DR"; */
+"SxZ-Ky-9DR.normalTitle" = "MAAND";
+
+/* Class = "IBUIBarButtonItem"; title = "Bewaar"; ObjectID = "TN6-u6-J8K"; */
+"TN6-u6-J8K.title" = "Bewaar";
+
+/* Class = "IBUILabel"; text = "START"; ObjectID = "YcD-6x-epQ"; */
+"YcD-6x-epQ.text" = "START";
+
+/* Class = "IBUINavigationController"; title = "Navigation Controller"; ObjectID = "Ycn-Xl-I4Q"; */
+"Ycn-Xl-I4Q.title" = "Navigation Controller";
+
+/* Class = "IBUIBarButtonItem"; title = "Bewaar"; ObjectID = "ZXT-4X-18T"; */
+"ZXT-4X-18T.title" = "Bewaar";
+
+/* Class = "IBUINavigationItem"; title = "Selecteer periode"; ObjectID = "dht-Lo-FKW"; */
+"dht-Lo-FKW.title" = "Selecteer periode";
+
+/* Class = "IBUIButton"; normalTitle = "9"; ObjectID = "eIj-di-SUK"; */
+"eIj-di-SUK.normalTitle" = "9";
+
+/* Class = "IBUIButton"; normalTitle = "10"; ObjectID = "evl-Uq-dZL"; */
+"evl-Uq-dZL.normalTitle" = "10";
+
+/* Class = "IBUIButton"; normalTitle = "5"; ObjectID = "hAZ-ic-dvE"; */
+"hAZ-ic-dvE.normalTitle" = "5";
+
+/* Class = "IBUIButton"; normalTitle = "DAG"; ObjectID = "hcO-71-mh0"; */
+"hcO-71-mh0.normalTitle" = "DAG";
+
+/* Class = "IBUIButton"; normalTitle = "2"; ObjectID = "nRV-Rs-WVV"; */
+"nRV-Rs-WVV.normalTitle" = "2";
+
+/* Class = "IBUINavigationItem"; title = "Bewerken"; ObjectID = "nxo-rt-rYx"; */
+"nxo-rt-rYx.title" = "Bewerken";
+
+/* Class = "IBUIBarButtonItem"; title = "Annuleer"; ObjectID = "qEw-Bt-Ye7"; */
+"qEw-Bt-Ye7.title" = "Annuleer";
+
+/* Class = "IBUIButton"; normalTitle = "WEEK"; ObjectID = "u6P-OS-LH1"; */
+"u6P-OS-LH1.normalTitle" = "WEEK";
+
+/* Class = "IBUIViewController"; title = "Reminder Edit"; ObjectID = "uZQ-o2-HbV"; */
+"uZQ-o2-HbV.title" = "Reminder Edit";
+
+/* Class = "IBUIButton"; normalTitle = "3"; ObjectID = "yf9-Us-FRz"; */
+"yf9-Us-FRz.normalTitle" = "3";

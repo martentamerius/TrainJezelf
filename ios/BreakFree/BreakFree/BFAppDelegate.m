@@ -9,9 +9,11 @@
 #import "BFAppDelegate.h"
 #import "BFAppDefines.h"
 #import "BFReminderList.h"
+#import "BFReminder.h"
 #import "BFNavigationController.h"
 
 @implementation BFAppDelegate
+
 
 #pragma mark - App startup
 

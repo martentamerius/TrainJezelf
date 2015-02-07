@@ -6,8 +6,14 @@
 //  Copyright (c) 2014 Tamerius & Bos. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
+/*!
+ * @typedef BFFrequencyType
+ * @brief The reminder frequency type. (Hourly, daily, weekly or monthly.)
+ * @constant BFFrequencyHourly  Every hour a user-chosen number of reminders.
+ * @constant BFFrequencyDaily   Every day a user-chosen number of reminders.
+ * @constant BFFrequencyWeekly  Every week a user-chosen number of reminders.
+ * @constant BFFrequencyMonthly Every month a user-chosen number of reminders.
+ */
 typedef NS_ENUM(NSUInteger, BFFrequencyType) {
     BFFrequencyHourly,
     BFFrequencyDaily,

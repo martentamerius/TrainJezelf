@@ -18,6 +18,30 @@
 
 @implementation BFReminderViewController
 
+static const NSArray *_quotes;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder])) {
+        // Initialize the quotes-array from the localized quotes-plist
+        NSString *errorDesc = nil;
+        NSPropertyListFormat format;
+        NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"Quotes" ofType:@"plist"];
+        NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
+        NSDictionary *plistDict = (NSDictionary *)[NSPropertyListSerialization propertyListFromData:plistXML
+                                                   mutabilityOption:NSPropertyListImmutable
+                                                   format:&format errorDescription:&errorDesc];
+        if (!plistDict) {
+            DLog(@"Error reading quotes plist with format %@ from %@. Error description: %@", @(format), plistPath, errorDesc);
+        } else {
+            NSArray *quoteArray = [plistDict objectForKey:@"Quotes"];
+            _quotes = (quoteArray)?:[NSArray array];
+        }
+    }
+    
+    return self;
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
@@ -38,33 +62,9 @@
 
 - (void)showReminderMessage:(NSString *)message
 {
-    const NSArray *quotes = @[ @"Wees jezelf, er zijn al anderen genoeg.",
-                               @"Laat zien wie je bent, los van verwachtingen, los van goedkeuring.",
-                               @"Wie met zijn hoofd in de wolken loopt en met zijn voeten op de grond, is een waarlijk groot mens.",
-                               @"Als je met beide benen op de grond staat, kom je geen stap verder.",
-                               @"Wie met beide benen op de grond blijft staan, komt niet ver.",
-                               @"Je kleiner voordoen dan je bent, bewijst de wereld geen dienst.",
-                               @"Waar je ook staat, je staat altijd wel op iemands tenen.",
-                               @"Iemand met een nieuw idee is een vreemde vogel, tot het idee blijkt te werken...",
-                               @"Wie angst heeft voor de toekomst, heeft die toekomst al half bedorven.",
-                               @"Jezelf afmeten naar je geringste daad is de kracht van de oceaan bepalen naar de luchtigheid van haar schuim.",
-                               @"Wees niet bang een stukje van jezelf te geven; het groeit allemaal weer aan.",
-                               @"Pas wanneer je ten einde raad je angst om de hals durft te vallen, zal hij je nooit meer naar de keel vliegen.",
-                               @"Beken kleur. Wees wie je bent. Dan stralen je ogen.",
-                               @"Zij die geen angst kennen, kennen geen moed. Want werkelijke moed is het overwinnen van de angst.",
-                               @"Pluk de dag, en laat nog wat hangen voor morgen.",
-                               @"Als je waagt, groeit je moed. Als je aarzelt, groeit je vrees.",
-                               @"Angst voor morgen komt een dag te vroeg.",
-                               @"Wie als kind is gekreukeld, moet als volwassene leren strijken.",
-                               @"Je bent het resultaat van alle vroegere afbeeldingen die je voor jezelf geschilderd hebt. En je kunt altijd nieuwe schilderen.",
-                               @"Ik ben geen mislukkeling. Ik heb alleen 10.000 manieren gevonden die niet werken.",
-                               @"Ik kom op het leven af en het leven op mij, dat botst soms een beetje.",
-                               @"Het is niet de berg die wij overwinnen maar onszelf.",
-                               @"Niks moet, Alles kan." ];
-    
     if (self.citationLabel) {
-        NSUInteger randomQuoteIndex = arc4random_uniform((unsigned int)[quotes count]);
-        NSString *randomQuote = quotes[randomQuoteIndex];
+        NSUInteger randomQuoteIndex = arc4random_uniform((unsigned int)[_quotes count]);
+        NSString *randomQuote = _quotes[randomQuoteIndex];
         
         // Show either the reminder message, or a random quote
         self.citationLabel.text = (message)?:randomQuote;

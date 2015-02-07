@@ -10,6 +10,7 @@
 #import "BFNavigationController.h"
 #import "BFReminderViewController.h"
 #import "BFReminderList.h"
+#import "BFReminder.h"
 #import "BFReminderEditViewController.h"
 #import "BFReminderCollectionViewCell.h"
 #import "BFAppDelegate.h"
@@ -244,7 +245,7 @@
         cell.messageLabel.text = reminder.message;
         cell.pauseBackgroundImageView.hidden = (![reminder isPaused]);
         
-        NSString *freqText = [NSString stringWithFormat:@"%@x per %@", @(reminder.frequencyCount), [reminder frequencyTypeString]];
+        NSString *freqText = [NSString stringWithFormat:NSLocalizedString(@"%@ times per %@", @"Reminder cell frequency label text"), @(reminder.frequencyCount), [reminder frequencyTypeString]];
         
         // Create italic body style font for frequency string
         UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
@@ -262,10 +263,6 @@
     
     return cell;
 }
-
-
-#pragma mark - UICollectionViewDelegate
-
 
 
 #pragma mark - Reminder Edit unwinding

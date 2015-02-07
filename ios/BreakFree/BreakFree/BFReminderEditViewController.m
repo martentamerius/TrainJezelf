@@ -11,7 +11,7 @@
 #import "BFNavigationController.h"
 #import "BFReminderList.h"
 #import "BFFirePeriodViewController.h"
-
+#import "BFReminder.h"
 
 @interface BFReminderEditViewController () <UITextViewDelegate, UITextFieldDelegate, BFFirePeriodViewControllerDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
@@ -90,14 +90,14 @@
         self.messageTextView.text = self.reminder.message;
         self.messageTextView.textColor = [UIColor darkTextColor];
     } else {
-        self.messageTextView.text = @"Waaraan wil je herinnerd worden?";
+        self.messageTextView.text = NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message");
         self.messageTextView.textColor = [UIColor lightGrayColor];
     }
 }
 
 - (NSString *)messageText
 {
-    if ([self.messageTextView.text isEqualToString:@"Waaraan wil je herinnerd worden?"]) {
+    if ([self.messageTextView.text isEqualToString:NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message")]) {
         return nil;
     } else {
         return [NSString stringWithString:self.messageTextView.text];
@@ -179,12 +179,21 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    if ([self.messageTextView.text isEqualToString:@"Waaraan wil je herinnerd worden?"]) {
+    if ([self.messageTextView.text isEqualToString:NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message")]) {
         // Do some magic to remove the placeholder text
         self.messageTextView.text = @"";
         self.messageTextView.textColor = [UIColor darkTextColor];
     }
     return YES;
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([self.messageTextView.text length]==0) {
+        // If the user has removed all text, put in the placeholder text
+        self.messageTextView.text = NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message");
+        self.messageTextView.textColor = [UIColor lightGrayColor];
+    }
 }
 
 
@@ -237,11 +246,16 @@
     
     // If the save button has been tapped, check if the reminder text message has been entered
     if (([self.messageTextView.text length]>0) &&
-        (![self.messageTextView.text isEqualToString:@"Waaraan wil je herinnerd worden?"]))
+        (![self.messageTextView.text isEqualToString:NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message")]))
         return YES;
 
     // If not: show an alert and cancel the segue transition
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Let op" message:@"Er is geen bericht ingevoerd." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    NSString *alertTitle = NSLocalizedString(@"Warning", @"Empty message alertview title");
+    NSString *alertMessage = NSLocalizedString(@"The message text is empty.", @"Empty message alertview message");
+    NSString *alertButtonTitle = NSLocalizedString(@"OK", @"Empty message alertview button title");
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self
+                                              cancelButtonTitle:alertButtonTitle otherButtonTitles:nil];
     [alertView show];
     
     return NO;

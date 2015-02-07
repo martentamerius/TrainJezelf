@@ -23,10 +23,9 @@
 {
     [super viewDidLoad];
     
-    // Remove the cancel-button (left barbuttonitem) if this controller is presented by a popover controller
     if (self.navigationController.parentViewController &&
         [self.navigationController.parentViewController isKindOfClass:[UIPopoverController class]]) {
-        
+        // Remove the cancel-button (left barbuttonitem) if this controller is presented by a popover controller
         self.navigationItem.leftBarButtonItem = nil;
     }
     
