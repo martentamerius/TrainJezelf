@@ -183,8 +183,14 @@
 
 - (NSDate *)startOfPeriodCurrentPeriod
 {
+    return [self startOfPeriodWithDate:[NSDate date]];
+}
+
+- (NSDate *)startOfPeriodWithDate:(NSDate *)date
+{
     NSCalendar *currentCalendar = [NSCalendar autoupdatingCurrentCalendar];
-    NSDate *startOfCurrentPeriod = [NSDate date];
+    currentCalendar.firstWeekday = BFDayOfWeek_Sunday;
+    NSDate *startOfCurrentPeriod = date;
     
     NSCalendarUnit allComponents = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfMonth |
                                     NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute |
@@ -203,8 +209,8 @@
         startDateComps.hour = self.dailyPeriodStartComponents.hour;
     }
     if (self.frequencyType >= BFFrequencyWeekly) {
-        // Period starts at the beginning of the current week (day = 1 means sunday)
-        startDateComps.weekday = (self.shouldFireDuringWeekends)?1:2;
+        // Period starts at the beginning of the current week (day = 1 means sunday, day = 2 means monday)
+        startDateComps.weekday = (self.shouldFireDuringWeekends)?BFDayOfWeek_Sunday:BFDayOfWeek_Monday;
     }
     if (self.frequencyType == BFFrequencyMonthly) {
         // Period starts at the beginning of the current month
@@ -234,6 +240,7 @@
 {
     // Get the duration of a day by using the calendar API, excluding the off-hours
     NSCalendar *currentCalendar = [NSCalendar autoupdatingCurrentCalendar];
+    currentCalendar.firstWeekday = BFDayOfWeek_Sunday;
     NSCalendarUnit dateComps = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
     
     // Adjust the time of the date for start and end
@@ -256,6 +263,7 @@
 - (NSTimeInterval)periodDurationForStartDate:(NSDate *)periodStartDate
 {
     NSCalendar *currentCalendar = [NSCalendar autoupdatingCurrentCalendar];
+    currentCalendar.firstWeekday = BFDayOfWeek_Sunday;
     NSTimeInterval periodDuration = 0;
     
     switch (self.frequencyType) {
@@ -285,7 +293,7 @@
                 // Check if the last day of the week should be a saturday or a friday
                 NSCalendarUnit dateComps = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekday);
                 NSDateComponents *periodEndComps = [currentCalendar components:dateComps fromDate:periodStartDate];
-                periodEndComps.weekday = (self.shouldFireDuringWeekends)?6:5;
+                periodEndComps.weekday = (self.shouldFireDuringWeekends)?BFDayOfWeek_Saturday:BFDayOfWeek_Friday;
                 endOfCurrentPeriod = [currentCalendar dateFromComponents:periodEndComps];
                 
             } else {
@@ -329,10 +337,12 @@
     
     // Check if the fire date is in the weekend
     NSCalendar *currentCalendar = [NSCalendar autoupdatingCurrentCalendar];
+    currentCalendar.firstWeekday = BFDayOfWeek_Sunday;
     NSDateComponents *dayOfWeekComps = [currentCalendar components:NSCalendarUnitWeekday fromDate:fireDate];
-    if ((dayOfWeekComps.weekday == 1) || (dayOfWeekComps.weekday == 6)) {
-        // Sunday == 1 / Saturday == 6
+    if ((dayOfWeekComps.weekday == BFDayOfWeek_Sunday) || (dayOfWeekComps.weekday == BFDayOfWeek_Saturday)) {
+        // Sunday == 1 / Saturday == 7
         fallsInWeekend = YES;
+        NSLog(@"Proposed firedate %@ falls in weekend.", fireDate);
     }
     
     return fallsInWeekend;
@@ -344,6 +354,7 @@
     
     // Check if the original firedate happens to be during daily off-hours
     NSCalendar *currentCalendar = [NSCalendar autoupdatingCurrentCalendar];
+    currentCalendar.firstWeekday = BFDayOfWeek_Sunday;
     NSDateComponents *fireDateComps = [currentCalendar components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:fireDate];
     NSTimeInterval fireTimeInterval = (fireDateComps.hour * 3600) + (fireDateComps.minute * 60) + fireDateComps.second;
     
@@ -353,9 +364,11 @@
     if ((fireTimeInterval < dailyStartTime) || (fireTimeInterval > dailyEndTime)) {
         // Fire date falls within the off-hours range
         fallsInOffHoursOrWeekends = YES;
+        NSLog(@"Proposed firedate %@ falls during off-hours.", fireDate);
+        
     } else if (!self.shouldFireDuringWeekends) {
         // Check if the original fire date falls during the weekend
-        fallsInOffHoursOrWeekends &= [self fireDateFallsInWeekend:fireDate];
+        fallsInOffHoursOrWeekends = [self fireDateFallsInWeekend:fireDate];
     }
     
     return fallsInOffHoursOrWeekends;
@@ -376,6 +389,12 @@
 
 - (void)scheduleLocalNotificationsForCurrentReminder
 {
+    // Schedule local notification for current reminder with start date 'now'.
+    [self scheduleLocalNotificationsForCurrentReminderWithStartDate:[NSDate date]];
+}
+
+- (void)scheduleLocalNotificationsForCurrentReminderWithStartDate:(NSDate *)startDate
+{
     // 1. Remove currently scheduled notifications
     [self removeAllLocalNotificationsForCurrentReminder];
     
@@ -390,7 +409,7 @@
             NSTimeInterval meanInterval = dailyPeriodDuration / self.frequencyCount;
             // and determine the next fire date after the present date/time by repeatedly adding the mean time interval
             NSDate *nextFireDate = startOfCurrentPeriod;
-            while ([nextFireDate timeIntervalSinceNow]<-1) {
+            while ([nextFireDate timeIntervalSinceDate:startDate]<-1) {
                 nextFireDate = [nextFireDate dateByAddingTimeInterval:meanInterval];
             }
 
@@ -398,8 +417,8 @@
             // weekends, although these may not actually get scheduled. (Prepare notifications for at least 3 days)
             NSInteger maxNotificationCount = self.frequencyCount;
             switch (self.frequencyType) {
-                case BFFrequencyHourly: { maxNotificationCount *= (3 * 24); break; }
-                case BFFrequencyDaily: { maxNotificationCount *= ((3 * 24 * 3600) / dailyPeriodDuration); break; }
+                case BFFrequencyHourly: { maxNotificationCount *= (3 * (self.dailyPeriodEndComponents.hour - self.dailyPeriodStartComponents.hour)); break; }
+                case BFFrequencyDaily: { maxNotificationCount *= ((3 * (self.dailyPeriodEndComponents.hour - self.dailyPeriodStartComponents.hour) * 3600) / dailyPeriodDuration); break; }
                 default: break;
             }
             
@@ -415,12 +434,19 @@
                     NSTimeInterval jitter =  (-1 * (meanInterval / 4)) + arc4random_uniform(meanInterval / 2);
                     NSDate *jitteryDate = [nextFireDate dateByAddingTimeInterval:jitter];
                     
-                    // Check, and recheck! Maybe this time, including the jitter, the date falls in daily off-hours or weekend.
+                    // Check and double check! Maybe this time, including the jitter, the date falls in daily off-hours or weekend.
                     if (![self fireDateFallsInOffHoursOrWeekends:jitteryDate]) {
                         
                         // 6. All is well; schedule a new local notification with the "jittery" fire date
                         [self scheduleLocalNotificationWithFireDate:jitteryDate];
+                        
+                    } else {
+                        // Retry the attempt with a later fire date
+                        counter--;
                     }
+                } else {
+                    // Retry the attempt with a later fire date
+                    counter--;
                 }
                 
                 // 7. Add mean time interval to the current fire date for next local notification

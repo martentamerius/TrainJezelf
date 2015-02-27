@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B02BFA91A8FA08B00ACAFD7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9B75C77C1A842DBE00161928 /* Localizable.strings */; };
+		9B02BFAA1A8FA09700ACAFD7 /* Quotes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B75C7741A84213C00161928 /* Quotes.plist */; };
 		9B0BACDB1986E6F800D4CC09 /* BFReminderCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */; };
 		9B10A6EE1A84173700991AF4 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B10A6F01A84173700991AF4 /* Launch Screen.xib */; };
 		9B10A6F21A84178A00991AF4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B10A6F41A84178A00991AF4 /* Storyboard.storyboard */; };
@@ -42,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9B02BFA61A8F99B400ACAFD7 /* BFReminder+UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BFReminder+UnitTest.h"; sourceTree = "<group>"; };
 		9B0BACD91986E6F800D4CC09 /* BFReminderCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderCollectionViewController.h; sourceTree = "<group>"; };
 		9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderCollectionViewController.m; sourceTree = "<group>"; };
 		9B3F0DB71966A4A30089DEC1 /* BreakFree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakFree.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -165,6 +168,7 @@
 		9B3F0DD91966A4A30089DEC1 /* BreakFreeTests */ = {
 			isa = PBXGroup;
 			children = (
+				9B02BFA61A8F99B400ACAFD7 /* BFReminder+UnitTest.h */,
 				9B3F0DDF1966A4A30089DEC1 /* BreakFreeTests.m */,
 				9B3F0DDA1966A4A30089DEC1 /* Supporting Files */,
 			);
@@ -326,6 +330,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B02BFA91A8FA08B00ACAFD7 /* Localizable.strings in Resources */,
+				9B02BFAA1A8FA09700ACAFD7 /* Quotes.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

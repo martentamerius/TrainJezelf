@@ -21,6 +21,17 @@ typedef NS_ENUM(NSUInteger, BFFrequencyType) {
     BFFrequencyMonthly
 };
 
+typedef NS_ENUM(NSInteger, BFDayOfWeek) {
+    BFDayOfWeek_Sunday = 1,
+    BFDayOfWeek_Monday,
+    BFDayOfWeek_Tuesday,
+    BFDayOfWeek_Wednesday,
+    BFDayOfWeek_Thursday,
+    BFDayOfWeek_Friday,
+    BFDayOfWeek_Saturday
+};
+
+
 @interface BFReminder : NSObject <NSCoding>
 @property (nonatomic, strong) NSUUID *uuid;
 @property (nonatomic, strong) NSString *message;

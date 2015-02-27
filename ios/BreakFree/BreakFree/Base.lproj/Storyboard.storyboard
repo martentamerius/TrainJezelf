@@ -686,10 +686,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="560" translatesAutoresizingMaskIntoConstraints="NO" id="hRc-LP-8Vf">
-                                <rect key="frame" x="20" y="360" width="280" height="158"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="560" translatesAutoresizingMaskIntoConstraints="NO" id="hRc-LP-8Vf">
+                                <rect key="frame" x="20" y="408" width="280" height="108"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="158" id="e8u-dZ-XMv"/>
+                                    <constraint firstAttribute="height" constant="108" id="qTt-FX-XwA"/>
                                 </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Don't let your problems push you around, but let your dreams guide you.">
@@ -716,7 +716,7 @@
                             <constraint firstItem="q5l-vj-Ufu" firstAttribute="leading" secondItem="2Zm-DH-GEQ" secondAttribute="leading" id="N2N-yY-afz"/>
                             <constraint firstAttribute="bottom" secondItem="q5l-vj-Ufu" secondAttribute="bottom" id="gN3-Ff-tc0"/>
                             <constraint firstAttribute="trailing" secondItem="q5l-vj-Ufu" secondAttribute="trailing" id="hRm-07-fIv"/>
-                            <constraint firstItem="noH-Y6-Mgb" firstAttribute="top" secondItem="hRc-LP-8Vf" secondAttribute="bottom" constant="50" id="ksQ-Na-bw3"/>
+                            <constraint firstItem="0sh-lI-H9W" firstAttribute="bottom" secondItem="hRc-LP-8Vf" secondAttribute="bottom" constant="52" id="jt4-9a-N8j"/>
                             <constraint firstItem="0sh-lI-H9W" firstAttribute="width" secondItem="q5l-vj-Ufu" secondAttribute="width" id="py4-Oh-d0r"/>
                             <constraint firstItem="0sh-lI-H9W" firstAttribute="leading" secondItem="q5l-vj-Ufu" secondAttribute="leading" id="wLz-wD-Zl8"/>
                         </constraints>
@@ -740,7 +740,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="323.19999999999999" y="-471.43999999999988"/>
+            <point key="canvasLocation" x="323" y="-546"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UQM-Wz-DaO">

@@ -10,7 +10,7 @@
 #define BreakFree_BFAppDefines_h
 
 // Time in seconds the reminder view should be modally displayed
-#define kBFReminderViewPeriod                           5
+#define kBFReminderViewPeriod                           7
 
 // Number of (sequentially numbered) images to show in reminder view
 #define kBFReminderImageCount                           6

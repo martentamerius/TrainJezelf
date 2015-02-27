@@ -67,10 +67,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+#pragma mark - Time Picker handling
+
 - (void)initTimePickersWithStartDateComponents:(NSDateComponents *)startDateComps andEndDateComponents:(NSDateComponents *)endDateComps
 {
-    self.startTimeComponents = startDateComps;
-    self.endTimeComponents = endDateComps;
+    // Pick earliest date comps as startTimeComp and latest as endTimeComps
+    if ((startDateComps.hour > endDateComps.hour) ||
+        ((startDateComps.hour == endDateComps.hour) && (startDateComps.minute > endDateComps.minute))) {
+        
+        // Start and end should be swapped!
+        self.startTimeComponents = endDateComps;
+        self.endTimeComponents = startDateComps;
+        
+    } else {
+        
+        self.startTimeComponents = startDateComps;
+        self.endTimeComponents = endDateComps;
+    }
 }
 
 
@@ -103,6 +117,7 @@
         // Tell the delegate about the end date
         [self.delegate firePeriodViewController:self didFinish:YES withStartDateComponents:startDateComps andEndDateComponents:endDateComps];
     }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -151,6 +166,38 @@
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
 {
     return 60.0f;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    // Check start and end time
+    NSInteger startHour = [self.dailyPeriodStartPicker selectedRowInComponent:0];
+    NSInteger startMinute = [self.dailyPeriodStartPicker selectedRowInComponent:1];
+    NSInteger endHour = [self.dailyPeriodEndPicker selectedRowInComponent:0];
+    NSInteger endMinute = [self.dailyPeriodEndPicker selectedRowInComponent:1];
+    
+    if ((startHour > endHour) || ((startHour == endHour) && (startMinute >= endMinute))) {
+        // Start time is later than end time. Make adjustments...
+        if (pickerView == self.dailyPeriodStartPicker) {
+            if (endMinute>0) {
+                [self.dailyPeriodStartPicker selectRow:endHour inComponent:0 animated:YES];
+                [self.dailyPeriodStartPicker selectRow:endMinute-1 inComponent:1 animated:YES];
+            } else if (endHour>0) {
+                // ... and carry one!
+                [self.dailyPeriodStartPicker selectRow:endHour-1 inComponent:0 animated:YES];
+                [self.dailyPeriodStartPicker selectRow:([self.dailyPeriodStartPicker numberOfRowsInComponent:1]-1) inComponent:1 animated:YES];
+            }
+        } else if (pickerView == self.dailyPeriodEndPicker) {
+            if (startMinute<([self.dailyPeriodEndPicker numberOfRowsInComponent:1]-2)) {
+                [self.dailyPeriodEndPicker selectRow:startHour inComponent:0 animated:YES];
+                [self.dailyPeriodEndPicker selectRow:startMinute+1 inComponent:1 animated:YES];
+            } else if (startHour<([self.dailyPeriodEndPicker numberOfRowsInComponent:0]-2)) {
+                // ... and carry one!
+                [self.dailyPeriodEndPicker selectRow:startHour+1 inComponent:0 animated:YES];
+                [self.dailyPeriodEndPicker selectRow:0 inComponent:1 animated:YES];
+            }
+        }
+    }
 }
 
 @end

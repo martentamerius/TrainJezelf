@@ -68,7 +68,6 @@ static const NSArray *_quotes;
         
         // Show either the reminder message, or a random quote
         self.citationLabel.text = (message)?:randomQuote;
-        [self.view setNeedsUpdateConstraints];
         
         // Show a (new) random image from asset catalog
         NSUInteger index = arc4random_uniform(kBFReminderImageCount);
@@ -95,9 +94,10 @@ static const NSArray *_quotes;
     
     __weak typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(dispatchTimeInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([weakSelf.timeToDismiss timeIntervalSinceNow]<=1) {
+        if ([weakSelf.timeToDismiss timeIntervalSinceNow] <= 0.5) {
             // Out of time!
-            [weakSelf dismissReminderView:weakSelf];
+            if (![weakSelf isBeingDismissed])
+                [weakSelf dismissReminderView:weakSelf];
         } else {
             // New random quotes or messages have been displayed; reschedule the delayed dismissal!
             [weakSelf scheduleDelayedDismissal];

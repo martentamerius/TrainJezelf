@@ -32,6 +32,9 @@
 /* Class = "IBUIButton"; normalTitle = "8"; ObjectID = "LIK-Iv-463"; */
 "LIK-Iv-463.normalTitle" = "8";
 
+/* Class = "IBUILabel"; text = "- Unknown"; ObjectID = "M95-uD-ZJV"; */
+"M95-uD-ZJV.text" = "- Onbekend";
+
 /* Class = "IBUIButton"; normalTitle = "6"; ObjectID = "PXw-a8-ryd"; */
 "PXw-a8-ryd.normalTitle" = "6";
 
