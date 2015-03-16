@@ -47,6 +47,7 @@
 		9B02BFA61A8F99B400ACAFD7 /* BFReminder+UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BFReminder+UnitTest.h"; sourceTree = "<group>"; };
 		9B0BACD91986E6F800D4CC09 /* BFReminderCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderCollectionViewController.h; sourceTree = "<group>"; };
 		9B0BACDA1986E6F800D4CC09 /* BFReminderCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderCollectionViewController.m; sourceTree = "<group>"; };
+		9B14E51A1AA64ADF00F16BE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9B3F0DB71966A4A30089DEC1 /* BreakFree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakFree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B3F0DBA1966A4A30089DEC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9B3F0DBC1966A4A30089DEC1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -78,7 +79,6 @@
 		9B75C7791A842A5D00161928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Launch Screen.xib"; sourceTree = "<group>"; };
 		9B75C77A1A842D3E00161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = "nl.lproj/Launch Screen.strings"; sourceTree = "<group>"; };
 		9B75C77B1A842D4800161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Storyboard.strings; sourceTree = "<group>"; };
-		9B75C77D1A842DBE00161928 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9B75C77F1A842DC800161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9BD27BB01A78144A00CA3F8B /* BFFirePeriodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFFirePeriodViewController.h; sourceTree = "<group>"; };
 		9BD27BB11A78144A00CA3F8B /* BFFirePeriodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFFirePeriodViewController.m; sourceTree = "<group>"; };
@@ -404,8 +404,8 @@
 		9B75C77C1A842DBE00161928 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9B75C77D1A842DBE00161928 /* en */,
 				9B75C77F1A842DC800161928 /* nl */,
+				9B14E51A1AA64ADF00F16BE7 /* Base */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -489,11 +489,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BreakFree/BreakFree-Prefix.pch";
 				INFOPLIST_FILE = "BreakFree/BreakFree-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -505,11 +507,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BreakFree/BreakFree-Prefix.pch";
 				INFOPLIST_FILE = "BreakFree/BreakFree-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

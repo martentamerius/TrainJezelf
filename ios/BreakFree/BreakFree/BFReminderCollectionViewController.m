@@ -245,7 +245,7 @@
         cell.messageLabel.text = reminder.message;
         cell.pauseBackgroundImageView.hidden = (![reminder isPaused]);
         
-        NSString *freqText = [NSString stringWithFormat:NSLocalizedString(@"%@ times per %@", @"Reminder cell frequency label text"), @(reminder.frequencyCount), [reminder frequencyTypeString]];
+        NSString *freqText = [NSString stringWithFormat:NSLocalizedString(@"%@ times a %@ between %@", @"Reminder cell frequency label text"), @(reminder.frequencyCount), [reminder frequencyTypeString], [reminder dailyFirePeriodString]];
         
         // Create italic body style font for frequency string
         UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];

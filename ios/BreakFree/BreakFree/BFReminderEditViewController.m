@@ -251,7 +251,7 @@
 
     // If not: show an alert and cancel the segue transition
     NSString *alertTitle = NSLocalizedString(@"Warning", @"Empty message alertview title");
-    NSString *alertMessage = NSLocalizedString(@"The message text is empty.", @"Empty message alertview message");
+    NSString *alertMessage = NSLocalizedString(@"The message textfield is empty.", @"Empty message alertview message");
     NSString *alertButtonTitle = NSLocalizedString(@"OK", @"Empty message alertview button title");
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self

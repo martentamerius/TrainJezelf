@@ -19,6 +19,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(setMinimumBackgroundFetchInterval:)]) {
         // iOS 7+: Set minimum background fetch interval.
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -26,7 +28,7 @@
     
     // iOS 8: Register the app for alert notifications.
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationType types = UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
         UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
     }
@@ -59,9 +61,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
-    // Reset app icon badge number when the app is active
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 
@@ -91,7 +90,7 @@
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     // Check the list of reminders whether any new local notifications need scheduling
-    NSLog(@"Checking scheduling of all reminders!");
+    DLog(@"Checking scheduling of all reminders!");
     [[BFReminderList sharedReminderList] checkSchedulingOfLocalNotificationsForAllReminders];
     
     // Don't forget to run the completion handler!

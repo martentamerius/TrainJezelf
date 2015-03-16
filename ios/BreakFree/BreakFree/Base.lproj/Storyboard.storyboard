@@ -46,9 +46,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="awK-tj-my7">
-                                            <rect key="frame" x="8" y="28" width="71" height="14.5"/>
+                                            <rect key="frame" x="8" y="28" width="204" height="14.5"/>
                                             <attributedString key="attributedText">
-                                                <fragment content="4 times a day">
+                                                <fragment content="4 times a day between 8:00 and 19:00">
                                                     <attributes>
                                                         <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <font key="NSFont" size="12" name="HelveticaNeue-Italic"/>
@@ -59,23 +59,23 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_pause" translatesAutoresizingMaskIntoConstraints="NO" id="J9I-qJ-ruC">
-                                            <rect key="frame" x="242" y="2" width="44" height="44"/>
+                                            <rect key="frame" x="242" y="4" width="44" height="44"/>
                                             <gestureRecognizers/>
                                         </imageView>
                                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_trash" translatesAutoresizingMaskIntoConstraints="NO" id="2HO-bL-tFR">
-                                            <rect key="frame" x="2" y="2" width="44" height="44"/>
+                                            <rect key="frame" x="2" y="4" width="44" height="44"/>
                                             <gestureRecognizers/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" white="0.97783564814814816" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.9836883544921875" green="0.9591367244720459" blue="0.99990534782409668" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="lWO-w4-KUz" firstAttribute="top" secondItem="8ls-rh-ori" secondAttribute="topMargin" constant="-2" id="0ia-XV-1ui"/>
-                                    <constraint firstItem="2HO-bL-tFR" firstAttribute="top" secondItem="8ls-rh-ori" secondAttribute="top" constant="2" id="3qq-Df-FaS"/>
+                                    <constraint firstItem="2HO-bL-tFR" firstAttribute="top" secondItem="8ls-rh-ori" secondAttribute="top" constant="4" id="3qq-Df-FaS"/>
                                     <constraint firstAttribute="centerX" secondItem="9cS-t4-MHJ" secondAttribute="centerX" id="6At-2u-FK0"/>
-                                    <constraint firstItem="J9I-qJ-ruC" firstAttribute="top" secondItem="8ls-rh-ori" secondAttribute="top" constant="2" id="73M-a1-IXU"/>
+                                    <constraint firstItem="J9I-qJ-ruC" firstAttribute="top" secondItem="8ls-rh-ori" secondAttribute="top" constant="4" id="73M-a1-IXU"/>
                                     <constraint firstAttribute="centerY" secondItem="9cS-t4-MHJ" secondAttribute="centerY" id="EHy-tU-o8p"/>
                                     <constraint firstAttribute="bottomMargin" secondItem="awK-tj-my7" secondAttribute="bottom" constant="-1" id="GOY-D9-qJF"/>
                                     <constraint firstItem="lWO-w4-KUz" firstAttribute="trailing" secondItem="8ls-rh-ori" secondAttribute="trailingMargin" id="I6t-O5-2ZS"/>
@@ -320,7 +320,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TIMES A" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-aF-JOr">
-                                        <rect key="frame" x="124.5" y="81" width="56" height="17"/>
+                                        <rect key="frame" x="124" y="81" width="56" height="17"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -418,16 +418,16 @@
                                         </connections>
                                     </button>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="G4x-X2-M9x" userLabel="Weekend Switch">
-                                        <rect key="frame" x="223" y="186" width="51" height="31"/>
+                                        <rect key="frame" x="233" y="186" width="51" height="31"/>
                                         <connections>
                                             <action selector="weekendSwitchValueChanged:" destination="uZQ-o2-HbV" eventType="valueChanged" id="6bC-zl-Zte"/>
                                         </connections>
                                     </switch>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="8:00 and 19:00" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KDP-yZ-agt">
-                                        <rect key="frame" x="142" y="144" width="130" height="30"/>
+                                        <rect key="frame" x="132" y="144" width="150" height="30"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="130" id="Hna-Vy-IMh"/>
+                                            <constraint firstAttribute="width" constant="150" id="Hna-Vy-IMh"/>
                                         </constraints>
                                         <color key="textColor" red="0.4549019608" green="0.1960784314" blue="0.62745098040000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
@@ -585,7 +585,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="650.66666666666663" y="-1306.4000000000001"/>
+            <point key="canvasLocation" x="640" y="-1307"/>
         </scene>
         <!--Select period-->
         <scene sceneID="nBL-gc-N6B">
@@ -790,8 +790,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="d3f-jC-l8E"/>
         <segue reference="U9c-Q3-ie2"/>
+        <segue reference="iN5-fI-8wi"/>
         <segue reference="u2I-qG-bXJ"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.63529413938522339" green="0.37647062540054321" blue="0.7882353663444519" alpha="1" colorSpace="deviceRGB"/>

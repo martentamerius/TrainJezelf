@@ -127,9 +127,7 @@
         NSInteger endHour = (self.dailyPeriodEndComponents.hour != NSUndefinedDateComponent)?self.dailyPeriodEndComponents.hour:0;
         NSInteger endMinute = (self.dailyPeriodEndComponents.minute != NSUndefinedDateComponent)?self.dailyPeriodEndComponents.minute:0;
         
-        periodString = [NSString stringWithFormat:NSLocalizedString(@"%@:%@ and %@:%@", @"Daily fire period string"),
-                        @(startHour), [numberFormatter stringFromNumber:@(startMinute)],
-                        @(endHour), [numberFormatter stringFromNumber:@(endMinute)]];
+        periodString = [NSString stringWithFormat:NSLocalizedString(@"%@:%@ and %@:%@", @"Daily fire period string"), @(startHour), [numberFormatter stringFromNumber:@(startMinute)], @(endHour), [numberFormatter stringFromNumber:@(endMinute)]];
     }
     
     return [NSString stringWithString:periodString];
@@ -167,9 +165,7 @@
         localNotification.fireDate = date;
         localNotification.alertBody = [NSString stringWithString:self.message];
         localNotification.alertAction = NSLocalizedString(@"View details", @"Local notification alert action title");
-        
         localNotification.soundName = UILocalNotificationDefaultSoundName;
-        localNotification.applicationIconBadgeNumber = 1;
         
         NSDictionary *infoDict = [NSDictionary dictionaryWithObject:self.uuid.UUIDString forKey:kBFLocalNotificationReminderUUIDString];
         localNotification.userInfo = infoDict;
@@ -342,7 +338,7 @@
     if ((dayOfWeekComps.weekday == BFDayOfWeek_Sunday) || (dayOfWeekComps.weekday == BFDayOfWeek_Saturday)) {
         // Sunday == 1 / Saturday == 7
         fallsInWeekend = YES;
-        NSLog(@"Proposed firedate %@ falls in weekend.", fireDate);
+        DLog(@"Proposed firedate %@ falls in weekend.", fireDate);
     }
     
     return fallsInWeekend;
@@ -364,7 +360,7 @@
     if ((fireTimeInterval < dailyStartTime) || (fireTimeInterval > dailyEndTime)) {
         // Fire date falls within the off-hours range
         fallsInOffHoursOrWeekends = YES;
-        NSLog(@"Proposed firedate %@ falls during off-hours.", fireDate);
+        DLog(@"Proposed firedate %@ falls during off-hours.", fireDate);
         
     } else if (!self.shouldFireDuringWeekends) {
         // Check if the original fire date falls during the weekend
