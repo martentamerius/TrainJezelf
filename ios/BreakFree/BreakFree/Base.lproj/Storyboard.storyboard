@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Ycn-Xl-I4Q">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Ycn-Xl-I4Q">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -13,7 +13,7 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" id="Ju2-GU-s2o">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="h3k-lx-N8m">
                             <size key="itemSize" width="288" height="50"/>
@@ -37,7 +37,7 @@
                                             <attributedString key="attributedText">
                                                 <fragment content="Take a break, drink some water!">
                                                     <attributes>
-                                                        <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <font key="NSFont" size="16" name="HelveticaNeue"/>
                                                         <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
                                                     </attributes>
@@ -50,7 +50,7 @@
                                             <attributedString key="attributedText">
                                                 <fragment content="4 times a day between 8:00 and 19:00">
                                                     <attributes>
-                                                        <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <font key="NSFont" size="12" name="HelveticaNeue-Italic"/>
                                                         <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
                                                     </attributes>
@@ -69,7 +69,7 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" red="0.9836883544921875" green="0.9591367244720459" blue="0.99990534782409668" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.97475320100784302" green="0.9739072322845459" blue="0.99991047382354736" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="lWO-w4-KUz" firstAttribute="top" secondItem="8ls-rh-ori" secondAttribute="topMargin" constant="-2" id="0ia-XV-1ui"/>
@@ -224,7 +224,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hAZ-ic-dvE">
-                                        <rect key="frame" x="223" y="7.5" width="42" height="32.5"/>
+                                        <rect key="frame" x="223" y="8" width="42" height="32.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="5">
@@ -304,7 +304,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evl-Uq-dZL">
-                                        <rect key="frame" x="222" y="39.5" width="41.5" height="32"/>
+                                        <rect key="frame" x="222" y="40" width="41.5" height="32"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="10">
@@ -425,6 +425,7 @@
                                     </switch>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="8:00 and 19:00" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KDP-yZ-agt">
                                         <rect key="frame" x="132" y="144" width="150" height="30"/>
+                                        <color key="backgroundColor" red="0.97475320099999996" green="0.97390723229999998" blue="0.99991047379999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="Hna-Vy-IMh"/>
@@ -442,7 +443,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.97475320100784302" green="0.9739072322845459" blue="0.99991047382354736" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="RcU-7b-2vL" firstAttribute="width" secondItem="evl-Uq-dZL" secondAttribute="width" id="0Aq-zR-isn"/>
                                     <constraint firstItem="nRV-Rs-WVV" firstAttribute="width" secondItem="yf9-Us-FRz" secondAttribute="width" id="0Hi-4N-dMC"/>
@@ -509,32 +510,28 @@
                                     <constraint firstItem="RcU-7b-2vL" firstAttribute="width" secondItem="eIj-di-SUK" secondAttribute="width" id="zeW-So-iZv"/>
                                 </constraints>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Of what do you want to be reminded?" translatesAutoresizingMaskIntoConstraints="NO" id="ZY8-A2-nSY">
-                                <rect key="frame" x="8" y="72" width="304" height="36"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="u1y-2w-p6i"/>
-                                </constraints>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Of what do you want to be reminded?" minimumFontSize="14" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="taJ-3s-VDT">
+                                <rect key="frame" x="8" y="72" width="304" height="30"/>
+                                <color key="backgroundColor" red="0.97475320100784302" green="0.9739072322845459" blue="0.99991047382354736" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
-                                    <outlet property="delegate" destination="uZQ-o2-HbV" id="3AV-6J-ct3"/>
-                                    <outletCollection property="gestureRecognizers" destination="reS-l5-LZJ" appends="YES" id="b5s-DZ-zGc"/>
-                                    <outletCollection property="gestureRecognizers" destination="83M-6M-5CC" appends="YES" id="F5v-g2-A7f"/>
+                                    <outlet property="delegate" destination="uZQ-o2-HbV" id="RCl-xL-qnj"/>
+                                    <outletCollection property="gestureRecognizers" destination="reS-l5-LZJ" appends="YES" id="EBD-wP-kmD"/>
+                                    <outletCollection property="gestureRecognizers" destination="83M-6M-5CC" appends="YES" id="3B0-wD-kZZ"/>
                                 </connections>
-                            </textView>
+                            </textField>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="ZY8-A2-nSY" firstAttribute="leading" secondItem="Xb5-yd-dl7" secondAttribute="leading" constant="8" id="1dK-o4-GrZ"/>
-                            <constraint firstAttribute="trailing" secondItem="ZY8-A2-nSY" secondAttribute="trailing" constant="8" id="66y-gR-ecD"/>
                             <constraint firstAttribute="trailing" secondItem="skG-Fx-19T" secondAttribute="trailing" constant="8" id="N8H-bh-CrF"/>
-                            <constraint firstItem="ZY8-A2-nSY" firstAttribute="top" secondItem="fK2-Da-PBR" secondAttribute="bottom" constant="8" id="SyI-08-UPL"/>
+                            <constraint firstItem="taJ-3s-VDT" firstAttribute="leading" secondItem="Xb5-yd-dl7" secondAttribute="leading" constant="8" id="TLR-2v-XBV"/>
                             <constraint firstItem="bcL-8Y-nh2" firstAttribute="top" secondItem="skG-Fx-19T" secondAttribute="bottom" constant="8" id="YLP-BS-9ki"/>
+                            <constraint firstAttribute="trailing" secondItem="taJ-3s-VDT" secondAttribute="trailing" constant="8" id="ZqG-hr-nZN"/>
                             <constraint firstItem="skG-Fx-19T" firstAttribute="leading" secondItem="Xb5-yd-dl7" secondAttribute="leading" constant="8" id="cTV-A8-BL7"/>
+                            <constraint firstItem="taJ-3s-VDT" firstAttribute="top" secondItem="fK2-Da-PBR" secondAttribute="bottom" constant="8" id="yQf-wu-CYT"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Edit" id="nxo-rt-rYx">
@@ -548,7 +545,7 @@
                     <connections>
                         <outlet property="dailyFirePeriodTextField" destination="KDP-yZ-agt" id="7v9-2s-Sh0"/>
                         <outlet property="frequencyBackgroundView" destination="skG-Fx-19T" id="5Nz-3k-Zq8"/>
-                        <outlet property="messageTextView" destination="ZY8-A2-nSY" id="1wd-jv-S39"/>
+                        <outlet property="messageTextField" destination="taJ-3s-VDT" id="a6U-Xo-Jde"/>
                         <outlet property="weekendSwitch" destination="G4x-X2-M9x" id="7DO-60-klr"/>
                         <outletCollection property="frequencyCountButtons" destination="RcU-7b-2vL" id="ksS-LI-XW1"/>
                         <outletCollection property="frequencyCountButtons" destination="nRV-Rs-WVV" id="dX9-Ka-kDa"/>
@@ -566,10 +563,7 @@
                         <outletCollection property="frequencyTypeButtons" destination="SxZ-Ky-9DR" id="SPG-Nt-uBx"/>
                         <segue destination="8oS-gX-YgP" kind="modal" identifier="BFReminderEditToReminderShakeSegue" id="FpV-yL-abd"/>
                         <segue destination="8oS-gX-YgP" kind="modal" identifier="BFReminderEditToReminderSegue" animates="NO" id="d3f-jC-l8E"/>
-                        <segue destination="xYl-cK-OxK" kind="popover" identifier="BFSegueChooseDailyFirePeriodAsPopover" popoverAnchorView="KDP-yZ-agt" id="u2I-qG-bXJ">
-                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                        </segue>
-                        <segue destination="xYl-cK-OxK" kind="modal" identifier="BFSegueChooseDailyFirePeriodModally" modalPresentationStyle="pageSheet" modalTransitionStyle="coverVertical" id="Djt-fo-Q2z"/>
+                        <segue destination="xYl-cK-OxK" kind="modal" identifier="BFSegueChooseDailyFirePeriodModally" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="Djt-fo-Q2z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tu7-bg-Oce" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -585,7 +579,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="640" y="-1307"/>
+            <point key="canvasLocation" x="683" y="-1307"/>
         </scene>
         <!--Select period-->
         <scene sceneID="nBL-gc-N6B">
@@ -596,19 +590,19 @@
                         <viewControllerLayoutGuide type="bottom" id="wlP-xc-Gdl"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tVr-D7-R3E">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="440"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="END" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FaP-gJ-cDt">
-                                <rect key="frame" x="225" y="138" width="30" height="17"/>
+                                <rect key="frame" x="225" y="88" width="29.5" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bDa-0M-CHF" userLabel="Daily Start Period Picker View">
-                                <rect key="frame" x="0.0" y="159" width="160" height="162"/>
+                                <rect key="frame" x="10" y="109" width="140" height="162"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="NOg-2u-Qfz"/>
+                                    <constraint firstAttribute="width" constant="140" id="NOg-2u-Qfz"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="dataSource" destination="6wK-uK-f9J" id="9b4-ba-ZVG"/>
@@ -616,28 +610,28 @@
                                 </connections>
                             </pickerView>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="chi-vK-5oy" userLabel="Daily End Period Picker View">
-                                <rect key="frame" x="160" y="159" width="160" height="162"/>
+                                <rect key="frame" x="170" y="109" width="140" height="162"/>
                                 <connections>
                                     <outlet property="dataSource" destination="6wK-uK-f9J" id="GpR-Fk-qAj"/>
                                     <outlet property="delegate" destination="6wK-uK-f9J" id="3FD-z7-Q9K"/>
                                 </connections>
                             </pickerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="249" verticalCompressionResistancePriority="751" text="START" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YcD-6x-epQ">
-                                <rect key="frame" x="58" y="138" width="43.5" height="17"/>
+                                <rect key="frame" x="58" y="88" width="43.5" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.97475320099999996" green="0.97390723229999998" blue="0.99991047379999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="bDa-0M-CHF" firstAttribute="width" secondItem="chi-vK-5oy" secondAttribute="width" id="6GF-Go-ICh"/>
                             <constraint firstItem="bDa-0M-CHF" firstAttribute="top" secondItem="YcD-6x-epQ" secondAttribute="bottom" constant="4" id="7p0-GZ-qZF"/>
-                            <constraint firstItem="chi-vK-5oy" firstAttribute="trailing" secondItem="tVr-D7-R3E" secondAttribute="trailing" id="AFR-tN-F2w"/>
-                            <constraint firstItem="bDa-0M-CHF" firstAttribute="leading" secondItem="tVr-D7-R3E" secondAttribute="leading" id="BfM-MN-ij9"/>
+                            <constraint firstItem="chi-vK-5oy" firstAttribute="trailing" secondItem="tVr-D7-R3E" secondAttribute="trailing" constant="-10" id="AFR-tN-F2w"/>
+                            <constraint firstItem="bDa-0M-CHF" firstAttribute="leading" secondItem="tVr-D7-R3E" secondAttribute="leading" constant="10" id="BfM-MN-ij9"/>
                             <constraint firstItem="YcD-6x-epQ" firstAttribute="centerX" secondItem="bDa-0M-CHF" secondAttribute="centerX" id="QOc-WN-F4C"/>
                             <constraint firstItem="YcD-6x-epQ" firstAttribute="baseline" secondItem="FaP-gJ-cDt" secondAttribute="baseline" id="TPj-PU-FE6"/>
-                            <constraint firstAttribute="centerY" secondItem="bDa-0M-CHF" secondAttribute="centerY" constant="-20" id="aM0-Id-rFc"/>
+                            <constraint firstAttribute="centerY" secondItem="bDa-0M-CHF" secondAttribute="centerY" constant="-40" id="aM0-Id-rFc"/>
                             <constraint firstItem="bDa-0M-CHF" firstAttribute="top" secondItem="chi-vK-5oy" secondAttribute="top" id="cRG-MX-9rD"/>
                             <constraint firstItem="chi-vK-5oy" firstAttribute="centerX" secondItem="FaP-gJ-cDt" secondAttribute="centerX" id="yqL-tq-MzV"/>
                         </constraints>
@@ -654,9 +648,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <value key="contentSizeForViewInPopover" type="size" width="320" height="462"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="320" height="300"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="440"/>
+                    <size key="freeformSize" width="320" height="300"/>
                     <connections>
                         <outlet property="dailyPeriodEndPicker" destination="chi-vK-5oy" id="iO2-o1-X1d"/>
                         <outlet property="dailyPeriodStartPicker" destination="bDa-0M-CHF" id="br4-3m-Y4x"/>
@@ -664,7 +658,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R8c-U9-hw7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1362.6666666666667" y="-1306.4000000000001"/>
+            <point key="canvasLocation" x="1490" y="-1307"/>
         </scene>
         <!--Reminder View-->
         <scene sceneID="aQw-Yo-TaG">
@@ -705,7 +699,7 @@
                                 <size key="shadowOffset" width="1" height="1"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="hRc-LP-8Vf" secondAttribute="trailing" constant="4" id="0O7-yQ-kUg"/>
                             <constraint firstItem="0sh-lI-H9W" firstAttribute="top" secondItem="q5l-vj-Ufu" secondAttribute="top" id="9x9-WX-NHv"/>
@@ -763,6 +757,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xYl-cK-OxK" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="Tsi-53-b7U"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4Oh-Q3-bSF">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -774,7 +769,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVC-s9-ENi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1019.7333333333333" y="-1306.4000000000001"/>
+            <point key="canvasLocation" x="1093" y="-1307"/>
         </scene>
     </scenes>
     <resources>
@@ -791,8 +786,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="U9c-Q3-ie2"/>
-        <segue reference="iN5-fI-8wi"/>
-        <segue reference="u2I-qG-bXJ"/>
+        <segue reference="d3f-jC-l8E"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.63529413938522339" green="0.37647062540054321" blue="0.7882353663444519" alpha="1" colorSpace="deviceRGB"/>
 </document>

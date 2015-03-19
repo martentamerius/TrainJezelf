@@ -72,13 +72,13 @@
 		9B3F0DFF1966DB6A0089DEC1 /* BFReminderEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFReminderEditViewController.h; sourceTree = "<group>"; };
 		9B3F0E001966DB6A0089DEC1 /* BFReminderEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFReminderEditViewController.m; sourceTree = "<group>"; };
 		9B4C2C651A7443F90031C568 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9B5B953B1ABB6165007A1D40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Storyboard.strings; sourceTree = "<group>"; };
 		9B75C7731A84213C00161928 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Quotes.plist; sourceTree = "<group>"; };
 		9B75C7751A84213F00161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = nl; path = nl.lproj/Quotes.plist; sourceTree = "<group>"; };
 		9B75C7761A84228F00161928 /* BreakFree-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BreakFree-Info.plist"; sourceTree = "<group>"; };
 		9B75C7781A842A5D00161928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Storyboard.storyboard; sourceTree = "<group>"; };
 		9B75C7791A842A5D00161928 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Launch Screen.xib"; sourceTree = "<group>"; };
 		9B75C77A1A842D3E00161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = "nl.lproj/Launch Screen.strings"; sourceTree = "<group>"; };
-		9B75C77B1A842D4800161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Storyboard.strings; sourceTree = "<group>"; };
 		9B75C77F1A842DC800161928 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9BD27BB01A78144A00CA3F8B /* BFFirePeriodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFFirePeriodViewController.h; sourceTree = "<group>"; };
 		9BD27BB11A78144A00CA3F8B /* BFFirePeriodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFFirePeriodViewController.m; sourceTree = "<group>"; };
@@ -387,7 +387,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				9B75C7781A842A5D00161928 /* Base */,
-				9B75C77B1A842D4800161928 /* nl */,
+				9B5B953B1ABB6165007A1D40 /* nl */,
 			);
 			name = Storyboard.storyboard;
 			sourceTree = "<group>";

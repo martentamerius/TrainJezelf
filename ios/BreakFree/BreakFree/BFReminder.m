@@ -253,7 +253,7 @@
     NSDate *periodStart = [currentCalendar dateFromComponents:periodStartComps];
     NSDate *periodEnd = [currentCalendar dateFromComponents:periodEndComps];
     
-    return abs([periodEnd timeIntervalSinceDate:periodStart]);
+    return fabs([periodEnd timeIntervalSinceDate:periodStart]);
 }
 
 - (NSTimeInterval)periodDurationForStartDate:(NSDate *)periodStartDate
@@ -267,7 +267,7 @@
             // Get the duration of an hour by using the calendar API (for the off-chance a leap second is introduced)
             NSDateComponents *frequencyType = [[NSDateComponents alloc] init];
             frequencyType.hour = 1;
-            periodDuration = abs([[currentCalendar dateByAddingComponents:frequencyType toDate:periodStartDate options:0] timeIntervalSinceDate:periodStartDate]);
+            periodDuration = fabs([[currentCalendar dateByAddingComponents:frequencyType toDate:periodStartDate options:0] timeIntervalSinceDate:periodStartDate]);
             
             break;
         }
@@ -413,8 +413,14 @@
             // weekends, although these may not actually get scheduled. (Prepare notifications for at least 3 days)
             NSInteger maxNotificationCount = self.frequencyCount;
             switch (self.frequencyType) {
-                case BFFrequencyHourly: { maxNotificationCount *= (3 * (self.dailyPeriodEndComponents.hour - self.dailyPeriodStartComponents.hour)); break; }
-                case BFFrequencyDaily: { maxNotificationCount *= ((3 * (self.dailyPeriodEndComponents.hour - self.dailyPeriodStartComponents.hour) * 3600) / dailyPeriodDuration); break; }
+                case BFFrequencyHourly: {
+                    maxNotificationCount *= fabsf(3.0f * (1+self.dailyPeriodEndComponents.hour-self.dailyPeriodStartComponents.hour));
+                    break;
+                }
+                case BFFrequencyDaily: {
+                    maxNotificationCount *= fabsf(3.0f * (1+self.dailyPeriodEndComponents.hour-self.dailyPeriodStartComponents.hour) * (3600.0f / MAX(dailyPeriodDuration, 3600)));
+                    break;
+                }
                 default: break;
             }
             

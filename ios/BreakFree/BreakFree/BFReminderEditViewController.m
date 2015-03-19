@@ -13,11 +13,10 @@
 #import "BFFirePeriodViewController.h"
 #import "BFReminder.h"
 
-@interface BFReminderEditViewController () <UITextViewDelegate, UITextFieldDelegate, BFFirePeriodViewControllerDelegate, UIAlertViewDelegate>
-@property (weak, nonatomic) IBOutlet UITextView *messageTextView;
+@interface BFReminderEditViewController () <UITextFieldDelegate, BFFirePeriodViewControllerDelegate, UIAlertViewDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *messageTextField;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *frequencyCountButtons;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *frequencyTypeButtons;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIView *frequencyBackgroundView;
 @property (weak, nonatomic) IBOutlet UITextField *dailyFirePeriodTextField;
 @property (weak, nonatomic) IBOutlet UISwitch *weekendSwitch;
@@ -40,9 +39,9 @@
     [super viewDidLoad];
 
     self.frequencyBackgroundView.layer.cornerRadius = 4.0f;
-    self.messageTextView.layer.cornerRadius = 4.0f;
+    self.messageTextField.layer.cornerRadius = 4.0f;
     
-    // Set values form BFReminder object
+    // Set values from BFReminder object
     if (self.reminder) {
         [self setMessageText:self.reminder.message];
         
@@ -86,21 +85,19 @@
 
 - (void)setMessageText:(NSString *)message
 {
-    if (message) {
-        self.messageTextView.text = self.reminder.message;
-        self.messageTextView.textColor = [UIColor darkTextColor];
+    if (message && (message.length>0)) {
+        self.messageTextField.text = self.reminder.message;
     } else {
-        self.messageTextView.text = NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message");
-        self.messageTextView.textColor = [UIColor lightGrayColor];
+        self.messageTextField.text = @"";
     }
 }
 
 - (NSString *)messageText
 {
-    if ([self.messageTextView.text isEqualToString:NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message")]) {
+    if ([self.messageTextField.text length] == 0) {
         return nil;
     } else {
-        return [NSString stringWithString:self.messageTextView.text];
+        return [NSString stringWithString:self.messageTextField.text];
     }
 }
 
@@ -146,14 +143,8 @@
     if (textField != self.dailyFirePeriodTextField)
         return YES;
     
-    // Only for the daily fire period textfield:
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        // iPads: show time picker in popover
-        [self performSegueWithIdentifier:kBFSegueChooseDailyFirePeriodAsPopover sender:self];
-    } else {
-        // iPhones: show time picker as a modal sheet
-        [self performSegueWithIdentifier:kBFSegueChooseDailyFirePeriodModally sender:self];
-    }
+    // Only for the daily fire period textfield: show time picker as a modal sheet
+    [self performSegueWithIdentifier:kBFSegueChooseDailyFirePeriodModally sender:self];
 
     // Finally: don't let the daily fire textfield become first responder!
     return NO;
@@ -175,38 +166,14 @@
 }
 
 
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-    if ([self.messageTextView.text isEqualToString:NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message")]) {
-        // Do some magic to remove the placeholder text
-        self.messageTextView.text = @"";
-        self.messageTextView.textColor = [UIColor darkTextColor];
-    }
-    return YES;
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    if ([self.messageTextView.text length]==0) {
-        // If the user has removed all text, put in the placeholder text
-        self.messageTextView.text = NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message");
-        self.messageTextView.textColor = [UIColor lightGrayColor];
-    }
-}
-
-
 #pragma mark - Swipe down gesture or tap outside textview
 
 - (IBAction)userWantsToDismissKeyboard:(UIGestureRecognizer *)sender
 {
-    if ([self.messageTextView isFirstResponder]) {
-        // User tapped or swiped down on text view while it is first responder: dismiss keyboard
-        [self.messageTextView resignFirstResponder];
+    if ([self.messageTextField isFirstResponder]) {
+        [self.messageTextField resignFirstResponder];
     } else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
-        // If user tapped on inactive message text view: make it first responder again!
-        [self.messageTextView becomeFirstResponder];
+        [self.messageTextField becomeFirstResponder];
     }
 }
 
@@ -217,7 +184,7 @@
 {
     // This alertview was shown because the user did not enter a message in the UITextView.
     // The user dismissed the alertview; now automatically let the UITextView become first responder.
-    [self.messageTextView becomeFirstResponder];
+    [self.messageTextField becomeFirstResponder];
 }
 
 
@@ -244,9 +211,8 @@
     if (![identifier isEqualToString:kBFSegueUnwindFromSaveReminderTapped])
         return YES;
     
-    // If the save button has been tapped, check if the reminder text message has been entered
-    if (([self.messageTextView.text length]>0) &&
-        (![self.messageTextView.text isEqualToString:NSLocalizedString(@"Of what do you want to be reminded?", @"Reminder text placeholder message")]))
+    // If the save button has been tapped, check if any reminder text message has been entered
+    if ([self.messageTextField.text length]>0)
         return YES;
 
     // If not: show an alert and cancel the segue transition
@@ -296,25 +262,23 @@
             
             // Check if the reminder is already saved into the reminder list
             if ([[BFReminderList sharedReminderList] reminderWithUUID:self.reminder.uuid]) {
-                // Save the changes to the user defaults
                 [[BFReminderList sharedReminderList] saveRemindersToUserDefaults];
-                // And adjust the scheduled local notifications
                 [self.reminder scheduleLocalNotificationsForCurrentReminder];
             } else {
-                // The reminder has never been saved before; add the reminder to the reminder list!
                 [[BFReminderList sharedReminderList] addReminder:self.reminder];
             }
         }
     }
-    if ([segue.identifier isEqualToString:kBFSegueChooseDailyFirePeriodAsPopover] || [[segue identifier] isEqualToString:kBFSegueChooseDailyFirePeriodModally]) {
-        
+    if ([[segue identifier] isEqualToString:kBFSegueChooseDailyFirePeriodModally]) {
         if (self.reminder) {
             // Set initial start and end time interval of the reminder in the BFFirePeriodViewController
             UINavigationController *destinationVC = segue.destinationViewController;
             BFFirePeriodViewController *firePeriodVC = (BFFirePeriodViewController *)[destinationVC topViewController];
             
-            firePeriodVC.delegate = self;
-            [firePeriodVC initTimePickersWithStartDateComponents:self.reminder.dailyPeriodStartComponents andEndDateComponents:self.reminder.dailyPeriodEndComponents];
+            if (firePeriodVC) {
+                firePeriodVC.delegate = self;
+                [firePeriodVC initTimePickersWithStartDateComponents:self.reminder.dailyPeriodStartComponents andEndDateComponents:self.reminder.dailyPeriodEndComponents];
+            }
         }
     }
 }

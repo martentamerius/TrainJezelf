@@ -27,7 +27,6 @@
 #define kBFSegueReminderListToReminder                  @"BFReminderListToReminderSegue"
 #define kBFSegueUnwindFromReminderToReminderList        @"BFUnwindFromReminderToReminderListSegue"
 
-#define kBFSegueChooseDailyFirePeriodAsPopover          @"BFSegueChooseDailyFirePeriodAsPopover"
 #define kBFSegueChooseDailyFirePeriodModally            @"BFSegueChooseDailyFirePeriodModally"
 
 #define kBFSegueReminderEditToReminderShake             @"BFReminderEditToReminderShakeSegue"
