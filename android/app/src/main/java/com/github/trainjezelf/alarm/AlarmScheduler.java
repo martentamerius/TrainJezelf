@@ -144,15 +144,22 @@ public class AlarmScheduler {
         final int activeMillis = (int)(activeInterval.getEndMillis() - activeInterval.getStartMillis());
         final int inactiveMillis = MILLISECONDS_PER_DAY - activeMillis;
         while (millis > 0) {
-            int millisToAdd = Math.min(activeMillis, millis);
+            // How many millis left until end of current active interval?
+            final int activeLeftToday = (int)(activeInterval.getEndMillis() - moment.getMillis());
+            final int millisToAdd = Math.min(activeLeftToday, millis);
             moment = moment.plusMillis(millisToAdd);
             millis = Math.max(0, millis - millisToAdd);
             activeInterval = getActiveIntervalFor(moment);
             if (!activeInterval.contains(moment)) {
                 moment = moment.plusMillis(inactiveMillis);
+                activeInterval = getActiveIntervalFor(moment);
             }
         }
         return moment;
+    }
+
+    private static int divideUp(int number, int divisor) {
+        return (number + divisor - 1) / divisor;
     }
 
     /**
@@ -175,23 +182,23 @@ public class AlarmScheduler {
                 periodMillis = activeMillis;
                 float hourlyToDailyFactor = (float)activeMillis / (float)(MILLISECONDS_PER_HOUR);
                 int equivalentRemindersPerDay = (int)(hourlyToDailyFactor * reminder.getNumberOfNotifiesPerPeriod());
-                subPeriodMillis = periodMillis / equivalentRemindersPerDay;
+                subPeriodMillis = divideUp(periodMillis, equivalentRemindersPerDay);
             }
             break;
             case DAILY: {
                 final int periodMillis;
                 periodMillis = activeMillis;
-                subPeriodMillis = periodMillis / reminder.getNumberOfNotifiesPerPeriod();
+                subPeriodMillis = divideUp(periodMillis, reminder.getNumberOfNotifiesPerPeriod());
             }
             break;
             case WEEKLY: {
                 final int activePeriodMillis = activeMillis * DAYS_PER_WEEK;
-                subPeriodMillis = activePeriodMillis / reminder.getNumberOfNotifiesPerPeriod();
+                subPeriodMillis = divideUp(activePeriodMillis, reminder.getNumberOfNotifiesPerPeriod());
             }
             break;
             case MONTHLY: {
                 final int periodMillis = activeMillis * now.dayOfMonth().getMaximumValue();
-                subPeriodMillis = periodMillis / reminder.getNumberOfNotifiesPerPeriod();
+                subPeriodMillis = divideUp(periodMillis, reminder.getNumberOfNotifiesPerPeriod());
             }
             break;
         }
@@ -216,7 +223,7 @@ public class AlarmScheduler {
                         withSecondOfMinute(0).withMillisOfSecond(0);
                 break;
             case WEEKLY:
-                firstActiveTimeOfPeriod = now.withDayOfWeek(DateTimeConstants.SUNDAY).
+                firstActiveTimeOfPeriod = now.withDayOfWeek(DateTimeConstants.MONDAY).
                         withHourOfDay(activeStartHour).withMinuteOfHour(activeStartMinute).
                         withSecondOfMinute(0).withMillisOfSecond(0);
                 // Not sure how JodaTime rounds the .withDayOfWeek() calculation. To be sure,
