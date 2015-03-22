@@ -6,4 +6,4 @@ Essentially, Break out! helps you to remind yourself of something in an intuitiv
 
 Development
 -----------
-IDE: Android Studio 1.0+
+IDE: Android Studio 1.1+
