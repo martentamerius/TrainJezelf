@@ -70,11 +70,11 @@ public class AlarmScheduler {
             if (endMinutes - beginMinutes < MINIMUM_ACTIVE_MINUTES) {
                 setActiveRangeFromEncoded(DEFAULT_ACTIVE_TIME_RANGE);
             }
+            Log.d(LOG_TAG, String.format("Loaded active interval from preferences: %d:%d -- %d:%d",
+                    activeStartHour, activeStartMinute, activeEndHour, activeEndMinute));
             // State handling
             preferencesLoaded = true;
         }
-        Log.d(LOG_TAG, String.format("%d:%d - %d:%d", activeStartHour, activeStartMinute,
-                activeEndHour, activeEndMinute));
     }
 
     private static void setActiveRangeFromEncoded(String encoded) {
@@ -240,10 +240,7 @@ public class AlarmScheduler {
         return firstActiveTimeOfPeriod;
     }
 
-    public static long getMillisOfNextNotification(Context context, DateTime now, Reminder reminder) {
-
-        loadActiveIntervalFromPreferences(context);
-
+    public static long getMillisOfNextNotification(DateTime now, Reminder reminder) {
         // Slackednow is slightly more in the future than 'now'.
         // The Android alarm manager may trigger an alarm just before the intended time we set,
         // and if we do nothing about this, the next notification will be scheduled at the same time,
@@ -278,7 +275,11 @@ public class AlarmScheduler {
      * @param notificationId the notification Id
      */
     public static void scheduleNextReminder(Context context, int notificationId) {
+
+        // Initializations
         InitializeJodaTimeIfNeeded(context);
+        loadActiveIntervalFromPreferences(context);
+
         final DataStore dataStore = DataStore.getInstance(context);
         final Reminder reminder = dataStore.get(notificationId);
         if (reminder == null) {
@@ -287,7 +288,7 @@ public class AlarmScheduler {
             return;
         }
         final DateTime now = new DateTime();
-        final long millisOfNextNotification = getMillisOfNextNotification(context, now, reminder);
+        final long millisOfNextNotification = getMillisOfNextNotification(now, reminder);
         Log.d(LOG_TAG, String.format("scheduling next reminder for uid %d at %s", reminder.getUniqueId(),
                 new DateTime(millisOfNextNotification).toString()));
         startAlert(context, millisOfNextNotification, notificationId);
