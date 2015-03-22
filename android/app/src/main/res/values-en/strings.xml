@@ -25,4 +25,5 @@
     <string name="about_version">Version</string>
     <string name="dialog_timespan_from">From</string>
     <string name="dialog_timespan_to">To</string>
+    <string name="message_hint">What would you like to remind yourself of?</string>
 </resources>

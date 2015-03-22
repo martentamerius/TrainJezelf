@@ -33,5 +33,6 @@
     <string name="about_version">Versie</string>
     <string name="dialog_timespan_from">Van</string>
     <string name="dialog_timespan_to">Tot</string>
+    <string name="message_hint">Waaraan wil je jezelf herinneren?</string>
 
 </resources>

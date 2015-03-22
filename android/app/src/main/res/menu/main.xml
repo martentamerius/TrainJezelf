@@ -1,13 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity" >
 
     <item android:id="@+id/action_preferences"
           android:title="@string/action_preferences"
-          android:showAsAction="collapseActionView" />
+          android:icon="@drawable/ic_action_settings"
+          app:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_about"
           android:title="@string/action_about"
-          android:showAsAction="collapseActionView" />
+          app:showAsAction="collapseActionView" />
 
 </menu>

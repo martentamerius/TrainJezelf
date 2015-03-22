@@ -24,7 +24,8 @@
             android:id="@+id/messageEditText"
             android:layout_below="@+id/messageTextView"
             android:background="@drawable/apptheme_edit_text_holo_light"
-            android:inputType="textMultiLine|textCapSentences" />
+            android:inputType="textMultiLine|textCapSentences"
+            android:hint="@string/message_hint" />
 
         <TextView
             android:layout_width="match_parent"
