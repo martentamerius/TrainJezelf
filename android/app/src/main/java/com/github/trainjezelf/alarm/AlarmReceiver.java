@@ -28,7 +28,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         final DataStore dataStore = DataStore.getInstance(context);
         final Reminder reminder = dataStore.get(notificationId);
         final String notificationText = reminder.getMessage();
-        final int notificationNumber = dataStore.getNextNumberOfNotifications(notificationId);
+        int notificationNumber = dataStore.getNextNumberOfNotifications(notificationId);
+
+        // When number of notification is 1, do not show the number in the notification itself
+        if (notificationNumber == 1) {
+            notificationNumber = 0;
+        }
 
         // Create intent that will be used when the user dismisses the notification
         Intent deleteIntent = new Intent(context, DismissReceiver.class);

@@ -130,8 +130,8 @@ public final class DataStore {
         if (reminder == null) {
             return 0;
         }
-        final int result = reminder.getNumberOfNotifications();
-        reminder.setNumberOfNotifications(result + 1);
+        final int result = reminder.getNumberOfNotifications() + 1;
+        reminder.setNumberOfNotifications(result);
         saveReminders();
         return result;
     }

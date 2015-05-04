@@ -77,7 +77,11 @@ public class AlarmScheduler {
         }
     }
 
-    private static void setActiveRangeFromEncoded(String encoded) {
+    /**
+     * Sets active time range using time string
+     * @param encoded time string (refer to TimeRange class for format)
+     */
+    public static void setActiveRangeFromEncoded(String encoded) {
         final TimeRange range = new TimeRange(encoded);
         activeStartHour = range.getFromHour();
         activeStartMinute = range.getFromMinute();
@@ -89,13 +93,21 @@ public class AlarmScheduler {
         preferencesLoaded = false;
     }
 
-    private static Intent getNotificationIntent(Context context, int notificationId) {
-        Intent intent = new Intent(context, AlarmReceiver.class);
+    public static Intent getNotificationIntent(Context context, int notificationId) {
+        final Intent intent = new Intent(context, AlarmReceiver.class);
         // Make the intent unique for this notification ID by specifying its type.
         // This makes sure that the Android OS does not discard the alarm because it thinks it is equal to another one.
         // (Refer for example to
         //     http://stackoverflow.com/questions/8469705/how-to-set-multiple-alarms-using-android-alarm-manager)
+        //
+        // Moreover, the Android documentation says for Intent.filterEquals():
+        //   http://developer.android.com/reference/android/content/Intent.html#filterEquals%28android.content.Intent%29
+        //
+        // 'Determine if two intents are the same for the purposes of intent resolution (filtering). That is, if their
+        //  action, data, type, class, and categories are the same. This does not compare any extra data included in
+        //  the intents.'
         intent.setType("ID=" + notificationId);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
         return intent;
     }
 
@@ -112,9 +124,9 @@ public class AlarmScheduler {
                     MIN_SECONDS_UNTIL_NEXT_NOTIFICATION * 1000));
             atMillis += MIN_SECONDS_UNTIL_NEXT_NOTIFICATION * 1000;
         }
-        Intent intent = getNotificationIntent(context, notificationId);
+        final Intent intent = getNotificationIntent(context, notificationId);
         intent.putExtra(AlarmReceiver.ARGUMENT_NOTIFICATION_ID, notificationId);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent,
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, atMillis, pendingIntent);
@@ -247,6 +259,12 @@ public class AlarmScheduler {
         return firstActiveTimeOfPeriod;
     }
 
+    /**
+     * Calculate time of next notification for a reminder
+     * @param now time of current notification
+     * @param reminder to calculate next notification time for
+     * @return next notification time in milliseconds
+     */
     public static long getMillisOfNextNotification(DateTime now, Reminder reminder) {
         // Slackednow is slightly more in the future than 'now'.
         // The Android alarm manager may trigger an alarm just before the intended time we set,
@@ -279,30 +297,38 @@ public class AlarmScheduler {
     /**
      * Schedules next reminder for given notification Id
      * @param context app context
-     * @param notificationId the notification Id
+     * @param reminderUniqueId unique Id of the reminder
      */
-    public static void scheduleNextReminder(Context context, int notificationId) {
+    public static void scheduleNextReminder(Context context, int reminderUniqueId) {
 
         // Initializations
         InitializeJodaTimeIfNeeded(context);
         loadActiveIntervalFromPreferences(context);
 
+        // Check if reminder is still in our database
         final DataStore dataStore = DataStore.getInstance(context);
-        final Reminder reminder = dataStore.get(notificationId);
+        final Reminder reminder = dataStore.get(reminderUniqueId);
         if (reminder == null) {
             // User may have deleted the reminder in the meanwhile
             Log.d(LOG_TAG, "ERROR, trying to schedule reminder that does not exist anymore");
             return;
         }
+
+        // Cancel outstanding notification, if any
+        if (hasPendingAlarm(context, reminderUniqueId)) {
+            cancelScheduledReminder(context, reminderUniqueId);
+        }
+
+        // Schedule it
         final DateTime now = new DateTime();
         final long millisOfNextNotification = getMillisOfNextNotification(now, reminder);
         Log.d(LOG_TAG, String.format("scheduling next reminder for uid %d at %s", reminder.getUniqueId(),
                 new DateTime(millisOfNextNotification).toString()));
-        startAlert(context, millisOfNextNotification, notificationId);
+        startAlert(context, millisOfNextNotification, reminderUniqueId);
     }
 
     /**
-     * Cancel scheduled reminder
+     * Cancels scheduled reminder
      * @param context app context
      * @param reminderUniqueId unique Id of the reminder
      */
@@ -315,6 +341,12 @@ public class AlarmScheduler {
         alarmManager.cancel(pendingIntent);
     }
 
+    /**
+     * Returns true if the reminder with specified unique Id has a pending alarm
+     * @param context app context
+     * @param reminderUniqueId unique Id of the reminder
+     * @return true if reminder has a pending alarm
+     */
     private static boolean hasPendingAlarm(Context context, int reminderUniqueId) {
         final Intent intent = getNotificationIntent(context, reminderUniqueId);
         final boolean alarmUp = (PendingIntent.getBroadcast(context, reminderUniqueId, intent,
@@ -324,15 +356,14 @@ public class AlarmScheduler {
     }
 
     /**
-     * Re-schedule all reminders
+     * Re-schedules all reminders
+     * @param context app context
      */
     public static void reScheduleAllReminders(Context context) {
         final DataStore dataStore = DataStore.getInstance(context);
         for (Reminder reminder : dataStore.getReminders()) {
             final int uniqueId = reminder.getUniqueId();
-            if (hasPendingAlarm(context, uniqueId)) {
-                scheduleNextReminder(context, reminder.getUniqueId());
-            }
+            scheduleNextReminder(context, uniqueId);
         }
     }
 }

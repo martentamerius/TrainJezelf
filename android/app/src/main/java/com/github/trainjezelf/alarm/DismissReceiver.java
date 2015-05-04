@@ -19,8 +19,6 @@ public class DismissReceiver extends BroadcastReceiver {
         final int notificationId = intent.getExtras().getInt(ARGUMENT_NOTIFICATION_ID);
         final DataStore dataStore = DataStore.getInstance(context);
         dataStore.clearNumberOfNotifications(notificationId);
-        // Re-schedule reminder so that it
-        AlarmScheduler.scheduleNextReminder(context, notificationId);
     }
 
 }

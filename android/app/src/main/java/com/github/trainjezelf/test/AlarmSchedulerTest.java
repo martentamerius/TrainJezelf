@@ -1,11 +1,13 @@
 package com.github.trainjezelf.test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.github.trainjezelf.alarm.AlarmScheduler;
 import com.github.trainjezelf.datastore.Reminder;
+import com.github.trainjezelf.datastore.TimeRange;
 
 import junit.framework.Assert;
 
@@ -16,12 +18,17 @@ import org.joda.time.DateTimeConstants;
 
 /**
  * Tests the alarm scheduler
- *
- * Work in progress: week scheduling does not work correctly yet.
  */
 public class AlarmSchedulerTest extends AndroidTestCase {
 
     private static final int NUMBER_OF_TEST_PERIODS = 42;
+
+    public void testGetNotificationIntent() {
+        final Context context = getContext();
+        final Intent intent1 = AlarmScheduler.getNotificationIntent(context, 1);
+        final Intent intent2 = AlarmScheduler.getNotificationIntent(context, 2);
+        Assert.assertFalse(intent1.filterEquals(intent2));
+    }
 
     public void testGetMillisOfNextReminder() throws Exception {
 
@@ -34,6 +41,15 @@ public class AlarmSchedulerTest extends AndroidTestCase {
         //final DateTime startTime = new DateTime(1388604600000L); // 1-1-2014 19:30
 
         // Default active interval is 8.00 - 22.00
+        final int startHour = 8;
+        final int startMinute = 30;
+        final int endHour = 17;
+        final int endMinute = 30;
+        TimeRange timeRange = new TimeRange("00:00-00:00");
+        timeRange.update(startHour, startMinute, endHour, endMinute);
+        AlarmScheduler.setActiveRangeFromEncoded(timeRange.encode());
+
+        final int activeHours = ((endHour * 60 + endMinute) - (startHour * 60 + startMinute)) / 60;
 
         for (Reminder.Period period : Reminder.Period.values()) {
 
@@ -85,8 +101,8 @@ public class AlarmSchedulerTest extends AndroidTestCase {
                     int currentValue = -1;
                     switch (period) {
                         case HOURLY:
-                            currentValue = now.getHourOfDay();
-                            break;
+//                            currentValue = now.getHourOfDay();
+//                            break;
                         case DAILY:
                             currentValue = now.getDayOfYear();
                             break;
@@ -105,9 +121,13 @@ public class AlarmSchedulerTest extends AndroidTestCase {
                     } else if (currentValue == previousValue) {
                         valueCount++;
                     } else {
+                        int expected = nrPerPeriod;
+                        if (period == Reminder.Period.HOURLY) {
+                            expected *= activeHours;
+                        }
                         Log.i(LOG_TAG, String.format("Got %d notifications for period %s, nrPerPeriod %d",
-                                valueCount, period, nrPerPeriod));
-                        Assert.assertEquals(valueCount, nrPerPeriod);
+                                valueCount, period, expected));
+                        Assert.assertEquals(valueCount, expected);
 //                        if (currentValue != previousValue + 1) {
 //                            Assert.assertEquals(currentValue, previousValue + 1);
 //                        }
